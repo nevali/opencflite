@@ -30,19 +30,8 @@
 #ifdef WIN32
 // This needs to be early in the file, before sys/types gets included, or winsock.h complains
 // about "fd_set and associated macros have been defined".
-/* This craziness is needed to work around Windows BOOL definition */
-#if defined(__OBJC__)
-#define NEED_OBJC
-#else
-#define __OBJC__
-#endif
-//#include <windows.h>
-//#define BOOL WINBOOL
-#include <winsock2.h>
-#include <ws2tcpip.h>
-//#undef BOOL
-#if !defined(NEED_OBJC)
-#undef __OBJC__
+#if !defined(SOCKET)
+#define SOCKET unsigned int
 #endif
 typedef SOCKET CFSocketNativeHandle;
 #else
