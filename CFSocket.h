@@ -28,12 +28,8 @@
 #define __COREFOUNDATION_CFSOCKET__ 1
 
 #ifdef WIN32
-// This needs to be early in the file, before sys/types gets included, or winsock.h complains
-// about "fd_set and associated macros have been defined".
-#if !defined(SOCKET)
-#define SOCKET unsigned int
-#endif
-typedef SOCKET CFSocketNativeHandle;
+// Avoid actually including <winsock2.h>, as it can screw up lots of data type definitions
+typedef unsigned int CFSocketNativeHandle;
 #else
 typedef int CFSocketNativeHandle;
 #endif
