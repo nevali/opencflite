@@ -77,6 +77,8 @@
 		844949A20ED27F3100EEB9C0 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		844949A40ED27F8500EEB9C0 /* ReadPListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */; };
 		845EDB370ED3374D0033E001 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 845EDB360ED3374D0033E001 /* Info.plist */; };
+		84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
+		84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DA170D0EDDEEEE00B6A2E6 /* date_test.c */; };
 		84DE4E550ED287D40023DFE2 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +95,13 @@
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8448EF660ED2796500716715;
+			remoteInfo = CFLite;
+		};
+		84DA17200EDDF45200B6A2E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8448EF660ED2796500716715 /* CFLite */;
 			remoteInfo = CFLite;
 		};
 /* End PBXContainerItemProxy section */
@@ -235,6 +244,8 @@
 		848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigDebug.xcconfig; path = ../XCode_Configs/ConfigDebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigRelease.xcconfig; path = ../XCode_Configs/ConfigRelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B5B0D0ED1548A003D696F /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		84DA170D0EDDEEEE00B6A2E6 /* date_test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = date_test.c; path = ../tests/date_test.c; sourceTree = SOURCE_ROOT; };
+		84DA171C0EDDF44500B6A2E6 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -264,12 +275,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84DA171A0EDDF44500B6A2E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		08FB7794FE84155DC02AAC07 /* CFLite */ = {
 			isa = PBXGroup;
 			children = (
+				84DA16F50EDDE95000B6A2E6 /* Tests */,
 				848B56470ECFB00B003D696F /* Xcode_configs */,
 				848B55C20ECFAE55003D696F /* Headers */,
 				08FB7795FE84155DC02AAC07 /* Source */,
@@ -287,6 +307,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				84DA17160EDDEFB100B6A2E6 /* Examples */,
 				848B55C30ECFAE6B003D696F /* Private Headers */,
 				848B55480ECFAE4D003D696F /* CFApplicationPreferences.c */,
 				848B55490ECFAE4D003D696F /* CFArray.c */,
@@ -350,8 +371,6 @@
 				848B55820ECFAE4D003D696F /* CFXMLParser.c */,
 				848B55830ECFAE4D003D696F /* CFXMLPreferencesDomain.c */,
 				848B55840ECFAE4D003D696F /* CFXMLTree.c */,
-				844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */,
-				840CBF6C0ED24F4500931057 /* WritePListExample.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -362,6 +381,7 @@
 				8448EF670ED2796500716715 /* CFLite.framework */,
 				844949820ED27E8700EEB9C0 /* WritePListExample */,
 				844949920ED27F1100EEB9C0 /* ReadPListExample */,
+				84DA171C0EDDF44500B6A2E6 /* Test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -454,6 +474,23 @@
 			name = Xcode_configs;
 			sourceTree = "<group>";
 		};
+		84DA16F50EDDE95000B6A2E6 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				84DA170D0EDDEEEE00B6A2E6 /* date_test.c */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		84DA17160EDDEFB100B6A2E6 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */,
+				840CBF6C0ED24F4500931057 /* WritePListExample.cpp */,
+			);
+			name = Examples;
+			sourceTree = "<group>";
+		};
 		C6A0FF2B0290797F04C91782 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,6 +563,23 @@
 			productReference = 844949920ED27F1100EEB9C0 /* ReadPListExample */;
 			productType = "com.apple.product-type.tool";
 		};
+		84DA171B0EDDF44500B6A2E6 /* Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84DA17220EDDF47000B6A2E6 /* Build configuration list for PBXNativeTarget "Test" */;
+			buildPhases = (
+				84DA17190EDDF44500B6A2E6 /* Sources */,
+				84DA171A0EDDF44500B6A2E6 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84DA17210EDDF45200B6A2E6 /* PBXTargetDependency */,
+			);
+			name = Test;
+			productName = Test;
+			productReference = 84DA171C0EDDF44500B6A2E6 /* Test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -541,6 +595,7 @@
 				8448EF660ED2796500716715 /* CFLite */,
 				844949810ED27E8700EEB9C0 /* WritePListExample */,
 				844949910ED27F1100EEB9C0 /* ReadPListExample */,
+				84DA171B0EDDF44500B6A2E6 /* Test */,
 			);
 		};
 /* End PBXProject section */
@@ -644,6 +699,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84DA17190EDDF44500B6A2E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -656,6 +719,11 @@
 			isa = PBXTargetDependency;
 			target = 8448EF660ED2796500716715 /* CFLite */;
 			targetProxy = 844949B90ED2845100EEB9C0 /* PBXContainerItemProxy */;
+		};
+		84DA17210EDDF45200B6A2E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8448EF660ED2796500716715 /* CFLite */;
+			targetProxy = 84DA17200EDDF45200B6A2E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -854,6 +922,38 @@
 			};
 			name = Release;
 		};
+		84DA171E0EDDF44600B6A2E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = Test;
+			};
+			name = Debug;
+		};
+		84DA171F0EDDF44600B6A2E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = Test;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -889,6 +989,15 @@
 			buildConfigurations = (
 				844949940ED27F1200EEB9C0 /* Debug */,
 				844949950ED27F1200EEB9C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84DA17220EDDF47000B6A2E6 /* Build configuration list for PBXNativeTarget "Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84DA171E0EDDF44600B6A2E6 /* Debug */,
+				84DA171F0EDDF44600B6A2E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
