@@ -1,0 +1,2 @@
+Mac OS X and Linux ship with ICU.  Since WIndows does not, the distribution includes the
+necessary ICU 3.6 link libraries and DLL's to build CFLite.dll.

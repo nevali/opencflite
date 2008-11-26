@@ -1,0 +1,10 @@
+Mac OS X and Linux ship with ICU.  Since WIndows does not, the distribution
+includes the necessary ICU 3.6 link libraries and DLLs to build CFLite.dll.
+
+Note the these are the same DLLs that ship with Safari, and want to link
+against MSVCR80.dll.  You will get an error on startup if you do not
+have this dll in your path.
+
+If you are targeting minw32, you might be better of just building ICU on
+that system (or use the binary ICU distribution).
+
