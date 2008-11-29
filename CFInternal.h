@@ -49,6 +49,7 @@
 #include <mach/mach_time.h>
 #elif DEPLOYMENT_TARGET_WIN32
 #include <windows.h>
+#include <malloc.h>
 #endif
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 #include <sys/time.h>
@@ -277,7 +278,16 @@ extern Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale,
 extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, unsigned *result);
 
 
+#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+
 #define STACK_BUFFER_DECL(T, N, C) T N[C];
+
+#elif DEPLOYMENT_TARGET_WIN32 && _MSC_VER
+
+#define STACK_BUFFER_DECL(T, N, C) T* N = (T*)_alloca(C * sizeof(T));
+
+#endif
+
 
 #ifdef __CONSTANT_CFSTRINGS__
 #define CONST_STRING_DECL(S, V) const CFStringRef S = (const CFStringRef)__builtin___CFStringMakeConstantString(V);

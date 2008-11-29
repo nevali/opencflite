@@ -239,7 +239,7 @@ static void __substituteFormatStringFromPrefsDF(CFDateFormatterRef formatter, bo
                         if (CFStringFindWithOptions(formatString, dateString, CFRangeMake(0, formatter_len), 0, &result)) {
                             CFStringReplace(formatString, result, pref);
                             int32_t new_len = CFStringGetLength(formatString);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
                             STACK_BUFFER_DECL(UChar, new_buffer, new_len);
 #else
                             UChar new_buffer[BUFFER_SIZE]; // Dynamic stack allocation is GNU specific
@@ -273,7 +273,7 @@ static void __CFDateFormatterApplySymbolPrefs(const void *key, const void *value
             CFStringRef item = (CFStringRef)CFArrayGetValueAtIndex(array, idx);
             if (CFGetTypeID(item) != CFStringGetTypeID()) continue;
             CFIndex item_cnt = CFStringGetLength(item);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 	         STACK_BUFFER_DECL(UChar, item_buffer, __CFMin(BUFFER_SIZE, item_cnt));
 #else
             UChar item_buffer[BUFFER_SIZE]; // Dynamic stack allocation is GNU specific
@@ -326,7 +326,7 @@ void CFDateFormatterSetFormat(CFDateFormatterRef formatter, CFStringRef formatSt
     CFIndex cnt = CFStringGetLength(formatString);
     CFAssert1(cnt <= 1024, __kCFLogAssertion, "%s(): format string too long", __PRETTY_FUNCTION__);
     if (formatter->_format != formatString && cnt <= 1024) {
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
         STACK_BUFFER_DECL(UChar, ubuffer, cnt);
 #else
         UChar ubuffer[BUFFER_SIZE]; // Dynamic stack allocation is GNU specific
@@ -400,7 +400,7 @@ Boolean CFDateFormatterGetAbsoluteTimeFromString(CFDateFormatterRef formatter, C
     }
     if (1024 < range.length) range.length = 1024;
     const UChar *ustr = (UChar *)CFStringGetCharactersPtr(string);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
     STACK_BUFFER_DECL(UChar, ubuffer, (NULL == ustr) ? range.length : 1);
 #else
     UChar ubuffer[BUFFER_SIZE]; // Dynamic stack allocation is GNU specific
@@ -436,7 +436,7 @@ Boolean CFDateFormatterGetAbsoluteTimeFromString(CFDateFormatterRef formatter, C
     return true;
 }
 
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 #define SET_SYMBOLS_ARRAY(ICU_CODE, INDEX_BASE) \
         __CFGenericValidateType(value, CFArrayGetTypeID()); \
 	CFArrayRef array = (CFArrayRef)value; \
@@ -554,7 +554,7 @@ void CFDateFormatterSetProperty(CFDateFormatterRef formatter, CFStringRef key, C
     } else if (kCFDateFormatterAMSymbol == key) {
         __CFGenericValidateType(value, CFStringGetTypeID());
 	CFIndex item_cnt = CFStringGetLength((CFStringRef)value);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 	STACK_BUFFER_DECL(UChar, item_buffer, __CFMin(BUFFER_SIZE, item_cnt));
 #else
    UChar item_buffer[BUFFER_SIZE];
@@ -569,7 +569,7 @@ void CFDateFormatterSetProperty(CFDateFormatterRef formatter, CFStringRef key, C
     } else if (kCFDateFormatterPMSymbol == key) {
         __CFGenericValidateType(value, CFStringGetTypeID());
 	CFIndex item_cnt = CFStringGetLength((CFStringRef)value);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 	STACK_BUFFER_DECL(UChar, item_buffer, __CFMin(BUFFER_SIZE, item_cnt));
 #else
    UChar item_buffer[BUFFER_SIZE];
@@ -618,7 +618,7 @@ void CFDateFormatterSetProperty(CFDateFormatterRef formatter, CFStringRef key, C
     }
 }
 
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 #define GET_SYMBOLS_ARRAY(ICU_CODE, INDEX_BASE) \
 	CFIndex idx, cnt = udat_countSymbols(formatter->_df, ICU_CODE) - INDEX_BASE; \
 	STACK_BUFFER_DECL(CFStringRef, strings, cnt); \

@@ -218,7 +218,7 @@ static void __substituteFormatStringFromPrefsNF(CFNumberFormatterRef formatter) 
 			if (CFStringFindWithOptions(formatString, numberString, CFRangeMake(0, formatter_len), 0, &result)) {
 			    CFStringReplace(formatString, result, pref);
 			    int32_t new_len = CFStringGetLength(formatString);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 			    STACK_BUFFER_DECL(UChar, new_buffer, new_len);
 #else
              UChar new_buffer[BUFFER_SIZE];
@@ -247,7 +247,7 @@ static void __CFNumberFormatterApplySymbolPrefs(const void *key, const void *val
 	UNumberFormatSymbol sym = (UNumberFormatSymbol)CFStringGetIntValue((CFStringRef)key);
 	CFStringRef item = (CFStringRef)value;
 	CFIndex item_cnt = CFStringGetLength(item);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 	STACK_BUFFER_DECL(UChar, item_buffer, item_cnt);
 #else
    UChar item_buffer[BUFFER_SIZE];
@@ -309,7 +309,7 @@ void CFNumberFormatterSetFormat(CFNumberFormatterRef formatter, CFStringRef form
     CFIndex cnt = CFStringGetLength(formatString);
     CFAssert1(cnt <= 1024, __kCFLogAssertion, "%s(): format string too long", __PRETTY_FUNCTION__);
     if ((!formatter->_format || !CFEqual(formatter->_format, formatString)) && cnt <= 1024) {
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
 	STACK_BUFFER_DECL(UChar, ubuffer, cnt);
 #else
    UChar ubuffer[BUFFER_SIZE];
@@ -430,7 +430,7 @@ Boolean CFNumberFormatterGetValueFromString(CFNumberFormatterRef formatter, CFSt
     }
     if (1024 < range.length) range.length = 1024;
     const UChar *ustr = (const UChar *)CFStringGetCharactersPtr(string);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
     STACK_BUFFER_DECL(UChar, ubuffer, (NULL == ustr) ? range.length : 1);
 #else
    UChar ubuffer[1024];

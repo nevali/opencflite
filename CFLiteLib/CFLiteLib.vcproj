@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\Compatibility\AvailabilityMacros.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

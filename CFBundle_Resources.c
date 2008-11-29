@@ -488,7 +488,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
             for (i = 0; i < c; i++) {
                 CFStringRef curType = (CFStringRef)CFArrayGetValueAtIndex(subResTypes, i);
                 CFIndex typeLen = CFStringGetLength(curType);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
                 STACK_BUFFER_DECL(UniChar, typeChars, typeLen);
 #else
                 UniChar *typeChars = (UniChar*)CFAllocatorAllocate(alloc, sizeof(UniChar) * typeLen, 0);
@@ -497,7 +497,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
                 CFStringGetCharacters(curType, CFRangeMake(0, typeLen), typeChars);
                 _CFSearchBundleDirectory(alloc, result, workingUniChars, workingLen, nameUniChars, nameLen, typeChars, typeLen, cheapStr, tmpString, version);
                 if (limit <= CFArrayGetCount(result)) break;
-#if !DEPLOYMENT_TARGET_MACOSX && (DEPLOYMENT_TARGET_WIN32 && !__GNUC__)
+#if !DEPLOYMENT_TARGET_MACOSX && !DEPLOYMENT_TARGET_WIN32
                     CFAllocatorDeallocate(alloc, typeChars);
                 }
 #endif
