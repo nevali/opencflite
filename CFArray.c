@@ -37,7 +37,6 @@
 CF_EXPORT bool _CFArrayIsMutable(CFArrayRef array);
 #endif
 
-
 __private_extern__ void _CFStorageSetWeak(CFStorageRef storage);
 
 const CFArrayCallBacks kCFTypeArrayCallBacks = {0, __CFTypeCollectionRetain, __CFTypeCollectionRelease, CFCopyDescription, CFEqual};

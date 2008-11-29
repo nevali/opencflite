@@ -25,6 +25,8 @@
 	Responsibility: Chris Parker
 */
 
+#if !DEPLOYMENT_TARGET_LINUX
+
 #include "CFInternal.h"
 #include <CoreFoundation/CFPreferences.h>
 #include <CoreFoundation/CFUniChar.h>
@@ -670,3 +672,5 @@ void _CFApplicationPreferencesRemoveDomain(_CFApplicationPreferences *self, CFPr
     updateDictRep(self);
     __CFSpinUnlock(&__CFApplicationPreferencesLock);
 }
+
+#endif

@@ -56,9 +56,13 @@
 #endif
 #include <limits.h>
 #include "auto_stubs.h"
-#ifndef DEPLOYMENT_TARGET_WIN32
+#ifdef DEPLOYMENT_TARGET_MACOSX
 #include <libkern/OSAtomic.h>
-#endif //DEPLOYMENT_TARGET_WIN32
+#endif //DEPLOYMENT_TARGET_MACOSX
+
+#if DEPLOYMENT_TARGET_LINUX
+extern int flsl(long mask);
+#endif
 
 #if DEPLOYMENT_TARGET_WIN32
 extern int flsl(long mask);

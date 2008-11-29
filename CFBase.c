@@ -27,12 +27,14 @@
 
 #include <CoreFoundation/CFBase.h>
 #include "CFInternal.h"
-#if !DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX
 #include <pthread.h>
 #include <malloc/malloc.h>
 #include <mach/mach.h>
 #include <dlfcn.h>
-#else
+#elif DEPLOYMENT_TARGET_LINUX
+#include <pthread.h>
+#elif DEPLOYMENT_TARGET_WIN32
 #include <windows.h>
 #endif
 #include <stdlib.h>

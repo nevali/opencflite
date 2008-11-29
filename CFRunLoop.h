@@ -123,6 +123,9 @@ typedef struct {
 #if defined(__MACH__)
     mach_port_t	(*getPort)(void *info);
     void *	(*perform)(void *msg, CFIndex size, CFAllocatorRef allocator, void *info);
+#elif defined(__linux__)
+    long	(*getPort)(void *info);
+    void	(*perform)(void *info);
 #else
     HANDLE	(*getPort)(void *info);
     void	(*perform)(void *info);

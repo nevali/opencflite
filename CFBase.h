@@ -52,7 +52,6 @@
 #endif
 
 #if defined(__WIN32__)
-#define weak_import
 
 /* This craziness is needed to work around Windows BOOL definition */
 #if defined(__OBJC__)
@@ -76,11 +75,14 @@
 #include <stdbool.h>
 #endif
 
-#define __private_extern__
-
 #elif defined(__GNUC__)
 #include <stdint.h>
 #include <stdbool.h>
+#endif
+
+#if !defined(__APPLE__)
+#define weak_import
+#define __private_extern__
 #endif
 
 #include <CoreFoundation/AvailabilityMacros.h>
