@@ -866,7 +866,8 @@ void __CFSocketSetSocketReadBufferAttrs(CFSocketRef s, CFTimeInterval timeout, C
 				s->_readBuffer = NULL;
 			}
          // Zero length buffer, smash the timeout
-         timeoutVal = (struct timeval) { 0, 0 };
+         static struct timeval sReset = { 0, 0 };
+         timeoutVal = sReset;
 		} else {
 			/* if the buffer shrank, we can re-use the old one */
 			if (length > s->_bytesToBuffer) {
@@ -1029,7 +1030,7 @@ Boolean __CFSocketGetBytesAvailable(CFSocketRef s, CFIndex* ctBytesAvailable)
 		return true;
 	} else {
 		int result;
-#if DEPLOYMENT_TARGET_WINDOWS
+#if !DEPLOYMENT_TARGET_WINDOWS
 	    int bytesAvailable, intLen = sizeof(bytesAvailable);
 	    result = getsockopt(CFSocketGetNative(s), SOL_SOCKET, SO_NREAD, &bytesAvailable, (socklen_t *)&intLen);
 #else
