@@ -31,7 +31,7 @@
 #include <math.h>
 #include <float.h>
 
-#if (DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__))
+#if (DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__))
 #define isnan _isnan
 #define copysign _copysign
 #define isinf !_finite
@@ -113,11 +113,11 @@ Boolean CFBooleanGetValue(CFBooleanRef boolean) {
 #define BITSFORDOUBLEPOSINF	((uint64_t)0x7ff0000000000000ULL)
 #define BITSFORDOUBLENEGINF	((uint64_t)0xfff0000000000000ULL)
 
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
 #define FLOAT_POSITIVE_2_TO_THE_64	0x1.0p+64L
 #define FLOAT_NEGATIVE_2_TO_THE_127	-0x1.0p+127L
 #define FLOAT_POSITIVE_2_TO_THE_127	0x1.0p+127L
-#elif (DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__))
+#elif (DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__))
 #define FLOAT_POSITIVE_2_TO_THE_64	18446744073709551616.0
 #define FLOAT_NEGATIVE_2_TO_THE_127	-1.7014118346046923173168730371588e38
 #define FLOAT_POSITIVE_2_TO_THE_127	-1.7014118346046923173168730371588e38
@@ -960,7 +960,7 @@ CFNumberRef CFNumberCreate(CFAllocatorRef allocator, CFNumberType type, const vo
 	__CFBitfieldSetValue(((struct __CFNumber *)result)->_base._cfinfo[CF_INFO_BITS], 4, 0, (uint8_t)kCFNumberSInt32Type);
 #if DEPLOYMENT_TARGET_MACOSX
 	if (OSAtomicCompareAndSwapPtrBarrier(NULL, (void *)result, (void *volatile *)&__CFNumberCache[valToBeCached - MinCachedInt])) {
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
    if (InterlockedCompareExchangePointer((volatile PVOID*)&__CFNumberCache[valToBeCached - MinCachedInt], (void *)result, (PVOID)&__CFNumberCache[valToBeCached - MinCachedInt])) {
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET 

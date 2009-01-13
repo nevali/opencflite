@@ -33,7 +33,7 @@
 #include <limits.h>
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <stdlib.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <stdlib.h>
 #include <tchar.h>
 #endif
@@ -299,7 +299,7 @@ static const uint16_t _CFEUCToCodePage[] = { // 0x900
 };
 
 UInt32 CFStringConvertEncodingToWindowsCodepage(CFStringEncoding theEncoding) {
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
     CFStringEncoding encodingBase = theEncoding & 0x0FFF;
 #endif
 
@@ -328,7 +328,7 @@ UInt32 CFStringConvertEncodingToWindowsCodepage(CFStringEncoding theEncoding) {
         }
         break;
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS 
     case 0x0200: // ISO 8859 series
         if (encodingBase <= kCFStringEncodingISOLatin10) return ISO8859CODEPAGE_BASE + (encodingBase - 0x200);
         break;
@@ -377,7 +377,7 @@ UInt32 CFStringConvertEncodingToWindowsCodepage(CFStringEncoding theEncoding) {
     return kCFStringEncodingInvalidId;
 }
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 static const struct {
     uint16_t acp;
     uint16_t encoding;
@@ -468,7 +468,7 @@ CFStringEncoding CFStringConvertWindowsCodepageToEncoding(UInt32 theEncoding) {
     } else if (theEncoding == 65006) { // UTF-32BE
         return kCFStringEncodingUTF32BE;
     } else {
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
         return bsearchEncoding(theEncoding);
 #endif
     }

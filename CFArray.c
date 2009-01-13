@@ -32,7 +32,7 @@
 #include <string.h>
 #include "auto_stubs.h"
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #define bzero(buf, bytes)      ((void) memset ((buf), 0x00, (bytes)))
 CF_EXPORT bool _CFArrayIsMutable(CFArrayRef array);
 #endif
@@ -600,7 +600,7 @@ Boolean CFArrayContainsValue(CFArrayRef array, CFRange range, const void *value)
     __CFGenericValidateType(array, __kCFArrayTypeID);
     __CFArrayValidateRange(array, range, __PRETTY_FUNCTION__);
     for (idx = 0; idx < range.length; idx++) {
-        const void *item = 0; //__CFArrayGetBucketAtIndex(array, range.location + idx)->_item;
+        const void *item = __CFArrayGetBucketAtIndex(array, range.location + idx)->_item;
         if (value == item) {
             return true;
         }

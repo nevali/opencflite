@@ -42,7 +42,7 @@ CF_EXTERN_C_BEGIN
 
 #if DEPLOYMENT_TARGET_MACOSX || 0
 #define PLATFORM_PATH_STYLE kCFURLPOSIXPathStyle
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 #define PLATFORM_PATH_STYLE kCFURLWindowsPathStyle
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -221,7 +221,7 @@ extern void _CFPlugInRemoveFactory(CFPlugInRef plugIn, _CFPFactory *factory);
 
 #define _CFBundleLocalizedResourceForkFileName CFSTR("Localized")
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 #define _CFBundleWindowsResourceDirectoryExtension CFSTR("resources")
 #endif
 

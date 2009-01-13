@@ -255,7 +255,7 @@ __private_extern__ Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTyp
     } while (true);
     charPtr[numChars] = 0;	// Null byte for strtod
 
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     result = strtod_l(charPtr, &endCharPtr, NULL);
 #else
     result = strtod(charPtr, &endCharPtr);

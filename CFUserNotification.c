@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <errno.h>
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #include <process.h>
 #define getpid _getpid
 #define ERR_SUCCESS 0
@@ -114,7 +114,7 @@ static CFStringRef __CFUserNotificationCopyDescription(CFTypeRef cf) {
 #define MESSAGE_TIMEOUT 100
 #if DEPLOYMENT_TARGET_MACOSX
 #define NOTIFICATION_PORT_NAME "com.apple.UNCUserNotification"
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define NOTIFICATION_PORT_NAME "com.apple.SBUserNotification"
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET

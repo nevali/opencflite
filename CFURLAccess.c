@@ -47,7 +47,7 @@ CFData read/write routines
 #include <pwd.h>
 #include <fcntl.h>
 #include <dlfcn.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <winsock2.h>
 #include <sys/stat.h>
 #include <io.h>
@@ -232,7 +232,7 @@ static Boolean _CFFileURLWritePropertiesToResource(CFURLRef url, CFDictionaryRef
             } else {
 #if DEPLOYMENT_TARGET_MACOSX
 #define MODE_TYPE mode_t
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define MODE_TYPE unsigned short
 #endif
                 const MODE_TYPE *modePtr = (const MODE_TYPE *)CFDataGetBytePtr((CFDataRef)value);

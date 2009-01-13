@@ -148,7 +148,7 @@ CF_INLINE void __CFStorageAllocLeafNodeMemory(CFAllocatorRef allocator, CFStorag
 CF_INLINE void __CFStorageSetCache(CFStorageRef storage, CFStorageNode *node, CFIndex loc, CFIndex len) {
 #if DEPLOYMENT_TARGET_MACOSX
    unsigned int genCount = ((unsigned int)OSAtomicIncrement32(&storage->cacheGenerationCount)) & genCountMask;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
    unsigned int genCount = ((unsigned int)InterlockedIncrement((volatile LONG*)&storage->cacheGenerationCount)) & genCountMask;
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET 

@@ -63,7 +63,7 @@ DEFINE_WEAK_CARBONCORE_FUNC(Size, GetAliasSizeFromPtr, (AliasPtr A), (A), 0)
 DEFINE_WEAK_CARBONCORE_FUNC(OSErr, _FSGetFSRefInformationFast, (const FSRef* A, SInt16 *B, UInt32 *C, UInt32 *D, Boolean *E, Boolean *F, HFSUniStr255 *G), (A, B, C, D, E, F, G), -3296)
 DEFINE_WEAK_CARBONCORE_FUNC(OSErr, _FSGetVolumeByName, ( CFStringRef volumeNameRef, FSVolumeRefNum* vRefNumP), ( volumeNameRef, vRefNumP), -3296 )
 
-#elif DEPLOYMENT_TARGET_WIN32 || 0 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0 || 0
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif
@@ -1548,7 +1548,7 @@ CF_EXPORT void _CFURLInitFSPath(CFURLRef url, CFStringRef path) {
     if (!len || '/' == CFStringGetCharacterAtIndex(path, len - 1))
         ((struct __CFURL *)url)->_flags |= IS_DIRECTORY;
 }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 CF_EXPORT void _CFURLInitFSPath(CFURLRef url, CFStringRef path) {
     CFIndex len = CFStringGetLength(path);
     if (len > 2) {
@@ -3776,7 +3776,7 @@ Boolean CFURLGetFileSystemRepresentation(CFURLRef url, Boolean resolveAgainstBas
     if (!url) return false;
 #if DEPLOYMENT_TARGET_MACOSX
     path = CFURLCreateStringWithFileSystemPath(alloc, url, kCFURLPOSIXPathStyle, resolveAgainstBase);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     path = CFURLCreateStringWithFileSystemPath(alloc, url, kCFURLWindowsPathStyle, resolveAgainstBase);
 #endif
    if (path) {
@@ -3793,7 +3793,7 @@ CFURLRef CFURLCreateFromFileSystemRepresentation(CFAllocatorRef allocator, const
     if (!path) return NULL;
 #if DEPLOYMENT_TARGET_MACOSX
     newURL = CFURLCreateWithFileSystemPath(allocator, path, kCFURLPOSIXPathStyle, isDirectory);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     newURL = CFURLCreateWithFileSystemPath(allocator, path, kCFURLWindowsPathStyle, isDirectory);
 #endif
    CFRelease(path);
@@ -3806,7 +3806,7 @@ CF_EXPORT CFURLRef CFURLCreateFromFileSystemRepresentationRelativeToBase(CFAlloc
     if (!path) return NULL;
 #if DEPLOYMENT_TARGET_MACOSX
    newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLPOSIXPathStyle, isDirectory, baseURL);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLWindowsPathStyle, isDirectory, baseURL);
 #endif
     CFRelease(path);

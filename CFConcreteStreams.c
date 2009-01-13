@@ -39,7 +39,7 @@
 #if DEPLOYMENT_TARGET_MACOSX
 #include <sys/time.h>
 #include <unistd.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <io.h>
 #define lseek _lseek
 #define open _open

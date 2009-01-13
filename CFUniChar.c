@@ -40,7 +40,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdlib.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -58,7 +58,7 @@ extern size_t strlcat(char *dst, const char *src, size_t siz);
 #define __kCFCharacterSetDir "/System/Library/CoreServices"
 #elif DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 #define __kCFCharacterSetDir "/usr/local/share/CoreFoundation"
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define __kCFCharacterSetDir "\\Windows\\CoreFoundation"
 #define MAXPATHLEN MAX_PATH
 #endif
@@ -105,7 +105,7 @@ static const void *__CFGetSectDataPtr(const char *segname, const char *sectname,
 
 #if !USE_MACHO_SEGMENT
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 extern const char* _CFDLLPath(void);
 #endif
 
@@ -115,13 +115,13 @@ extern const char* _CFDLLPath(void);
 CF_INLINE void __CFUniCharCharacterSetPath(char *cpath) {
 #if DEPLOYMENT_TARGET_MACOSX
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     strlcpy(cpath, _CFDLLPath(), MAXPATHLEN);
 #else
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 #if 0
     strncat(cpath, "\\Resources\\", MAXPATHLEN - strlen(cpath));
 #else
@@ -132,7 +132,7 @@ CF_INLINE void __CFUniCharCharacterSetPath(char *cpath) {
 #endif
 }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #define MAX_BITMAP_STATE 512
 //
 //  If a string is placed into this array, then it has been previously 
@@ -175,7 +175,7 @@ void __AddBitmapStateForName(char *bitmapName) {
 #endif //__WIN32__
 
 static bool __CFUniCharLoadBytesFromFile(const char *fileName, const void **bytes) {
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     HANDLE bitmapFileHandle = NULL;
     HANDLE mappingHandle = NULL;
     
@@ -1205,7 +1205,7 @@ bool CFUniCharFillDestinationBuffer(const UTF32Char *src, CFIndex srcLength, voi
     return true;
 }
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 void __CFUniCharCleanup(void)
 {
     int	idx;

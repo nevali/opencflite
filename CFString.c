@@ -423,7 +423,7 @@ CFStringEncoding CFStringGetSystemEncoding(void) {
         const CFStringEncodingConverter *converter = NULL;
 #if DEPLOYMENT_TARGET_MACOSX
             __CFDefaultSystemEncoding = kCFStringEncodingMacRoman; // MacRoman is built-in so always available
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
             __CFDefaultSystemEncoding = kCFStringEncodingWindowsLatin1; // WinLatin1 is built-in so always available
 #elif DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
             __CFDefaultSystemEncoding = kCFStringEncodingISOLatin1; // a reasonable default
@@ -1701,7 +1701,7 @@ static Boolean __CFStrIsConstantString(CFStringRef str) {
 #endif
 
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 __private_extern__ void __CFStringCleanup (void) {
     /* in case library is unloaded, release store for the constant string table */
     if (constantStringTable != NULL) {
@@ -2395,9 +2395,9 @@ CFComparisonResult CFStringCompareWithOptionsAndLocale(CFStringRef string, CFStr
 
             if (kCFStringEncodingASCII == eightBitEncoding) {
                 if (caseInsensitive) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
                     int cmpResult = strncasecmp_l((const char *)str1Bytes + rangeToCompare.location, (const char *)str2Bytes, __CFMin(rangeToCompare.length, str2Len), NULL);
-#elif DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__)
+#elif DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
                     int cmpResult = _strnicmp_l((const char*)str1Bytes + rangeToCompare.location, (const char*)str2Bytes, __CFMin(rangeToCompare.length, str2Len), NULL);
 #else
                     int cmpResult = strncasecmp((const char *)str1Bytes + rangeToCompare.location, (const char *)str2Bytes, __CFMin(rangeToCompare.length, str2Len));
@@ -5329,7 +5329,7 @@ void CFStringAppendFormatAndArguments(CFMutableStringRef outputString, CFDiction
             snprintf_l(buffer, 255, NULL, formatBuffer, value);	\
         }						\
     }}
-#elif DEPLOYMENT_TARGET_WIN32 && defined(_MSC_VER)
+#elif DEPLOYMENT_TARGET_WINDOWS && defined(_MSC_VER)
 #define SNPRINTF(TYPE, WHAT) {				\
     TYPE value = (TYPE) WHAT;				\
     if (-1 != specs[curSpec].widthArgNum) {		\

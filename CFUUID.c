@@ -29,7 +29,7 @@
 #include "CFInternal.h"
 #if DEPLOYMENT_TARGET_MACOSX
 #include <uuid/uuid.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <objbase.h>
 #include <stdlib.h>
 #define strtoul_l(a,b,c,d) strtoul(a,b,c)
@@ -176,7 +176,7 @@ CFUUIDRef CFUUIDCreate(CFAllocatorRef alloc) {
 #if (DEPLOYMENT_TARGET_MACOSX)
     uuid_t uuid;
     if (useV1UUIDs) uuid_generate_time(uuid); else uuid_generate_random(uuid);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     UUID uuidData;
     UUID* uuid = &uuidData;
     if (useV1UUIDs) UuidCreateSequential(uuid); else UuidCreate(uuid);

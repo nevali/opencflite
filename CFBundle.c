@@ -56,11 +56,11 @@
 #include <dlfcn.h>
 #endif /* BINARY_SUPPORT_DLFCN */
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 #include <fcntl.h>
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #include <io.h>
 #include <stdio.h>
 #define lseek _lseek
@@ -1691,7 +1691,7 @@ CFBundleExecutableType CFBundleGetExecutableType(CFBundleRef bundle) {
 #define PPT_NAME "PowerPoint Document"
 
 #define ustrncmp(x, y, z) strncmp((char *)(x), (char *)(y), (z))
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #if _MSC_VER
 #define ustrncasecmp(x, y, z) _strnicmp_l((char *)(x), (char *)(y), (z), NULL)
 #else

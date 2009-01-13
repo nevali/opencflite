@@ -1533,7 +1533,7 @@ CF_EXPORT CFIndex _CFStreamInstanceSize(void) {
     return sizeof(struct _CFStream);
 }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 
 __private_extern__ void __CFStreamCleanup(void) {
     __CFSpinLock(&sSourceLock);

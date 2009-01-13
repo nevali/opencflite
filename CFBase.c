@@ -34,7 +34,7 @@
 #include <dlfcn.h>
 #elif DEPLOYMENT_TARGET_LINUX
 #include <pthread.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #endif
 #include <stdlib.h>
@@ -260,7 +260,7 @@ static void __CFAllocatorSystemDeallocate(void *ptr, void *info) {
 
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32 || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
+#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 static void *__CFAllocatorSystemAllocate(CFIndex size, CFOptionFlags hint, void *info) {
     return malloc(size);
 }
@@ -452,7 +452,7 @@ __private_extern__ void __CFAllocatorInitialize(void) {
     memset(malloc_default_zone(), 0, 2 * sizeof(void *));
 #endif
     __kCFAllocatorSystemDefault._allocator = kCFAllocatorSystemDefault;
-#ifdef DEPLOYMENT_TARGET_WIN32
+#ifdef DEPLOYMENT_TARGET_WINDOWS
     __kCFAllocatorSystemDefault._context.allocate = __CFAllocatorSystemAllocate;
     __kCFAllocatorSystemDefault._context.reallocate = __CFAllocatorSystemReallocate;
     __kCFAllocatorSystemDefault._context.deallocate = __CFAllocatorSystemDeallocate;
@@ -800,7 +800,7 @@ void _CFAllocatorDeallocateGC(CFAllocatorRef allocator, void *ptr)
 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 __private_extern__ pthread_key_t __CFTSDKey = (pthread_key_t)NULL;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 __private_extern__ DWORD __CFTSDKey = 0xFFFFFFFF;
 #endif
 
@@ -810,7 +810,7 @@ extern void _CFRunLoop1(void);
 __private_extern__ void __CFFinalizeThreadData(void *arg) {
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     __CFThreadSpecificData *tsd = (__CFThreadSpecificData *)arg;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     __CFThreadSpecificData *tsd = (__CFThreadSpecificData*)TlsGetValue(__CFTSDKey);
     TlsSetValue(__CFTSDKey, NULL);
 #endif
@@ -819,7 +819,7 @@ __private_extern__ void __CFFinalizeThreadData(void *arg) {
 #if DEPLOYMENT_TARGET_MACOSX
     _CFRunLoop1();
 #endif
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 
     if (tsd->_messageHook) UnhookWindowsHookEx(tsd->_messageHook);
 
@@ -840,7 +840,7 @@ __private_extern__ __CFThreadSpecificData *__CFGetThreadSpecificData(void) {
     memset(data, 0, sizeof(__CFThreadSpecificData));
     pthread_setspecific(__CFTSDKey, data);
     return data;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     __CFThreadSpecificData *data;
     data = (__CFThreadSpecificData *)TlsGetValue(__CFTSDKey);
     if (data) {
@@ -857,12 +857,12 @@ __private_extern__ __CFThreadSpecificData *__CFGetThreadSpecificData(void) {
 __private_extern__ void __CFBaseInitialize(void) {
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     pthread_key_create(&__CFTSDKey, __CFFinalizeThreadData);
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
     __CFTSDKey = TlsAlloc();
 #endif
 }
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 __private_extern__ void __CFBaseCleanup(void) {
     TlsFree(__CFTSDKey);
 }

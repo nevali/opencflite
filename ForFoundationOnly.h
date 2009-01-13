@@ -84,7 +84,7 @@ CF_EXPORT CFErrorRef _CFBundleCreateError(CFAllocatorRef allocator, CFBundleRef 
 CF_EXTERN_C_END
 
 
-#if (DEPLOYMENT_TARGET_MACOSX || 0) || DEPLOYMENT_TARGET_WIN32
+#if (DEPLOYMENT_TARGET_MACOSX || 0) || DEPLOYMENT_TARGET_WINDOWS
 // ---- CFPreferences material ----------------------------------------
 
 #define DEBUG_PREFERENCES_MEMORY 0
@@ -111,7 +111,7 @@ typedef struct {
 
 CF_EXPORT CFAllocatorRef __CFPreferencesAllocator(void);
 CF_EXPORT const _CFPreferencesDomainCallBacks __kCFVolatileDomainCallBacks;
-//#if DEPLOYMENT_TARGET_WIN32
+//#if DEPLOYMENT_TARGET_WINDOWS
 //CF_EXPORT const _CFPreferencesDomainCallBacks __kCFWindowsRegistryDomainCallBacks;
 //#else
 CF_EXPORT const _CFPreferencesDomainCallBacks __kCFXMLPropertyListDomainCallBacks;
@@ -475,7 +475,7 @@ CF_EXPORT CFIndex _CFStreamInstanceSize(void);
     #include <mach/mach_time.h>
     #define __CFReadTSR() mach_absolute_time()
     #endif
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 CF_INLINE UInt64 __CFReadTSR(void) {
     LARGE_INTEGER freq;
     QueryPerformanceCounter(&freq);

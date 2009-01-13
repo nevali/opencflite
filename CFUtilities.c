@@ -60,7 +60,7 @@
 #if DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     #include <string.h>
     #include <pthread.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     #include <windows.h>
     #include <process.h>
     #define getpid _getpid
@@ -164,7 +164,7 @@ __private_extern__ uintptr_t __CFFindPointer(uintptr_t ptr, uintptr_t start) {
 }
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 typedef struct _args {
     void *func;
     void *arg;
@@ -507,7 +507,7 @@ static void _CFShowToFile(FILE *file, Boolean flush, const void *obj) {
      // iTunes used OutputDebugStringW(theString);
 
      CFStringInitInlineBuffer(str, &buffer, CFRangeMake(0, cnt));
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     TCHAR *accumulatedBuffer = (TCHAR *)malloc((cnt+1) * sizeof(TCHAR));
 #endif
      for (idx = 0; idx < cnt; idx++) {
@@ -520,7 +520,7 @@ static void _CFShowToFile(FILE *file, Boolean flush, const void *obj) {
          } else {
              fprintf_l(file, NULL, "\\u%04x", ch);
          }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 		 if (ch < 128) {
              fprintf(file, "%c", ch);
 	     lastNL = (ch == '\n');
@@ -560,7 +560,7 @@ void CFLog(int32_t lev, CFStringRef format, ...) {
     CFRelease(tz);
     gdate.second = gdate.second + 0.0005;
     // Date format: YYYY '-' MM '-' DD ' ' hh ':' mm ':' ss.fff
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     printf("%04d-%02d-%02d %02d:%02d:%06.3f %s[%d] CFLog (%d): ", (int)gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second, *_CFGetProgname(), getpid(), lev);
 #else
     fprintf_l(stderr, NULL, "%04d-%02d-%02d %02d:%02d:%06.3f %s[%d:%x] CFLog: ", (int)gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second, *_CFGetProgname(), getpid(), pthread_mach_thread_np(pthread_self()));

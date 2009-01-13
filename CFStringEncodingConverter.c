@@ -34,7 +34,7 @@
 #include "CFStringEncodingConverterExt.h"
 #include "CFStringEncodingConverterPriv.h"
 #include <stdlib.h>
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
 #include <pthread.h>
 #endif
 
@@ -321,7 +321,7 @@ static CFIndex __CFToBytesStandardEightBitWrapper(const void *converter, uint32_
 
 static CFIndex __CFToUnicodeStandardEightBitWrapper(const void *converter, uint32_t flags, const uint8_t *bytes, CFIndex numBytes, UniChar *characters, CFIndex maxCharLen, CFIndex *usedCharLen) {
     CFIndex processedByteLen = 0;
-#if DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__)
+#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
     UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
 #else
     UniChar charBuffer[((const _CFEncodingConverter*)converter)->maxLen];
@@ -351,7 +351,7 @@ static CFIndex __CFToUnicodeStandardEightBitWrapper(const void *converter, uint3
 
 static CFIndex __CFToCanonicalUnicodeStandardEightBitWrapper(const void *converter, uint32_t flags, const uint8_t *bytes, CFIndex numBytes, UniChar *characters, CFIndex maxCharLen, CFIndex *usedCharLen) {
     CFIndex processedByteLen = 0;
-#if DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__)
+#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
     UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
 #else
     UniChar charBuffer[((const _CFEncodingConverter*)converter)->maxLen];
@@ -400,7 +400,7 @@ static CFIndex __CFToCanonicalUnicodeStandardEightBitWrapper(const void *convert
 
 static CFIndex __CFToBytesCheapMultiByteWrapper(const void *converter, uint32_t flags, const UniChar *characters, CFIndex numChars, uint8_t *bytes, CFIndex maxByteLen, CFIndex *usedByteLen) {
     CFIndex processedCharLen = 0;
-#if DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__)
+#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
     uint8_t byteBuffer[20]; // Dynamic stack allocation is GNU specific
 #else
     uint8_t byteBuffer[((const _CFEncodingConverter*)converter)->maxLen];

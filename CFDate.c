@@ -70,7 +70,7 @@ __private_extern__ CFTimeInterval __CFTSRToTimeInterval(int64_t tsr) {
     return (CFTimeInterval)((double)tsr * __CF1_TSRRate);
 }
 
-#ifdef DEPLOYMENT_TARGET_WIN32
+#ifdef DEPLOYMENT_TARGET_WINDOWS
 __private_extern__ CFAbsoluteTime __CFDateWindowsSystemTimeToAbsoluteTime(SYSTEMTIME *the_time) {
    // this song and dance seems to be required to get enough precision
    // and date offset that the OSX version returns - steps were culled
@@ -106,7 +106,7 @@ CFAbsoluteTime CFAbsoluteTimeGetCurrent(void) {
     gettimeofday(&tv, NULL);
     ret = (CFTimeInterval)tv.tv_sec - kCFAbsoluteTimeIntervalSince1970;
     ret += (1.0E-6 * (CFTimeInterval)tv.tv_usec);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     FILETIME ft;
     GetSystemTimeAsFileTime(&ft);
     ret = _CFAbsoluteTimeFromFileTime(&ft);
@@ -122,7 +122,7 @@ __private_extern__ void __CFDateInitialize(void) {
     mach_timebase_info(&info);
     __CFTSRRate = (1.0E9 / (double)info.numer) * (double)info.denom;
     __CF1_TSRRate = 1.0 / __CFTSRRate;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     LARGE_INTEGER freq;
     if (!QueryPerformanceFrequency(&freq)) {
         HALT;

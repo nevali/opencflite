@@ -56,7 +56,7 @@
 #import <objc/objc.h>
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #include <shlobj.h>
 #endif
 

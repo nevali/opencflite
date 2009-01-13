@@ -41,7 +41,7 @@
 #include <unistd.h>
 #include <sys/fcntl.h>
 #include <tzfile.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #include <winreg.h>
 #include <time.h>
@@ -51,7 +51,7 @@
 #if DEPLOYMENT_TARGET_MACOSX
 #define TZZONELINK	TZDEFAULT
 #define TZZONEINFO	TZDIR "/"
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define TZZONEINFO	"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones"
 #endif
 
@@ -96,7 +96,7 @@ CF_INLINE void __CFTimeZoneUnlockCompatibilityMapping(void) {
  * It takes TimeZone names from the registry
  * (Aleksey Dukhnyakov)
  */
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 static CFMutableArrayRef __CFCopyWindowsTimeZoneList() {
     CFMutableArrayRef result = NULL;
     HKEY hkResult;
@@ -132,10 +132,10 @@ static CFMutableArrayRef __CFCopyWindowsTimeZoneList() {
 }
 #endif
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 static CFMutableArrayRef __CFCopyRecursiveDirectoryList() {
     CFMutableArrayRef result = CFArrayCreateMutable(kCFAllocatorSystemDefault, 0, &kCFTypeArrayCallBacks);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     int fd = open(TZDIR "/zone.tab", O_RDONLY);
     for (; 0 <= fd;) {
         uint8_t buffer[4096];
@@ -395,7 +395,7 @@ static Boolean __CFParseTimeZoneData(CFAllocatorRef allocator, CFDataRef data, C
     }
     return result;
 }
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 static Boolean __CFParseTimeZoneData(CFAllocatorRef allocator, CFDataRef data, CFTZPeriod **tzpp, CFIndex *cntp) {
 /* We use Win32 function to find TimeZone
  * (Aleksey Dukhnyakov)
@@ -506,7 +506,7 @@ static CFTimeZoneRef __CFTimeZoneCreateSystem(void) {
     }
     return CFTimeZoneCreateWithTimeIntervalFromGMT(kCFAllocatorSystemDefault, 0.0);
 }
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 static CFTimeZoneRef __CFTimeZoneCreateSystem(void) {
     CFTimeZoneRef result = NULL;
 /* The GetTimeZoneInformation function retrieves the current
@@ -610,7 +610,7 @@ CFArrayRef CFTimeZoneCopyKnownNames(void) {
  */
 #if DEPLOYMENT_TARGET_MACOSX
         list = __CFCopyRecursiveDirectoryList();
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
         list = __CFCopyWindowsTimeZoneList();
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -692,7 +692,7 @@ static const char *__CFTimeZoneAbbreviationDefaults =
 "    <key>WIT</key>  <string>Asia/Jakarta</string>"
 " </dict>"
 " </plist>";
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 static const char *__CFTimeZoneAbbreviationDefaults =
 /* Mappings to time zones in Windows Registry are best-guess */
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -857,7 +857,7 @@ static CFTimeZoneRef __CFTimeZoneCreateFixed(CFAllocatorRef allocator, int32_t s
     CFRelease(data);
     return result;
 }
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 static CFTimeZoneRef __CFTimeZoneCreateFixed(CFAllocatorRef allocator, int32_t seconds, CFStringRef name, int isDST) {
 /* CFTimeZoneRef->_data will contain TIME_ZONE_INFORMATION structure
  * to find current timezone
@@ -985,7 +985,7 @@ CFTimeZoneRef CFTimeZoneCreateWithName(CFAllocatorRef allocator, CFStringRef nam
     }
     return result;
 }
-#elif DEPLOYMENT_TARGET_WIN32 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || 0
 /* Reading GMT offset and daylight flag from the registry
  * for TimeZone name
  * (Aleksey Dukhnyakov)
@@ -1047,7 +1047,7 @@ CFDataRef CFTimeZoneGetData(CFTimeZoneRef tz) {
 /* This function converts CFAbsoluteTime to (Win32) SYSTEMTIME
  * (Aleksey Dukhnyakov)
  */
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 BOOL __CFTimeZoneGetWin32SystemTime(SYSTEMTIME * sys_time, CFAbsoluteTime time)
 {
     LONGLONG l;
@@ -1066,7 +1066,7 @@ BOOL __CFTimeZoneGetWin32SystemTime(SYSTEMTIME * sys_time, CFAbsoluteTime time)
 #endif
 
 CFTimeInterval _CFTimeZoneGetDSTOffset(CFTimeZoneRef tz, CFAbsoluteTime at) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     // #warning this does not work for non-CFTimeZoneRefs
     CFIndex idx;
     idx = __CFBSearchTZPeriods(tz, at);
@@ -1080,7 +1080,7 @@ CFTimeInterval _CFTimeZoneGetDSTOffset(CFTimeZoneRef tz, CFAbsoluteTime at) {
 
 // returns 0.0 if there is no data for the next switch after 'at'
 CFAbsoluteTime _CFTimeZoneGetNextDSTSwitch(CFTimeZoneRef tz, CFAbsoluteTime at) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
 // #warning this does not work for non-CFTimeZoneRefs
     CFIndex idx;
     idx = __CFBSearchTZPeriods(tz, at);

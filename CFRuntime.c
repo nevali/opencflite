@@ -54,7 +54,7 @@ __kCFReleaseEvent = 29
 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <malloc/malloc.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <malloc.h>
 /* On Win32 we should use _msize instead of malloc_size
  * (Aleksey Dukhnyakov)
@@ -370,7 +370,7 @@ CFTypeRef CFRetain(CFTypeRef cf) {
 __private_extern__ void __CFAllocatorDeallocate(CFTypeRef cf);
 
 void CFRelease(CFTypeRef cf) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     if (CF_IS_COLLECTABLE(cf)) {
         // release the GC-visible reference.
         if (auto_zone_release(__CFCollectableZone, (void*)cf) == 0 && !CFTYPE_IS_OBJC(cf)) {
@@ -440,7 +440,7 @@ __private_extern__ void __CFTypeCollectionRelease(CFAllocatorRef allocator, cons
     if (CF_IS_COLLECTABLE_ALLOCATOR(allocator)) {
         if (CFTYPE_IS_OBJC(cf)) return; // do nothing for OBJC objects.
         if (auto_zone_is_valid_pointer(__CFCollectableZone, cf)) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
             // GC: If this a CF object in the GC heap that is marked uncollectable, then
             // must balance the retain done in __CFTypeCollectionRetain().
             // We're basically inlining CFRelease() here, to avoid an extra heap membership test.
@@ -636,7 +636,7 @@ extern void __CFMachPortInitialize(void);
 #if DEPLOYMENT_TARGET_MACOSX
 extern void __CFMessagePortInitialize(void);
 #endif
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 extern void __CFRunLoopInitialize(void);
 extern void __CFRunLoopObserverInitialize(void);
 extern void __CFRunLoopSourceInitialize(void);
@@ -649,7 +649,7 @@ extern void __CFPlugInInstanceInitialize(void);
 extern void __CFUUIDInitialize(void);
 extern void __CFBinaryHeapInitialize(void);
 extern void __CFBitVectorInitialize(void);
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 extern void __CFWindowsMessageQueueInitialize(void);
 extern void __CFBaseCleanup(void);
 #endif
@@ -671,7 +671,7 @@ bool kCFUseCollectableAllocator = false;
 #if DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 static void __CFInitialize(void) __attribute__ ((constructor));
 static
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 CF_EXPORT
 #endif
 void __CFInitialize(void) {
@@ -755,7 +755,7 @@ void __CFInitialize(void) {
         __CFBinaryHeapInitialize();
         __CFBitVectorInitialize();
         __CFCharacterSetInitialize();
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
         __CFLocaleInitialize();
 #endif
         __CFStorageInitialize();
@@ -776,7 +776,7 @@ void __CFInitialize(void) {
 #endif
         __CFStreamInitialize();
         __CFPreferencesDomainInitialize();
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
         __CFRunLoopInitialize();
         __CFRunLoopObserverInitialize();
         __CFRunLoopSourceInitialize();
@@ -815,13 +815,13 @@ void __CFInitialize(void) {
 
         if (__CFRuntimeClassTableCount < 256) __CFRuntimeClassTableCount = 256;
 
-#if defined(DEBUG) && !DEPLOYMENT_TARGET_WIN32
+#if defined(DEBUG) && !DEPLOYMENT_TARGET_WINDOWS
         CFLog(kCFLogLevelWarning, CFSTR("Assertions enabled"));
 #endif
     }
 }
 
-//#if DEPLOYMENT_TARGET_WIN32
+//#if DEPLOYMENT_TARGET_WINDOWS
 
 #ifdef _BUILD_NET_FOUNDATION_
 #ifdef __cplusplus
@@ -836,7 +836,7 @@ extern void _CFHTTPStreamCleanup(void);
 
 #endif //_BUILD_NET_FOUNDATION_
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 
 extern void __CFBaseCleanup (void);
 extern void __CFSocketCleanup (void);
@@ -910,7 +910,7 @@ CFHashCode _CFHash(CFTypeRef cf) {
     return (CFHashCode)cf;
 }
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 static inline bool myOSAtomicCompareAndSwap32Barrier(int32_t oldValue, int32_t newValue, volatile int32_t *theValue) {
     int32_t actualOldValue = InterlockedCompareExchange((volatile LONG *)theValue, newValue, oldValue);
     return actualOldValue == oldValue ? true : false;

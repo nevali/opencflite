@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 #include <mach/mach.h>
 #include <mach/mach_syscalls.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #endif
 
@@ -73,7 +73,7 @@ static void __CFMilliSleep(uint32_t msecs) {
     input.tv_sec = msecs / 1000;
     input.tv_nsec = (msecs - input.tv_sec * 1000) * 1000000;
     nanosleep(&input, NULL);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     Sleep (msecs);
 #else
 #error Dont know how to define sleep for this platform

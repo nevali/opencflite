@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 /* In typical fragile fashion, order of include on Windows is important */
 #include <io.h>
 #include <sys/types.h>
@@ -73,7 +73,7 @@ int _CFArgc(void) { return *_NSGetArgc(); }
 
 
 __private_extern__ Boolean _CFGetCurrentDirectory(char *path, int maxlen) {
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     DWORD len = GetCurrentDirectoryA(maxlen, path);
     return ((0 != len) && (maxlen > 0) && (len + 1 <= (DWORD)maxlen));
 #else
@@ -88,13 +88,13 @@ __private_extern__ Boolean _CFIsCFM(void) {
     return __CFIsCFM;
 }
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
 #define PATH_SEP '\\'
 #else
 #define PATH_SEP '/'
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #define PATH_LIST_SEP ';'
 #else
 #define PATH_LIST_SEP ':'
@@ -102,12 +102,12 @@ __private_extern__ Boolean _CFIsCFM(void) {
 
 static char *_CFSearchForNameInPath(const char *name, char *path) {
     struct stat statbuf;
-#if DEPLOYMENT_TARGET_WIN32 && !defined(__GNUC__)
+#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
     char nname[MAX_PATH + 1];
 #else
     char nname[strlen(name) + strlen(path) + 2];
 #endif
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     int no_hang_fd = open("/dev/autofs_nowait", 0);
 #endif
     for (;;) {
@@ -125,7 +125,7 @@ static char *_CFSearchForNameInPath(const char *name, char *path) {
             if (p != NULL) {
                 *p = PATH_LIST_SEP;
             }
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
            close(no_hang_fd);
 #endif
            return strdup(nname);
@@ -136,13 +136,13 @@ static char *_CFSearchForNameInPath(const char *name, char *path) {
         *p = PATH_LIST_SEP;
         path = p + 1;
     }
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     close(no_hang_fd);
 #endif
     return NULL;
 }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 // Returns the path to the CF DLL, which we can then use to find resources like char sets
 
 __private_extern__ const char* _CFDLLPath(void) {
@@ -208,7 +208,7 @@ const char *_CFProcessPath(void) {
             memmove((char *)__CFProcessPath, thePath, len + 1);
         }
     }
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     if (!__CFProcessPath) {
         char buf[CFMaxPathSize] = {0};
         HINSTANCE hinst = GetModuleHandle(NULL);
@@ -411,7 +411,7 @@ static CFURLRef _CFCreateHomeDirectoryURLForUser(CFStringRef uName) {
         }
         return _CFCopyHomeDirURLForUser(upwd);
     }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     CFStringRef user = !uName ? _CFUserName() : uName;
     CFURLRef home = NULL;
 
@@ -476,7 +476,7 @@ static CFStringRef _CFUserName(void) {
 #if (DEPLOYMENT_TARGET_MACOSX) || defined(__svr4__) || defined(__hpux__) || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     if (geteuid() != __CFEUID || getuid() != __CFUID)
 	_CFUpdateUserInfo();
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     if (!__CFUserName) {
 	char username[1040];
 	DWORD size = 1040;

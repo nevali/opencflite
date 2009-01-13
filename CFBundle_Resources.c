@@ -67,7 +67,7 @@ CF_INLINE CFStringRef _CFGetPlatformName(void) {
     return _CFBundleLinuxPlatformName;
 #elif DEPLOYMENT_TARGET_FREEBSD
     return _CFBundleFreeBSDPlatformName;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     return _CFBundleWindowsPlatformName;
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -488,7 +488,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
             for (i = 0; i < c; i++) {
                 CFStringRef curType = (CFStringRef)CFArrayGetValueAtIndex(subResTypes, i);
                 CFIndex typeLen = CFStringGetLength(curType);
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
                 STACK_BUFFER_DECL(UniChar, typeChars, typeLen);
 #else
                 UniChar *typeChars = (UniChar*)CFAllocatorAllocate(alloc, sizeof(UniChar) * typeLen, 0);
@@ -497,7 +497,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
                 CFStringGetCharacters(curType, CFRangeMake(0, typeLen), typeChars);
                 _CFSearchBundleDirectory(alloc, result, workingUniChars, workingLen, nameUniChars, nameLen, typeChars, typeLen, cheapStr, tmpString, version);
                 if (limit <= CFArrayGetCount(result)) break;
-#if !DEPLOYMENT_TARGET_MACOSX && !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_MACOSX && !DEPLOYMENT_TARGET_WINDOWS
                     CFAllocatorDeallocate(alloc, typeChars);
                 }
 #endif
@@ -1779,7 +1779,7 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectoryWithVer
                 }
                 CFRelease(posixPath);
             }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
             CFStringRef windowsPath = CFURLCopyFileSystemPath(url, kCFURLWindowsPathStyle);
             // this test is necessary to exclude the case where a bundle is spuriously created from the innards of another bundle
             if (windowsPath) {
@@ -1792,7 +1792,7 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectoryWithVer
                 }
                 CFRelease(windowsPath);
             }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif
@@ -1997,7 +1997,7 @@ __private_extern__ CFStringRef _CFBundleGetPlatformExecutablesSubdirectoryName(v
     return CFSTR("Linux");
 #elif DEPLOYMENT_TARGET_FREEBSD
     return CFSTR("FreeBSD");
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     return CFSTR("Windows");
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -2015,7 +2015,7 @@ __private_extern__ CFStringRef _CFBundleGetAlternatePlatformExecutablesSubdirect
     return CFSTR("Linux");
 #elif DEPLOYMENT_TARGET_FREEBSD
     return CFSTR("FreeBSD");
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     return CFSTR("Windows");
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -2033,7 +2033,7 @@ __private_extern__ CFStringRef _CFBundleGetOtherPlatformExecutablesSubdirectoryN
     return CFSTR("Other");
 #elif DEPLOYMENT_TARGET_FREEBSD
     return CFSTR("Other");
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     return CFSTR("Other");
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -2051,7 +2051,7 @@ __private_extern__ CFStringRef _CFBundleGetOtherAlternatePlatformExecutablesSubd
     return CFSTR("Other");
 #elif DEPLOYMENT_TARGET_FREEBSD
     return CFSTR("Other");
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     return CFSTR("Other");
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET

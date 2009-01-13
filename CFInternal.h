@@ -47,7 +47,7 @@
 #if DEPLOYMENT_TARGET_MACOSX
 #include <xlocale.h>
 #include <mach/mach_time.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #include <malloc.h>
 #endif
@@ -65,7 +65,7 @@
 extern int flsl(long mask);
 #endif
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 extern int flsl(long mask);
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #define __builtin_expect(expr, val) (expr)
@@ -173,7 +173,7 @@ extern void __CFGenericValidateType_(CFTypeRef cf, CFTypeID type, const char *fu
 typedef struct ___CFThreadSpecificData {
     void *_unused1;
     void *_allocator;
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     HHOOK _messageHook;
 #endif
 // If you add things to this struct, add cleanup to __CFFinalizeThreadData()
@@ -184,7 +184,7 @@ __private_extern__ void __CFFinalizeThreadData(void *arg);
 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 extern pthread_key_t __CFTSDKey;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 extern DWORD __CFTSDKey;
 #endif
 
@@ -194,7 +194,7 @@ CF_INLINE __CFThreadSpecificData *__CFGetThreadSpecificData_inline(void) {
 #if DEPLOYMENT_TARGET_MACOSX|| DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     __CFThreadSpecificData *data = (__CFThreadSpecificData *)pthread_getspecific(__CFTSDKey);
     return data ? data : __CFGetThreadSpecificData();
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     __CFThreadSpecificData *data = (__CFThreadSpecificData *)TlsGetValue(__CFTSDKey);
     return data ? data : __CFGetThreadSpecificData();
 #endif
@@ -278,11 +278,11 @@ extern Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale,
 extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, unsigned *result);
 
 
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WIN32 && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
 
 #define STACK_BUFFER_DECL(T, N, C) T N[C];
 
-#elif DEPLOYMENT_TARGET_WIN32 && _MSC_VER
+#elif DEPLOYMENT_TARGET_WINDOWS && _MSC_VER
 
 #define STACK_BUFFER_DECL(T, N, C) T* N = (T*)_alloca(C * sizeof(T));
 
@@ -302,7 +302,7 @@ struct CF_CONST_STRING {
 extern int __CFConstantStringClassReference[];
 
 /* CFNetwork also has a copy of the CONST_STRING_DECL macro (for use on platforms without constant string support in cc); please warn cfnetwork-core@group.apple.com of any necessary changes to this macro. -- REW, 1/28/2002 */
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 #define ___WindowsConstantStringClassReference &__CFConstantStringClassReference
 #else
 #define ___WindowsConstantStringClassReference NULL
@@ -312,11 +312,11 @@ extern int __CFConstantStringClassReference[];
 #define CONST_STRING_DECL(S, V)			\
 static struct CF_CONST_STRING __ ## S ## __ = {{&__CFConstantStringClassReference, {0x0000, 0x07c8}}, V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
-#elif !DEPLOYMENT_TARGET_WIN32 || (DEPLOYMENT_TARGET_WIN32 && defined(__GNUC__))
+#elif !DEPLOYMENT_TARGET_WINDOWS || (DEPLOYMENT_TARGET_WINDOWS && defined(__GNUC__))
 #define CONST_STRING_DECL(S, V)			\
 static struct CF_CONST_STRING __ ## S ## __ = {{&__CFConstantStringClassReference, {0x07c8, 0x0000}}, V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
-#elif 0 //DEPLOYMENT_TARGET_WIN32
+#elif 0 //DEPLOYMENT_TARGET_WINDOWS
 #define CONST_STRING_DECL(S, V)			\
 static struct CF_CONST_STRING __ ## S ## __ = {{___WindowsConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
@@ -340,7 +340,7 @@ CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #undef ___WindowsConstantStringClassReference
 
 /* Buffer size for file pathname */
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     #define CFMaxPathSize ((CFIndex)262)
     #define CFMaxPathLength ((CFIndex)260)
 #else
@@ -382,7 +382,7 @@ CF_INLINE void __CFSpinUnlock(CFSpinLock_t *lockp) {
     OSSpinLockUnlock(lockp);
 }
 
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 
 typedef CRITICAL_SECTION CFSpinLock_t;
 
@@ -418,7 +418,7 @@ CF_INLINE void __CFSpinUnlock(CFSpinLock_t *lock) {
 #define HAS_FORKED() 0
 #endif
 
-#if defined(__svr4__) || defined(__hpux__) || DEPLOYMENT_TARGET_WIN32
+#if defined(__svr4__) || defined(__hpux__) || DEPLOYMENT_TARGET_WINDOWS
 #include <errno.h>
 #elif DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 #include <sys/errno.h>

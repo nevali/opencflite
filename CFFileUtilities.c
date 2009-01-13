@@ -35,7 +35,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <fcntl.h>
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 /* In typical fragile fashion, order of include on Windows is important */
 #include <io.h>
 #include <fcntl.h>
@@ -51,7 +51,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     #define CF_OPENFLGS	(_O_BINARY|_O_NOINHERIT)
 #else
     #define CF_OPENFLGS	(0)
@@ -64,7 +64,7 @@ __private_extern__ CFStringRef _CFCopyExtensionForAbstractType(CFStringRef abstr
 
 
 __private_extern__ Boolean _CFCreateDirectory(const char *path) {
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     return CreateDirectoryA(path, (LPSECURITY_ATTRIBUTES)NULL);
 #else
     int no_hang_fd = open("/dev/autofs_nowait", 0);
@@ -75,7 +75,7 @@ __private_extern__ Boolean _CFCreateDirectory(const char *path) {
 }
 
 __private_extern__ Boolean _CFRemoveDirectory(const char *path) {
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     return RemoveDirectoryA(path);
 #else
     int no_hang_fd = open("/dev/autofs_nowait", 0);
@@ -86,7 +86,7 @@ __private_extern__ Boolean _CFRemoveDirectory(const char *path) {
 }
 
 __private_extern__ Boolean _CFDeleteFile(const char *path) {
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     return DeleteFileA(path);
 #else
     int no_hang_fd = open("/dev/autofs_nowait", 0);
@@ -107,14 +107,14 @@ __private_extern__ Boolean _CFReadBytesFromFile(CFAllocatorRef alloc, CFURLRef u
 
     *bytes = NULL;
     
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     fd = open(path, O_RDONLY|CF_OPENFLGS, 0666|_S_IREAD);
 #else
     int no_hang_fd = open("/dev/autofs_nowait", 0);
     fd = open(path, O_RDONLY|CF_OPENFLGS, 0666);
 #endif
     if (fd < 0) {
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
         close(no_hang_fd);
 #endif
         return false;
@@ -122,7 +122,7 @@ __private_extern__ Boolean _CFReadBytesFromFile(CFAllocatorRef alloc, CFURLRef u
     if (fstat(fd, &statBuf) < 0) {
         int saveerr = thread_errno();
         close(fd);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
         close(no_hang_fd);
 #endif
         thread_set_errno(saveerr);
@@ -130,7 +130,7 @@ __private_extern__ Boolean _CFReadBytesFromFile(CFAllocatorRef alloc, CFURLRef u
     }
     if ((statBuf.st_mode & S_IFMT) != S_IFREG) {
         close(fd);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
         close(no_hang_fd);
 #endif
         thread_set_errno(EACCES);
@@ -153,7 +153,7 @@ __private_extern__ Boolean _CFReadBytesFromFile(CFAllocatorRef alloc, CFURLRef u
         if (read(fd, *bytes, desiredLength) < 0) {
             CFAllocatorDeallocate(alloc, *bytes);
             close(fd);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
             close(no_hang_fd);
 #endif
             return false;
@@ -161,7 +161,7 @@ __private_extern__ Boolean _CFReadBytesFromFile(CFAllocatorRef alloc, CFURLRef u
         *length = desiredLength;
     }
     close(fd);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     close(no_hang_fd);
 #endif
     return true;
@@ -176,7 +176,7 @@ __private_extern__ Boolean _CFWriteBytesToFile(CFURLRef url, const void *bytes, 
         return false;
     }
 
-#if DEPLOYMENT_TARGET_WIN32 || 0
+#if DEPLOYMENT_TARGET_WINDOWS || 0
     mode = 0666;
     if (0 == stat(path, &statBuf)) {
         mode = statBuf.st_mode;
@@ -325,7 +325,7 @@ __private_extern__ CFMutableArrayRef _CFContentsOfDirectory(CFAllocatorRef alloc
         return NULL;
     }
 
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 
     WIN32_FIND_DATAA file;
     HANDLE handle;
@@ -396,7 +396,7 @@ __private_extern__ SInt32 _CFGetFileProperties(CFAllocatorRef alloc, CFURLRef pa
     Boolean fileExists;
     Boolean isDirectory = false;
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     struct _stati64 statBuf;
     int fd = -1;
 #else
@@ -413,7 +413,7 @@ __private_extern__ SInt32 _CFGetFileProperties(CFAllocatorRef alloc, CFURLRef pa
         return -1;
     }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     HANDLE hFile = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
     if (INVALID_HANDLE_VALUE == hFile)
        return -1;
@@ -485,7 +485,7 @@ __private_extern__ SInt32 _CFGetFileProperties(CFAllocatorRef alloc, CFURLRef pa
 
     if (modTime != NULL) {
         if (fileExists) {
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
             CFAbsoluteTime theTime = (CFAbsoluteTime)statBuf.st_mtime - kCFAbsoluteTimeIntervalSince1970;
 #else
             CFAbsoluteTime theTime = (CFAbsoluteTime)statBuf.st_mtimespec.tv_sec - kCFAbsoluteTimeIntervalSince1970;
@@ -528,7 +528,7 @@ __private_extern__ SInt32 _CFGetFileProperties(CFAllocatorRef alloc, CFURLRef pa
 // MF:!!! Should pull in the rest of the UniChar based path utils from Foundation.
 #if (DEPLOYMENT_TARGET_MACOSX) || defined(__svr4__) || defined(__hpux__) || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     #define UNIX_PATH_SEMANTICS
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     #define WINDOWS_PATH_SEMANTICS
 #else
 #error Unknown platform

@@ -116,7 +116,7 @@ static struct {
 
 #if DEPLOYMENT_TARGET_MACOSX
 #define CFNETWORK_LOAD_SYM(sym)   __CFLookupCFNetworkFunction(#sym)
-//#elif DEPLOYMENT_TARGET_WIN32
+//#elif DEPLOYMENT_TARGET_WINDOWS
 //#define CFNETWORK_LOAD_SYM(sym)   (void *)GetProcAddress(CFNetworkSupport.image, #sym)
 #endif
 

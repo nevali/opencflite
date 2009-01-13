@@ -75,7 +75,7 @@
 #include <stdlib.h>
 #include <unicode/uloc.h>
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 extern size_t strlcpy(char *dst, const char *src, size_t siz);
 extern size_t strlcat(char *dst, const char *src, size_t siz);
 #endif

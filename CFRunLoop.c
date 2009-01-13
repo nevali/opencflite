@@ -25,7 +25,7 @@
 	Responsibility: Christopher Kane
 */
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 
 #include <CoreFoundation/CFRunLoop.h>
 #include <CoreFoundation/CFSet.h>
@@ -60,7 +60,7 @@ static pthread_t kNilThreadT = { nil, nil };
 #define pthreadPointer(a) a.p
 #define lockCount(a) a.LockCount
 #define NativeThread pthread_t
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 static HANDLE kNilThreadT = 0;
 #define lockCount(a) a.LockCount
 #define NativeThread HANDLE
@@ -156,7 +156,7 @@ CF_INLINE void __CFPortSetFree(__CFPortSet portSet) {
     mach_port_destroy(mach_task_self(), portSet);
 }
 
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
 
 typedef HANDLE __CFPort;
 #define CFPORT_NULL NULL
@@ -288,7 +288,7 @@ struct __CFRunLoopMode {
     __CFPortSet _portSet;
 #if DEPLOYMENT_TARGET_MACOSX
     int _kq;
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     DWORD _msgQMask;
 #endif
 };
@@ -321,7 +321,7 @@ static CFStringRef __CFRunLoopModeCopyDescription(CFTypeRef cf) {
     CFStringAppendFormat(result, NULL, CFSTR("<CFRunLoopMode %p [%p]>{name = %@, locked = %s, "), rlm, CFGetAllocator(rlm), rlm->_name, lockCount(rlm->_lock) ? "true" : "false");
 #if DEPLOYMENT_TARGET_MACOSX
     CFStringAppendFormat(result, NULL, CFSTR("port set = %p,"), rlm->_portSet);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     CFStringAppendFormat(result, NULL, CFSTR("MSGQ mask = %p,"), rlm->_msgQMask);
 #endif
     CFStringAppendFormat(result, NULL, CFSTR("\n\tsources = %@,\n\tobservers == %@,\n\ttimers = %@\n},\n"), rlm->_sources, rlm->_observers, rlm->_timers);
@@ -453,7 +453,7 @@ static CFRunLoopModeRef __CFRunLoopFindMode(CFRunLoopRef rl, CFStringRef modeNam
 static Boolean __CFRunLoopModeIsEmpty(CFRunLoopRef rl, CFRunLoopModeRef rlm) {
     CHECK_FOR_FORK();
     if (NULL == rlm) return true;
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     if (0 != rlm->_msgQMask) return false;
 #endif
     if (NULL != rlm->_sources && 0 < CFSetGetCount(rlm->_sources)) return false;
@@ -473,7 +473,7 @@ static Boolean __CFRunLoopModeIsEmpty(CFRunLoopRef rl, CFRunLoopModeRef rlm) {
     return true;
 }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 DWORD __CFRunLoopGetWindowsMessageQueueMask(CFRunLoopRef rl, CFStringRef modeName) {
     CFRunLoopModeRef rlm;
     DWORD result = 0;
@@ -768,7 +768,7 @@ static void __CFRunLoopTimerRescheduleWithAllModes(CFRunLoopTimerRef rlt, CFRunL
 #endif
 }
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 
 typedef struct _collectTimersContext {
     CFMutableArrayRef results;
@@ -1046,7 +1046,7 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
         CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorSystemDefault, 0, NULL, NULL);
         CFRunLoopRef mainLoop = __CFRunLoopCreate();
         CFDictionarySetValue(dict, 0, mainLoop);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     	 if (!OSAtomicCompareAndSwapPtrBarrier(NULL, dict, (void * volatile *)&runLoops)) {
 	        CFRelease(dict);
 	        CFRelease(mainLoop);
@@ -1086,7 +1086,7 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
 
 __private_extern__ void _CFRunLoop1(void) {
     __CFSpinLock(&loopsLock);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     // FIXMEFIXMEE
     if (runLoops) {
 	pthread_t t = pthread_self();
@@ -1108,7 +1108,7 @@ CFRunLoopRef CFRunLoopGetMain(void) {
 
 CFRunLoopRef CFRunLoopGetCurrent(void) {
     CHECK_FOR_FORK();
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
     return _CFRunLoop0(kNilThreadT);   // FIXMEFIXME
 #else
     return _CFRunLoop0(pthread_self());
@@ -1117,7 +1117,7 @@ CFRunLoopRef CFRunLoopGetCurrent(void) {
 
 void _CFRunLoopSetCurrent(CFRunLoopRef rl) {
     __CFSpinLock(&loopsLock);
-#if !DEPLOYMENT_TARGET_WIN32
+#if !DEPLOYMENT_TARGET_WINDOWS
     CFRunLoopRef currentLoop = runLoops ? (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(pthread_self())) : NULL;
     if (rl != currentLoop) {
 	// intentionally leak currentLoop so we don't kill any ports in the child
@@ -1791,7 +1791,7 @@ static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInter
 	} else if (MACH_MSG_SUCCESS != ret) {
 	    HALT;
 	}
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
         DWORD waitResult = WAIT_TIMEOUT;
         HANDLE handleBuf[MAXIMUM_WAIT_OBJECTS];
         HANDLE *handles;
@@ -1859,7 +1859,7 @@ static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInter
 	if (NULL != msg) {
             livePort = msg->msgh_local_port;
         }
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
         CFAssert2(waitResult != WAIT_FAILED, __kCFLogAssertion, "%s(): error %d from MsgWaitForMultipleObjects", __PRETTY_FUNCTION__, GetLastError());
         if (waitResult == WAIT_TIMEOUT) {
             // do nothing, just return to caller
@@ -2506,7 +2506,7 @@ static CFStringRef __CFRunLoopSourceCopyDescription(CFTypeRef cf) {	/* DOES CALL
 	Dl_info info;
 	const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";
 	contextDesc = CFStringCreateWithFormat(CFGetAllocator(rls), NULL, CFSTR("<CFRunLoopSource context>{version = %ld, info = %p, callout = %s (%p)}"), rls->_context.version0.version, rls->_context.version0.info, name, addr);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
    const char *name = "???";
 	contextDesc = CFStringCreateWithFormat(CFGetAllocator(rls), NULL, CFSTR("<CFRunLoopSource context>{version = %ld, info = %p, callout = %s (%p)}"), rls->_context.version0.version, rls->_context.version0.info, name, addr);
 #else
@@ -2693,7 +2693,7 @@ static CFStringRef __CFRunLoopObserverCopyDescription(CFTypeRef cf) {	/* DOES CA
     Dl_info info;
     const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";
     result = CFStringCreateWithFormat(CFGetAllocator(rlo), NULL, CFSTR("<CFRunLoopObserver %p [%p]>{locked = %s, valid = %s, activities = 0x%x, repeats = %s, order = %d, callout = %s (%p), context = %@}"), cf, CFGetAllocator(rlo), lockCount(rlo->_lock) ? "Yes" : "No", __CFIsValid(rlo) ? "Yes" : "No", rlo->_activities, __CFRunLoopObserverRepeats(rlo) ? "Yes" : "No", rlo->_order, name, addr, contextDesc);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     void *addr = rlo->_callout;
     const char *name = "???";
     result = CFStringCreateWithFormat(CFGetAllocator(rlo), NULL, CFSTR("<CFRunLoopObserver %p [%p]>{locked = %s, valid = %s, activities = 0x%x, repeats = %s, order = %d, callout = %s (%p), context = %@}"), cf, CFGetAllocator(rlo), lockCount(rlo->_lock) ? "Yes" : "No", __CFIsValid(rlo) ? "Yes" : "No", rlo->_activities, __CFRunLoopObserverRepeats(rlo) ? "Yes" : "No", rlo->_order, name, addr, contextDesc);
@@ -2846,7 +2846,7 @@ static CFStringRef __CFRunLoopTimerCopyDescription(CFTypeRef cf) {	/* DOES CALLO
     }
 #if DEPLOYMENT_TARGET_MACOSX
     int64_t now2 = (int64_t)mach_absolute_time();
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     int64_t now2 = (int64_t)0;
 #endif
     CFAbsoluteTime now1 = CFAbsoluteTimeGetCurrent();
@@ -2855,7 +2855,7 @@ static CFStringRef __CFRunLoopTimerCopyDescription(CFTypeRef cf) {	/* DOES CALLO
     Dl_info info;
     const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";
     result = CFStringCreateWithFormat(CFGetAllocator(rlt), NULL, CFSTR("<CFRunLoopTimer %p [%p]>{locked = %s, valid = %s, interval = %0.09g, next fire date = %0.09g, order = %d, callout = %s (%p), context = %@}"), cf, CFGetAllocator(rlt), lockCount(rlt->_lock) ? "Yes" : "No", __CFIsValid(rlt) ? "Yes" : "No", __CFTSRToTimeInterval(rlt->_intervalTSR), now1 + __CFTSRToTimeInterval(fireTime - now2), rlt->_order, name, addr, contextDesc);
-#elif DEPLOYMENT_TARGET_WIN32
+#elif DEPLOYMENT_TARGET_WINDOWS
     void *addr = rlt->_callout;
     const char *name = "???";
     result = CFStringCreateWithFormat(CFGetAllocator(rlt), NULL, CFSTR("<CFRunLoopTimer %p [%p]>{locked = %s, valid = %s, interval = %0.09g, next fire date = %0.09g, order = %d, callout = %s (%p), context = %@}"), cf, CFGetAllocator(rlt), lockCount(rlt->_lock) ? "Yes" : "No", __CFIsValid(rlt) ? "Yes" : "No", __CFTSRToTimeInterval(rlt->_intervalTSR), now1 + __CFTSRToTimeInterval(fireTime - now2), rlt->_order, name, addr, contextDesc);
