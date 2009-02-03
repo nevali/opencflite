@@ -39,6 +39,8 @@ CF_EXTERN_C_BEGIN
 #endif
 #elif DEPLOYMENT_TARGET_WINDOWS || 0
 #define BINARY_SUPPORT_DLL 1
+#elif DEPLOYMENT_TARGET_LINUX || 0
+#define BINARY_SUPPORT_DLFCN 1
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif

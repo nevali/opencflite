@@ -37,9 +37,9 @@
 #include "CFPriv.h"
 #include "CFInternal.h"
 #include <sys/stat.h>
-#if DEPLOYMENT_TARGET_MACOSX
+#if !DEPLOYMENT_TARGET_WINDOWS
 #include <unistd.h>
-#endif //__MACH__
+#endif
 
 #if DEBUG_PREFERENCES_MEMORY
 #include "../Tests/CFCountingAllocator.c"
@@ -409,7 +409,7 @@ static CFStringRef  _CFPreferencesStandardDomainCacheKey(CFStringRef  domainName
 static CFURLRef _CFPreferencesURLForStandardDomainWithSafetyLevel(CFStringRef domainName, CFStringRef userName, CFStringRef hostName, unsigned long safeLevel) {
     CFURLRef theURL = NULL;
     CFAllocatorRef prefAlloc = __CFPreferencesAllocator();
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     CFURLRef prefDir = _preferencesDirectoryForUserHostSafetyLevel(userName, hostName, safeLevel);
     CFStringRef  appName;
     CFStringRef  fileName;

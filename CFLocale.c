@@ -41,12 +41,10 @@
 #include <unicode/uset.h>           // ICU Unicode sets
 #include <unicode/putil.h>          // ICU low-level utilities
 #include <unicode/umsg.h>           // ICU message formatting
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 #include <CoreFoundation/CFNumberFormatter.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unicode/ucol.h>
-#endif
 
 #if DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h> // for GetLocaleInfo
@@ -310,9 +308,7 @@ CFLocaleRef CFLocaleGetSystem(void) {
 
 static CFLocaleRef __CFLocaleCurrent = NULL;
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 #define FALLBACK_LOCALE_NAME CFSTR("")
-#endif
 
 CFLocaleRef CFLocaleCopyCurrent(void) {
 
@@ -343,11 +339,8 @@ CFLocaleRef CFLocaleCopyCurrent(void) {
     locale->_cache = CFDictionaryCreateMutable(kCFAllocatorSystemDefault, 0, NULL, &kCFTypeDictionaryValueCallBacks);
     locale->_overrides = NULL;
     locale->_prefs = prefs;
-#if DEPLOYMENT_TARGET_WINDOWS
+
     CF_SPINLOCK_INIT_FOR_STRUCTS(locale->_lock);
-#else
-    locale->_lock = CFSpinLockInit;
-#endif
 
     __CFLocaleLockGlobal();
     if (NULL == __CFLocaleCurrent) {
@@ -402,11 +395,9 @@ CFLocaleRef CFLocaleCreate(CFAllocatorRef allocator, CFStringRef identifier) {
     locale->_cache = CFDictionaryCreateMutable(allocator, 0, NULL, &kCFTypeDictionaryValueCallBacks);
     locale->_overrides = NULL;
     locale->_prefs = NULL;
-#if DEPLOYMENT_TARGET_WINDOWS
+
     CF_SPINLOCK_INIT_FOR_STRUCTS(locale->_lock);
-#else
-    locale->_lock = CFSpinLockInit;
-#endif
+
     if (canCache) {
         if (NULL == __CFLocaleCache) {
             __CFLocaleCache = CFDictionaryCreateMutable(kCFAllocatorSystemDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -541,7 +532,7 @@ CFArrayRef CFLocaleCopyAvailableLocaleIdentifiers(void) {
         CFRelease(string2);
     }
     CFIndex cnt = CFSetGetCount(working);
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
     STACK_BUFFER_DECL(const void *, buffer, cnt);
 #else
     const void* buffer[BUFFER_SIZE];

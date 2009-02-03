@@ -2,6 +2,10 @@
 #include <CoreFoundation/CFBundle.h>
 #include <CoreFoundation/CFRuntime.h>
 #include <malloc.h>
+#include <string.h>
+#if DEPLOYMENT_TARGET_LINUX
+#include <alloca.h>
+#endif
 
 typedef void* SEL;
 typedef void* id;

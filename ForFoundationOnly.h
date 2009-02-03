@@ -50,7 +50,7 @@ CF_EXTERN_C_BEGIN
 
 #if DEPLOYMENT_TARGET_MACOSX || 0
 #include <malloc/malloc.h>
-#endif //__MACH__
+#endif /* DEPLOYMENT_TARGET_MACOSX */
 
 CF_EXTERN_C_END
 
@@ -84,7 +84,7 @@ CF_EXPORT CFErrorRef _CFBundleCreateError(CFAllocatorRef allocator, CFBundleRef 
 CF_EXTERN_C_END
 
 
-#if (DEPLOYMENT_TARGET_MACOSX || 0) || DEPLOYMENT_TARGET_WINDOWS
+#if (DEPLOYMENT_TARGET_MACOSX || 0) || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 // ---- CFPreferences material ----------------------------------------
 
 #define DEBUG_PREFERENCES_MEMORY 0
@@ -480,6 +480,33 @@ CF_INLINE UInt64 __CFReadTSR(void) {
     LARGE_INTEGER freq;
     QueryPerformanceCounter(&freq);
     return freq.QuadPart;
+}
+#else
+CF_INLINE UInt64 __CFReadTSR(void) {
+    union {
+		UInt64 time64;
+		UInt32 word[2];
+    } now;
+#if defined(__i386__)
+    /* Read from Pentium and Pentium Pro 64-bit timestamp counter. */
+    /* The counter is set to 0 at processor reset and increments on */
+    /* every clock cycle. */
+    __asm__ volatile("rdtsc" : : : "eax", "edx");
+    __asm__ volatile("movl %%eax,%0" : "=m" (now.word[0]) : : "eax");
+    __asm__ volatile("movl %%edx,%0" : "=m" (now.word[1]) : : "edx");
+#elif defined(__ppc__) || defined(__powerpc__)
+    /* Read from PowerPC 64-bit time base register. */
+    UInt32 t3;
+    do {
+		__asm__ volatile("mftbu %0" : "=r" (now.word[0]));
+		__asm__ volatile("mftb %0" : "=r" (now.word[1]));
+		__asm__ volatile("mftbu %0" : "=r" (t3));
+    } while (now.word[0] != t3);
+#else
+#warning "No known method for reading a time stamp register on this architecture."
+    now.time64 = (uint64_t)0;
+#endif /* defined(__i386__) */
+    return now.time64;
 }
 #endif
 

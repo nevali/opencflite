@@ -27,7 +27,7 @@
 
 #include <CoreFoundation/CFUUID.h>
 #include "CFInternal.h"
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <uuid/uuid.h>
 #elif DEPLOYMENT_TARGET_WINDOWS
 #include <objbase.h>
@@ -173,7 +173,7 @@ CFUUIDRef CFUUIDCreate(CFAllocatorRef alloc) {
         }
         checked = true;
     }
-#if (DEPLOYMENT_TARGET_MACOSX)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     uuid_t uuid;
     if (useV1UUIDs) uuid_generate_time(uuid); else uuid_generate_random(uuid);
 #elif DEPLOYMENT_TARGET_WINDOWS

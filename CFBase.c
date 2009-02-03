@@ -1009,7 +1009,7 @@ __asm__ (
 
 // void __HALT(void);
 
-#if defined(__ppc__) || defined(__ppc64__)
+#if defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__)
 __asm__ (
 ".text\n"
 "	.align 2\n"

@@ -455,7 +455,7 @@ static void _CFAppendXML0(CFTypeRef object, UInt32 indentation, CFMutableDataRef
         _plistAppendUTF8CString(xmlString, "</");
         _plistAppendCharacters(xmlString, CFXMLPlistTags[STRING_IX], STRING_TAG_LENGTH);
         _plistAppendUTF8CString(xmlString, ">\n");
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     } else if (typeID == _CFKeyedArchiverUIDGetTypeID()) {
         _plistAppendUTF8CString(xmlString, "<");
         _plistAppendCharacters(xmlString, CFXMLPlistTags[DICT_IX], DICT_TAG_LENGTH);

@@ -70,6 +70,10 @@
 #define close _close
 #endif
 
+#if DEPLOYMENT_TARGET_LINUX
+#include <unistd.h>
+#endif
+
 #define LOG_BUNDLE_LOAD 0
 
 // Public CFBundle Info plist keys
@@ -689,7 +693,7 @@ CFBundleRef CFBundleGetBundleWithIdentifier(CFStringRef bundleID) {
             bundlesWithThisID = (CFArrayRef)CFDictionaryGetValue(_bundlesByIdentifier, bundleID);
             if (bundlesWithThisID && CFArrayGetCount(bundlesWithThisID) > 0) result = (CFBundleRef)CFArrayGetValueAtIndex(bundlesWithThisID, 0);
         }
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
         if (!result) {
             // Try to create the bundle for the caller and try again
             void *p = __builtin_return_address(0);
@@ -1697,6 +1701,11 @@ CFBundleExecutableType CFBundleGetExecutableType(CFBundleRef bundle) {
 #else
 #define ustrncasecmp(x, y, z) strncasecmp((char *)(x), (char *)(y), (z))
 #endif
+#elif DEPLOYMENT_TARGET_LINUX
+// When compiling with -Wall the GNU C library complains about passing
+// NULL to strncasecmp_l as the locale. Since a locale is never
+// passed, the C locale version should be a suitable replacement.
+#define ustrncasecmp(x, y, z) strncasecmp((char *)(x), (char *)(y), (z))
 #else
 #define ustrncasecmp(x, y, z) strncasecmp_l((char *)(x), (char *)(y), (z), NULL)
 #endif

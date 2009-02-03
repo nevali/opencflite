@@ -56,9 +56,20 @@
 #endif
 #define EBADF 		WSAENOTSOCK
 extern void gettimeofday(struct timeval *tv, void *dummy);
-#endif
+#elif DEPLOYMENT_TARGET_LINUX
+#include <dlfcn.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/socket.h>
+#endif /* DEPLOYMENT_TARGET_MACOSX */
 #include "auto_stubs.h"
 
+#if defined(DEBUG)
+#include <stdio.h>
+#endif
 #if DEPLOYMENT_TARGET_WINDOWS
 /* Use crazy Microsoft signatures */
 #define SOCK_DATA char*
@@ -1030,12 +1041,15 @@ Boolean __CFSocketGetBytesAvailable(CFSocketRef s, CFIndex* ctBytesAvailable)
 		return true;
 	} else {
 		int result;
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
 	    int bytesAvailable, intLen = sizeof(bytesAvailable);
 	    result = getsockopt(CFSocketGetNative(s), SOL_SOCKET, SO_NREAD, &bytesAvailable, (socklen_t *)&intLen);
-#else
+#elif DEPLOYMENT_TARGET_WINDOWS
 	    unsigned long bytesAvailable;
 	    result = ioctlsocket(CFSocketGetNative(s), FIONREAD, &bytesAvailable);
+#else
+		CFIndex bytesAvailable = 0;
+		result = -1;
 #endif
 		if (result < 0)
 			return false;
@@ -1460,13 +1474,8 @@ static CFSocketRef _CFSocketCreateWithNative(CFAllocatorRef allocator, CFSocketN
     memory->_f.connected = FALSE;
     memory->_f.writableHint = FALSE;
     memory->_f.closeSignaled = FALSE;
-#if DEPLOYMENT_TARGET_WINDOWS
     CF_SPINLOCK_INIT_FOR_STRUCTS(memory->_lock);
     CF_SPINLOCK_INIT_FOR_STRUCTS(memory->_writeLock);
-#else
-    memory->_lock = CFSpinLockInit;
-    memory->_writeLock = CFSpinLockInit;
-#endif
     memory->_socket = sock;
     if (INVALID_SOCKET == sock || 0 != getsockopt(sock, SOL_SOCKET, SO_TYPE, (SOCK_DATA)&(memory->_socketType), (socklen_t *)&typeSize)) memory->_socketType = 0;		// cast for WinSock bad API
     memory->_errorCode = 0;
@@ -2222,7 +2231,7 @@ static void __CFSocketSendNameRegistryRequest(CFSocketSignature *signature, CFDi
 static void __CFSocketValidateSignature(const CFSocketSignature *providedSignature, CFSocketSignature *signature, uint16_t defaultPortNumber) {
     struct sockaddr_in sain, *sainp;
     memset(&sain, 0, sizeof(sain));
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
     sain.sin_len = sizeof(sain);
 #endif
     sain.sin_family = AF_INET;
@@ -2248,7 +2257,7 @@ static void __CFSocketValidateSignature(const CFSocketSignature *providedSignatu
         } else {
             sainp = (struct sockaddr_in *)CFDataGetBytePtr(providedSignature->address);
             if ((int)sizeof(struct sockaddr_in) <= CFDataGetLength(providedSignature->address) && (AF_INET == sainp->sin_family || 0 == sainp->sin_family)) {
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
                 sain.sin_len = sizeof(sain);
 #endif
                 sain.sin_family = AF_INET;

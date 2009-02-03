@@ -52,7 +52,7 @@ __kCFRetainEvent = 28,
 __kCFReleaseEvent = 29
 };
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
+#if DEPLOYMENT_TARGET_MACOSX
 #include <malloc/malloc.h>
 #elif DEPLOYMENT_TARGET_WINDOWS
 #include <malloc.h>
@@ -61,6 +61,11 @@ __kCFReleaseEvent = 29
  */
 CF_INLINE size_t malloc_size(void* memblock) {
     return _msize(memblock);
+}
+#elif DEPLOYMENT_TARGET_LINUX
+#include <malloc.h>
+CF_INLINE size_t malloc_size(const void *memblock) {
+    return malloc_usable_size((void *)memblock);
 }
 #endif
 

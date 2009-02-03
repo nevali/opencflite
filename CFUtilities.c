@@ -532,6 +532,8 @@ static void _CFShowToFile(FILE *file, Boolean flush, const void *obj) {
      if (!lastNL) {
 #if DEPLOYMENT_TARGET_MACOSX
          fprintf_l(file, NULL, "\n");
+#else
+		 fprintf(file, "\n");
 #endif
          if (flush) fflush(file);
      }

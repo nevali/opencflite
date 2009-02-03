@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unicode/ucal.h>
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/fcntl.h>
@@ -48,7 +48,7 @@
 #include <tchar.h>
 #endif
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #define TZZONELINK	TZDEFAULT
 #define TZZONEINFO	TZDIR "/"
 #elif DEPLOYMENT_TARGET_WINDOWS
@@ -132,7 +132,7 @@ static CFMutableArrayRef __CFCopyWindowsTimeZoneList() {
 }
 #endif
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 static CFMutableArrayRef __CFCopyRecursiveDirectoryList() {
     CFMutableArrayRef result = CFArrayCreateMutable(kCFAllocatorSystemDefault, 0, &kCFTypeArrayCallBacks);
 #if !DEPLOYMENT_TARGET_WINDOWS
@@ -278,7 +278,7 @@ CF_INLINE void __CFEntzcode(int32_t value, unsigned char *bufp) {
     bufp[3] = (value >> 0) & 0xff;
 }
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 static Boolean __CFParseTimeZoneData(CFAllocatorRef allocator, CFDataRef data, CFTZPeriod **tzpp, CFIndex *cntp) {
     int32_t len, timecnt, typecnt, charcnt, idx, cnt;
     const uint8_t *p, *timep, *typep, *ttisp, *charp;
@@ -469,7 +469,7 @@ CFTypeID CFTimeZoneGetTypeID(void) {
 }
 
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 static CFTimeZoneRef __CFTimeZoneCreateSystem(void) {
     CFTimeZoneRef result = NULL;
 
@@ -608,7 +608,7 @@ CFArrayRef CFTimeZoneCopyKnownNames(void) {
 /* TimeZone information locate in the registry for Win32
  * (Aleksey Dukhnyakov)
  */
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
         list = __CFCopyRecursiveDirectoryList();
 #elif DEPLOYMENT_TARGET_WINDOWS
         list = __CFCopyWindowsTimeZoneList();
@@ -632,7 +632,7 @@ CFArrayRef CFTimeZoneCopyKnownNames(void) {
     return tzs;
 }
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 /* The criteria here are sort of: coverage for the U.S. and Europe,
  * large cities, abbreviation uniqueness, and perhaps a few others.
  * But do not make the list too large with obscure information.
@@ -831,7 +831,7 @@ CFTimeZoneRef CFTimeZoneCreate(CFAllocatorRef allocator, CFStringRef name, CFDat
     return memory;
 }
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 static CFTimeZoneRef __CFTimeZoneCreateFixed(CFAllocatorRef allocator, int32_t seconds, CFStringRef name, int isDST) {
     CFTimeZoneRef result;
     CFDataRef data;
@@ -922,7 +922,7 @@ CFTimeZoneRef CFTimeZoneCreateWithName(CFAllocatorRef allocator, CFStringRef nam
 	return (CFTimeZoneRef)CFRetain(result);
     }
     __CFTimeZoneUnlockGlobal();
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     CFURLRef baseURL, tempURL;
     void *bytes;
     CFIndex length;
@@ -1093,7 +1093,7 @@ CFAbsoluteTime _CFTimeZoneGetNextDSTSwitch(CFTimeZoneRef tz, CFAbsoluteTime at) 
 }
 
 CFTimeInterval CFTimeZoneGetSecondsFromGMT(CFTimeZoneRef tz, CFAbsoluteTime at) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if !DEPLOYMENT_TARGET_WINDOWS
     CFIndex idx;
     CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), CFTimeInterval, tz, "_secondsFromGMTForAbsoluteTime:", at);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
@@ -1152,7 +1152,7 @@ CFStringRef CFTimeZoneCopyAbbreviation(CFTimeZoneRef tz, CFAbsoluteTime at) {
 }
 
 Boolean CFTimeZoneIsDaylightSavingTime(CFTimeZoneRef tz, CFAbsoluteTime at) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if !DEPLOYMENT_TARGET_WINDOWS
     CFIndex idx;
     CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), Boolean, tz, "_isDaylightSavingTimeForAbsoluteTime:", at);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());

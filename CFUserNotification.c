@@ -50,6 +50,8 @@
 #include <pthread.h>
 #endif
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+
 #define CFUserNotificationLog(alertHeader, alertMessage) CFLog(3, CFSTR("%@:  %@"), alertHeader, alertMessage);
 
 enum {
@@ -496,3 +498,4 @@ CF_EXPORT SInt32 CFUserNotificationDisplayAlert(CFTimeInterval timeout, CFOption
 #undef MAX_PORT_NAME_LENGTH
 #undef NOTIFICATION_PORT_NAME_SUFFIX
 
+#endif /* DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS */

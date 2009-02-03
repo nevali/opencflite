@@ -42,7 +42,9 @@
 #include <sys/types.h>
 #endif
 
+#if DEPLOYMENT_TARGET_MACOSX
 static CFArrayRef HFSPathToURLComponents(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
+#endif
 static CFArrayRef WindowsPathToURLComponents(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
 static CFStringRef WindowsPathToURLPath(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
 static CFStringRef POSIXPathToURLPath(CFStringRef path, CFAllocatorRef alloc, Boolean isDirectory);
@@ -63,7 +65,7 @@ DEFINE_WEAK_CARBONCORE_FUNC(Size, GetAliasSizeFromPtr, (AliasPtr A), (A), 0)
 DEFINE_WEAK_CARBONCORE_FUNC(OSErr, _FSGetFSRefInformationFast, (const FSRef* A, SInt16 *B, UInt32 *C, UInt32 *D, Boolean *E, Boolean *F, HFSUniStr255 *G), (A, B, C, D, E, F, G), -3296)
 DEFINE_WEAK_CARBONCORE_FUNC(OSErr, _FSGetVolumeByName, ( CFStringRef volumeNameRef, FSVolumeRefNum* vRefNumP), ( volumeNameRef, vRefNumP), -3296 )
 
-#elif DEPLOYMENT_TARGET_WINDOWS || 0 || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX || 0
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif
@@ -1533,7 +1535,7 @@ static void _CFURLInit(struct __CFURL *url, CFStringRef URLString, UInt32 fsType
 	#endif
 }
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 CF_EXPORT void _CFURLInitFSPath(CFURLRef url, CFStringRef path) {
     CFIndex len = CFStringGetLength(path);
     if (len && CFStringGetCharacterAtIndex(path, 0) == '/') {
@@ -3774,7 +3776,7 @@ Boolean CFURLGetFileSystemRepresentation(CFURLRef url, Boolean resolveAgainstBas
     CFAllocatorRef alloc = CFGetAllocator(url);
 
     if (!url) return false;
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     path = CFURLCreateStringWithFileSystemPath(alloc, url, kCFURLPOSIXPathStyle, resolveAgainstBase);
 #elif DEPLOYMENT_TARGET_WINDOWS
     path = CFURLCreateStringWithFileSystemPath(alloc, url, kCFURLWindowsPathStyle, resolveAgainstBase);
@@ -3791,7 +3793,7 @@ CFURLRef CFURLCreateFromFileSystemRepresentation(CFAllocatorRef allocator, const
     CFStringRef path = CFStringCreateWithBytes(allocator, buffer, bufLen, CFStringFileSystemEncoding(), false);
     CFURLRef newURL;
     if (!path) return NULL;
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     newURL = CFURLCreateWithFileSystemPath(allocator, path, kCFURLPOSIXPathStyle, isDirectory);
 #elif DEPLOYMENT_TARGET_WINDOWS
     newURL = CFURLCreateWithFileSystemPath(allocator, path, kCFURLWindowsPathStyle, isDirectory);
@@ -3804,7 +3806,7 @@ CF_EXPORT CFURLRef CFURLCreateFromFileSystemRepresentationRelativeToBase(CFAlloc
     CFStringRef path = CFStringCreateWithBytes(allocator, buffer, bufLen, CFStringFileSystemEncoding(), false);
     CFURLRef newURL;
     if (!path) return NULL;
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
    newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLPOSIXPathStyle, isDirectory, baseURL);
 #elif DEPLOYMENT_TARGET_WINDOWS
     newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLWindowsPathStyle, isDirectory, baseURL);

@@ -31,7 +31,7 @@
 
 #include <CoreFoundation/CFDictionary.h>
 #include "CFInternal.h"
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
 #include <mach-o/dyld.h>
 #endif
 

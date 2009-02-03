@@ -2395,7 +2395,7 @@ CFComparisonResult CFStringCompareWithOptionsAndLocale(CFStringRef string, CFStr
 
             if (kCFStringEncodingASCII == eightBitEncoding) {
                 if (caseInsensitive) {
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
                     int cmpResult = strncasecmp_l((const char *)str1Bytes + rangeToCompare.location, (const char *)str2Bytes, __CFMin(rangeToCompare.length, str2Len), NULL);
 #elif DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
                     int cmpResult = _strnicmp_l((const char*)str1Bytes + rangeToCompare.location, (const char*)str2Bytes, __CFMin(rangeToCompare.length, str2Len), NULL);

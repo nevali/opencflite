@@ -101,7 +101,7 @@ __private_extern__ CFAbsoluteTime __CFDateWindowsSystemTimeToAbsoluteTime(SYSTEM
 
 CFAbsoluteTime CFAbsoluteTimeGetCurrent(void) {
     CFAbsoluteTime ret;
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
     struct timeval tv;
     gettimeofday(&tv, NULL);
     ret = (CFTimeInterval)tv.tv_sec - kCFAbsoluteTimeIntervalSince1970;

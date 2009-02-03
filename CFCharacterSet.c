@@ -500,7 +500,7 @@ static void __CFCheckForExpandedSet(CFCharacterSetRef cset) {
 
     if (0 > __CFNumberOfPlanesForLogging) {
         const char *envVar = getenv("CFCharacterSetCheckForExpandedSet");
-#if !DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX
         long value = (envVar ? strtol_l(envVar, NULL, 0, NULL) : 0);
 #else
         long value = (envVar ? strtol(envVar, NULL, 0) : 0);

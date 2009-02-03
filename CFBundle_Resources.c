@@ -25,7 +25,7 @@
 	Responsibility: Doug Davidson
 */
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #define READ_DIRECTORIES 1
 #endif
 
@@ -1766,7 +1766,7 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectoryWithVer
             infoURLFromBaseNoExtension = _CFBundleInfoURLFromBaseNoExtension2;
             infoURLFromBase = _CFBundleInfoURLFromBase2;
         } else if (3 == version) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
             CFStringRef posixPath = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
             // this test is necessary to exclude the case where a bundle is spuriously created from the innards of another bundle
             if (posixPath) {
@@ -1792,7 +1792,6 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectoryWithVer
                 }
                 CFRelease(windowsPath);
             }
-#elif DEPLOYMENT_TARGET_WINDOWS
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif

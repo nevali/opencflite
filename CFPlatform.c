@@ -274,7 +274,25 @@ const char *_CFProcessPath(void) {
         if (!thePath) {
             thePath = (*_NSGetArgv())[execIndex];
         }
+#elif DEPLOYMENT_TARGET_LINUX
+	if (!__CFProcessPath) {
+		pid_t pid = getpid();
+		char buf[2][CFMaxPathSize] = {{0}, {0}};
+		int n;
+
+		n = snprintf(buf[0], CFMaxPathSize, "/proc/%u/exe", pid);
+
+		if (n > 0) {
+			n = readlink(buf[0], buf[1], CFMaxPathLength);
+			if (n > 0 && n <= CFMaxPathLength) {
+				buf[1][n] = '\0';
+				thePath = buf[1];
+			}
+		}
+#else
+#error "Don't know how to compute the process path for this platform."
 #endif
+
         if (thePath) {
             int len = strlen(thePath);
             __CFProcessPath = (const char *)CFAllocatorAllocate(kCFAllocatorSystemDefault, len + 1, 0);

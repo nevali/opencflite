@@ -61,12 +61,11 @@
 #include <libkern/OSAtomic.h>
 #endif //DEPLOYMENT_TARGET_MACOSX
 
-#if DEPLOYMENT_TARGET_LINUX
+#if !(DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_FREEBSD)
 extern int flsl(long mask);
 #endif
 
 #if DEPLOYMENT_TARGET_WINDOWS
-extern int flsl(long mask);
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #define __builtin_expect(expr, val) (expr)
 
@@ -278,7 +277,7 @@ extern Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTypeRef locale,
 extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, unsigned *result);
 
 
-#if DEPLOYMENT_TARGET_MACOSX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || (DEPLOYMENT_TARGET_WINDOWS && __GNUC__)
 
 #define STACK_BUFFER_DECL(T, N, C) T N[C];
 
@@ -400,6 +399,28 @@ CF_INLINE void __CFSpinLock(CFSpinLock_t *slock) {
 
 CF_INLINE void __CFSpinUnlock(CFSpinLock_t *lock) {
     LeaveCriticalSection(lock);
+}
+
+#elif DEPLOYMENT_TARGET_LINUX
+
+typedef struct __CFSpinLock {
+	int init;
+	pthread_spinlock_t lock;
+} CFSpinLock_t;
+
+#define CFSpinLockInit {0}
+#define CF_SPINLOCK_INIT_FOR_STRUCTS(X) do { pthread_spin_init(&X.lock, PTHREAD_PROCESS_PRIVATE); X.init = 1; } while (0)
+
+CF_INLINE void __CFSpinLock(CFSpinLock_t *lockp) {
+	if (lockp->init == 0) {
+		!pthread_spin_init(&lockp->lock, PTHREAD_PROCESS_PRIVATE) &&
+		(lockp->init = 1);
+	}
+	pthread_spin_lock(&lockp->lock);
+}
+
+CF_INLINE void __CFSpinUnlock(CFSpinLock_t *lockp) {
+	pthread_spin_unlock(&lockp->lock);
 }
 
 #else

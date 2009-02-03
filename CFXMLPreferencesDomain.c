@@ -68,7 +68,7 @@ __private_extern__ const _CFPreferencesDomainCallBacks __kCFXMLPropertyListDomai
 static void __CFMilliSleep(uint32_t msecs) {
 #if defined(__svr4__) || defined(__hpux__)
     sleep((msecs + 900) / 1000);
-#elif DEPLOYMENT_TARGET_MACOSX
+#elif DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     struct timespec input;
     input.tv_sec = msecs / 1000;
     input.tv_nsec = (msecs - input.tv_sec * 1000) * 1000000;

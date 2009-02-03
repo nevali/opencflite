@@ -778,7 +778,7 @@ caseFoldRetry:
             default: break;
         }
     }
-#endif DO_SPECIAL_CASE_MAPPING
+#endif /* DO_SPECIAL_CASE_MAPPING */
 
     if (NULL == __CFUniCharBitmapDataArray) __CFUniCharLoadBitmapData();
 

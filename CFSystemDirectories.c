@@ -87,6 +87,15 @@ CFSearchPathEnumerationState __CFGetNextSearchPathEnumeration(CFSearchPathEnumer
     */
     return result;
 }
+
+#elif DEPLOYMENT_TARGET_LINUX
+CFSearchPathEnumerationState __CFStartSearchPathEnumeration(CFSearchPathDirectory dir, CFSearchPathDomainMask domainMask) {
+    return 0;
+}
+
+CFSearchPathEnumerationState __CFGetNextSearchPathEnumeration(CFSearchPathEnumerationState state, uint8_t *path, CFIndex pathSize) {
+    return 0;
+}
 #endif
 
 

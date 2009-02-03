@@ -25,7 +25,7 @@
 	Responsibility: Christopher Kane
 */
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 
 #include <CoreFoundation/CFRunLoop.h>
 #include <CoreFoundation/CFSet.h>
@@ -40,7 +40,7 @@
 #include <mach/clock.h>
 #include <unistd.h>
 #include <dlfcn.h>
-#else
+#elif DEPLOYMENT_TARGET_WINDOWS
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)
 // With the MS headers, turning off Standard-C gets you macros for stat vs _stat.
 // Strictly speaking, this is supposed to control traditional vs ANSI C features.
@@ -51,6 +51,8 @@
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)
 #define __STDC__
 #endif
+#elif DEPLOYMENT_TARGET_LINUX
+#include <dlfcn.h>
 #endif
 
 static int _LogCFRunLoop = 0;
@@ -1460,6 +1462,7 @@ static Boolean __CFRunLoopDoSource1(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRun
     return sourceHandled;
 }
 
+#if !DEPLOYMENT_TARGET_LINUX
 static Boolean __CFRunLoopDoTimer(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRunLoopTimerRef rlt) {	/* DOES CALLOUT */
     Boolean timerHandled = false;
     int64_t oldFireTSR = 0;
@@ -1527,6 +1530,7 @@ static Boolean __CFRunLoopDoTimer(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRunLo
     __CFRunLoopModeLock(rlm);
     return timerHandled;
 }
+#endif
 
 CF_EXPORT Boolean _CFRunLoopFinished(CFRunLoopRef rl, CFStringRef modeName) {
     CHECK_FOR_FORK();
@@ -1721,7 +1725,7 @@ static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInter
 	mach_msg_header_t *msg;
 	kern_return_t ret;
         uint8_t buffer[1024 + 80] = {0};	// large enough for 1k of inline payload; must be zeroed for GC
-#else
+#elif DEPLOYMENT_TARGET_WINDOWS
         CFArrayRef timersToCall = NULL;
 #endif
 	int32_t returnValue = 0;
@@ -2083,8 +2087,10 @@ void CFRunLoopWakeUp(CFRunLoopRef rl) {
     if (ret != MACH_MSG_SUCCESS && ret != MACH_SEND_TIMED_OUT) {
 	HALT;
     }
-#else
+#elif DEPLOYMENT_TARGET_WINDOWS
     SetEvent(rl->_wakeUpPort);
+#elif DEPLOYMENT_TARGET_LINUX
+	// XXX
 #endif
 }
 
@@ -2502,7 +2508,7 @@ static CFStringRef __CFRunLoopSourceCopyDescription(CFTypeRef cf) {	/* DOES CALL
     }
     if (NULL == contextDesc) {
 	void *addr = rls->_context.version0.version == 0 ? (void *)rls->_context.version0.perform : (rls->_context.version0.version == 1 ? (void *)rls->_context.version1.perform : NULL);
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 	Dl_info info;
 	const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";
 	contextDesc = CFStringCreateWithFormat(CFGetAllocator(rls), NULL, CFSTR("<CFRunLoopSource context>{version = %ld, info = %p, callout = %s (%p)}"), rls->_context.version0.version, rls->_context.version0.info, name, addr);
@@ -2688,7 +2694,7 @@ static CFStringRef __CFRunLoopObserverCopyDescription(CFTypeRef cf) {	/* DOES CA
     if (!contextDesc) {
 	contextDesc = CFStringCreateWithFormat(CFGetAllocator(rlo), NULL, CFSTR("<CFRunLoopObserver context %p>"), rlo->_context.info);
     }
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     void *addr = (void*)rlo->_callout;
     Dl_info info;
     const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";
@@ -2850,7 +2856,7 @@ static CFStringRef __CFRunLoopTimerCopyDescription(CFTypeRef cf) {	/* DOES CALLO
     int64_t now2 = (int64_t)0;
 #endif
     CFAbsoluteTime now1 = CFAbsoluteTimeGetCurrent();
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
     void *addr = (void*)rlt->_callout;
     Dl_info info;
     const char *name = (dladdr(addr, &info) && info.dli_saddr == addr && info.dli_sname) ? info.dli_sname : "???";

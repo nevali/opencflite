@@ -36,7 +36,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <sys/time.h>
 #include <unistd.h>
 #elif DEPLOYMENT_TARGET_WINDOWS
