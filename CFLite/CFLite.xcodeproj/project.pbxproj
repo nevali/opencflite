@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84129F450F38C0BD00A64427 /* vproc_priv.h in Headers */ = {isa = PBXBuildFile; fileRef = 84129F440F38C0BD00A64427 /* vproc_priv.h */; };
+		84129F470F38C0CF00A64427 /* bootstrap_priv.h in Headers */ = {isa = PBXBuildFile; fileRef = 84129F460F38C0CF00A64427 /* bootstrap_priv.h */; };
 		8448EF6C0ED2798800716715 /* CFApplicationPreferences.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55480ECFAE4D003D696F /* CFApplicationPreferences.c */; };
 		8448EF6D0ED2798800716715 /* CFArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55490ECFAE4D003D696F /* CFArray.c */; };
 		8448EF6E0ED2798800716715 /* CFBag.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B554A0ECFAE4D003D696F /* CFBag.c */; };
@@ -109,6 +111,8 @@
 /* Begin PBXFileReference section */
 		840CBF450ED24A9B00931057 /* libSystem.B.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.B.dylib; path = /usr/lib/libSystem.B.dylib; sourceTree = "<absolute>"; };
 		840CBF6C0ED24F4500931057 /* WritePListExample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WritePListExample.cpp; path = ../examples/WritePListExample/WritePListExample.cpp; sourceTree = SOURCE_ROOT; };
+		84129F440F38C0BD00A64427 /* vproc_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vproc_priv.h; path = ../include/mach_support/vproc_priv.h; sourceTree = SOURCE_ROOT; };
+		84129F460F38C0CF00A64427 /* bootstrap_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bootstrap_priv.h; path = ../include/mach_support/bootstrap_priv.h; sourceTree = SOURCE_ROOT; };
 		8448EF670ED2796500716715 /* CFLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CFLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949820ED27E8700EEB9C0 /* WritePListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WritePListExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949920ED27F1100EEB9C0 /* ReadPListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReadPListExample; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -386,9 +390,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		84129F430F38C08F00A64427 /* mach_support */ = {
+			isa = PBXGroup;
+			children = (
+				84129F460F38C0CF00A64427 /* bootstrap_priv.h */,
+				84129F440F38C0BD00A64427 /* vproc_priv.h */,
+			);
+			name = mach_support;
+			sourceTree = "<group>";
+		};
 		848B55C20ECFAE55003D696F /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				84129F430F38C08F00A64427 /* mach_support */,
 				848B55DF0ECFAF5E003D696F /* CFArray.h */,
 				848B55E00ECFAF5E003D696F /* CFBag.h */,
 				848B55E10ECFAF5E003D696F /* CFBase.h */,
@@ -505,6 +519,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84129F450F38C0BD00A64427 /* vproc_priv.h in Headers */,
+				84129F470F38C0CF00A64427 /* bootstrap_priv.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,7 +754,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = ../..;
+				HEADER_SEARCH_PATHS = (
+					../../include/mach_support,
+					../../include,
+					../..,
+				);
 			};
 			name = Debug;
 		};
