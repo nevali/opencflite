@@ -23,7 +23,7 @@ bool check_date_constructors ()
    aCFDate = CFDateCreate(kCFAllocatorDefault, absTime);
    
    CFShow(CFSTR("Absolute Time is"));
-   printf("The current absolute time is %d\n", absTime);
+   printf("The current absolute time is %f\n", absTime);
    CFShow(CFSTR("Equivalent CFDate object is"));
    CFShow(aCFDate);
    
@@ -89,14 +89,14 @@ bool check_gregorian_dates ()
    
    // Convert the Gregorian date to absolute time.
    absTime = CFGregorianDateGetAbsoluteTime(gregDate, NULL);
-   printf("The Absolute Time from a Gregorian date is: %d\n", absTime);
+   printf("The Absolute Time from a Gregorian date is: %f\n", absTime);
    
    CFShow(CFSTR("This corresponds to the following:"));
    weekOfYear = CFAbsoluteTimeGetWeekOfYear (absTime, NULL);
    dayOfWeek = CFAbsoluteTimeGetDayOfWeek (absTime, NULL);
    
-   printf("Week of the year for %d-%d-%d is %d\n", gregDate.month, gregDate.day, gregDate.year, weekOfYear);
-   printf("Day of the week for %d-%d-%d is %d\n", gregDate.month, gregDate.day, gregDate.year, dayOfWeek);
+   printf("Week of the year for %d-%d-%d is %ld\n", gregDate.month, gregDate.day, gregDate.year, weekOfYear);
+   printf("Day of the week for %d-%d-%d is %ld\n", gregDate.month, gregDate.day, gregDate.year, dayOfWeek);
 
    printf("\n");
 
