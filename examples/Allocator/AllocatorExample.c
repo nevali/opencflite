@@ -40,7 +40,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 
 // This function will print the provided arguments (printf style varargs) out to the console.

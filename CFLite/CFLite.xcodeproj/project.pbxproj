@@ -6,9 +6,59 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		84129FDA0F3A4E5400A64427 /* make_target_paths */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 84129FDD0F3A4E9D00A64427 /* Build configuration list for PBXAggregateTarget "make_target_paths" */;
+			buildPhases = (
+				84129FDF0F3A4EA900A64427 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = make_target_paths;
+			productName = make_target_paths;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
-		84129F450F38C0BD00A64427 /* vproc_priv.h in Headers */ = {isa = PBXBuildFile; fileRef = 84129F440F38C0BD00A64427 /* vproc_priv.h */; };
-		84129F470F38C0CF00A64427 /* bootstrap_priv.h in Headers */ = {isa = PBXBuildFile; fileRef = 84129F460F38C0CF00A64427 /* bootstrap_priv.h */; };
+		84129F7B0F3A4C2600A64427 /* CFArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55DF0ECFAF5E003D696F /* CFArray.h */; };
+		84129F7C0F3A4C2600A64427 /* CFBag.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E00ECFAF5E003D696F /* CFBag.h */; };
+		84129F7D0F3A4C2600A64427 /* CFBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E10ECFAF5E003D696F /* CFBase.h */; };
+		84129F7E0F3A4C2600A64427 /* CFBinaryHeap.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E20ECFAF5E003D696F /* CFBinaryHeap.h */; };
+		84129F7F0F3A4C2600A64427 /* CFBitVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E30ECFAF5E003D696F /* CFBitVector.h */; };
+		84129F800F3A4C2600A64427 /* CFBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E40ECFAF5E003D696F /* CFBundle.h */; };
+		84129F810F3A4C2600A64427 /* CFByteOrder.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E80ECFAF5E003D696F /* CFByteOrder.h */; };
+		84129F820F3A4C2600A64427 /* CFCalendar.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55E90ECFAF5E003D696F /* CFCalendar.h */; };
+		84129F830F3A4C2600A64427 /* CFCharacterSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55EA0ECFAF5E003D696F /* CFCharacterSet.h */; };
+		84129F840F3A4C2600A64427 /* CFData.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55EC0ECFAF5E003D696F /* CFData.h */; };
+		84129F850F3A4C2600A64427 /* CFDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55ED0ECFAF5E003D696F /* CFDate.h */; };
+		84129F860F3A4C2600A64427 /* CFDateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55EE0ECFAF5E003D696F /* CFDateFormatter.h */; };
+		84129F870F3A4C2600A64427 /* CFDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55EF0ECFAF5E003D696F /* CFDictionary.h */; };
+		84129F880F3A4C2600A64427 /* CFError.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F00ECFAF5E003D696F /* CFError.h */; };
+		84129F890F3A4C2600A64427 /* CFLocale.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F30ECFAF5E003D696F /* CFLocale.h */; };
+		84129F8A0F3A4C2600A64427 /* CFMachPort.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F50ECFAF5E003D696F /* CFMachPort.h */; };
+		84129F8B0F3A4C2600A64427 /* CFMessagePort.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F60ECFAF5E003D696F /* CFMessagePort.h */; };
+		84129F8C0F3A4C2600A64427 /* CFNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F70ECFAF5E003D696F /* CFNumber.h */; };
+		84129F8D0F3A4C2600A64427 /* CFNumberFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F80ECFAF5E003D696F /* CFNumberFormatter.h */; };
+		84129F8E0F3A4C2600A64427 /* CFPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55F90ECFAF5E003D696F /* CFPlugIn.h */; };
+		84129F8F0F3A4C2600A64427 /* CFPlugInCOM.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55FB0ECFAF5E003D696F /* CFPlugInCOM.h */; };
+		84129F900F3A4C2600A64427 /* CFPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55FC0ECFAF5E003D696F /* CFPreferences.h */; };
+		84129F910F3A4C2600A64427 /* CFPropertyList.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55FE0ECFAF5E003D696F /* CFPropertyList.h */; };
+		84129F920F3A4C2600A64427 /* CFRunLoop.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55FF0ECFAF5E003D696F /* CFRunLoop.h */; };
+		84129F930F3A4C2600A64427 /* CFSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B56020ECFAF5E003D696F /* CFSet.h */; };
+		84129F940F3A4C2600A64427 /* CFSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B56030ECFAF5E003D696F /* CFSocket.h */; };
+		84129F950F3A4C2600A64427 /* CFStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B56050ECFAF5E003D696F /* CFStream.h */; };
+		84129F960F3A4C2600A64427 /* CFString.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B56090ECFAF5E003D696F /* CFString.h */; };
+		84129F970F3A4C2600A64427 /* CFStringEncodingExt.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B560E0ECFAF5E003D696F /* CFStringEncodingExt.h */; };
+		84129F980F3A4C2600A64427 /* CFTimeZone.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B560F0ECFAF5E003D696F /* CFTimeZone.h */; };
+		84129F990F3A4C2600A64427 /* CFTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B56100ECFAF5E003D696F /* CFTree.h */; };
+		84129F9A0F3A4C2600A64427 /* CFURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55C80ECFAF07003D696F /* CFURL.h */; };
+		84129F9B0F3A4C2600A64427 /* CFURLAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55C90ECFAF07003D696F /* CFURLAccess.h */; };
+		84129F9C0F3A4C2600A64427 /* CFUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CA0ECFAF07003D696F /* CFUserNotification.h */; };
+		84129F9D0F3A4C2600A64427 /* CFUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CB0ECFAF07003D696F /* CFUUID.h */; };
+		84129F9E0F3A4C2600A64427 /* CFXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CD0ECFAF07003D696F /* CFXMLNode.h */; };
+		84129F9F0F3A4C2600A64427 /* CFXMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CE0ECFAF07003D696F /* CFXMLParser.h */; };
+		84129FA00F3A4C2600A64427 /* CoreFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CF0ECFAF07003D696F /* CoreFoundation.h */; };
 		841BE8470F395D91001F2A66 /* StringExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 841BE83B0F395D3E001F2A66 /* StringExample.c */; };
 		841BE8490F395DA9001F2A66 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		841BE9230F395FB4001F2A66 /* AllocatorExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 841BE91A0F395F65001F2A66 /* AllocatorExample.c */; };
@@ -89,18 +139,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		84129FE00F3A4EC700A64427 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84129FDA0F3A4E5400A64427 /* make_target_paths */;
+			remoteInfo = make_target_paths;
+		};
 		841BE84B0F395DC5001F2A66 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715 /* CFLite */;
+			remoteGlobalIDString = 8448EF660ED2796500716715;
 			remoteInfo = CFLite;
 		};
 		841BE9270F395FC9001F2A66 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715 /* CFLite */;
+			remoteGlobalIDString = 8448EF660ED2796500716715;
 			remoteInfo = CFLite;
 		};
 		844949B60ED2844500EEB9C0 /* PBXContainerItemProxy */ = {
@@ -561,8 +618,44 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84129F450F38C0BD00A64427 /* vproc_priv.h in Headers */,
-				84129F470F38C0CF00A64427 /* bootstrap_priv.h in Headers */,
+				84129F7B0F3A4C2600A64427 /* CFArray.h in Headers */,
+				84129F7C0F3A4C2600A64427 /* CFBag.h in Headers */,
+				84129F7D0F3A4C2600A64427 /* CFBase.h in Headers */,
+				84129F7E0F3A4C2600A64427 /* CFBinaryHeap.h in Headers */,
+				84129F7F0F3A4C2600A64427 /* CFBitVector.h in Headers */,
+				84129F800F3A4C2600A64427 /* CFBundle.h in Headers */,
+				84129F810F3A4C2600A64427 /* CFByteOrder.h in Headers */,
+				84129F820F3A4C2600A64427 /* CFCalendar.h in Headers */,
+				84129F830F3A4C2600A64427 /* CFCharacterSet.h in Headers */,
+				84129F840F3A4C2600A64427 /* CFData.h in Headers */,
+				84129F850F3A4C2600A64427 /* CFDate.h in Headers */,
+				84129F860F3A4C2600A64427 /* CFDateFormatter.h in Headers */,
+				84129F870F3A4C2600A64427 /* CFDictionary.h in Headers */,
+				84129F880F3A4C2600A64427 /* CFError.h in Headers */,
+				84129F890F3A4C2600A64427 /* CFLocale.h in Headers */,
+				84129F8A0F3A4C2600A64427 /* CFMachPort.h in Headers */,
+				84129F8B0F3A4C2600A64427 /* CFMessagePort.h in Headers */,
+				84129F8C0F3A4C2600A64427 /* CFNumber.h in Headers */,
+				84129F8D0F3A4C2600A64427 /* CFNumberFormatter.h in Headers */,
+				84129F8E0F3A4C2600A64427 /* CFPlugIn.h in Headers */,
+				84129F8F0F3A4C2600A64427 /* CFPlugInCOM.h in Headers */,
+				84129F900F3A4C2600A64427 /* CFPreferences.h in Headers */,
+				84129F910F3A4C2600A64427 /* CFPropertyList.h in Headers */,
+				84129F920F3A4C2600A64427 /* CFRunLoop.h in Headers */,
+				84129F930F3A4C2600A64427 /* CFSet.h in Headers */,
+				84129F940F3A4C2600A64427 /* CFSocket.h in Headers */,
+				84129F950F3A4C2600A64427 /* CFStream.h in Headers */,
+				84129F960F3A4C2600A64427 /* CFString.h in Headers */,
+				84129F970F3A4C2600A64427 /* CFStringEncodingExt.h in Headers */,
+				84129F980F3A4C2600A64427 /* CFTimeZone.h in Headers */,
+				84129F990F3A4C2600A64427 /* CFTree.h in Headers */,
+				84129F9A0F3A4C2600A64427 /* CFURL.h in Headers */,
+				84129F9B0F3A4C2600A64427 /* CFURLAccess.h in Headers */,
+				84129F9C0F3A4C2600A64427 /* CFUserNotification.h in Headers */,
+				84129F9D0F3A4C2600A64427 /* CFUUID.h in Headers */,
+				84129F9E0F3A4C2600A64427 /* CFXMLNode.h in Headers */,
+				84129F9F0F3A4C2600A64427 /* CFXMLParser.h in Headers */,
+				84129FA00F3A4C2600A64427 /* CoreFoundation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +708,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				84129FE10F3A4EC700A64427 /* PBXTargetDependency */,
 			);
 			name = CFLite;
 			productName = CFLite;
@@ -690,6 +784,7 @@
 				84DA171B0EDDF44500B6A2E6 /* Test */,
 				841BE83F0F395D5A001F2A66 /* StringExample */,
 				841BE91E0F395F8E001F2A66 /* AllocatorExample */,
+				84129FDA0F3A4E5400A64427 /* make_target_paths */,
 			);
 		};
 /* End PBXProject section */
@@ -704,6 +799,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		84129FDF0F3A4EA900A64427 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo ${SRCROOT}\n\nmkdir -p ${SRCROOT}/../dist\nmkdir -p ${SRCROOT}/../dist/bin\nmkdir -p ${SRCROOT}/../dist/include\nmkdir -p ${SRCROOT}/../dist/include/CoreFoundation\nmkdir -p ${SRCROOT}/../dist/lib\n\ncd ${SRCROOT}/.. && cp *.h dist/include/CoreFoundation\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		841BE83D0F395D5A001F2A66 /* Sources */ = {
@@ -820,6 +931,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		84129FE10F3A4EC700A64427 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84129FDA0F3A4E5400A64427 /* make_target_paths */;
+			targetProxy = 84129FE00F3A4EC700A64427 /* PBXContainerItemProxy */;
+		};
 		841BE84C0F395DC5001F2A66 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8448EF660ED2796500716715 /* CFLite */;
@@ -860,9 +976,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					../../include/mach_support,
-					../../include,
 					../..,
+					../../include,
+					../../include/mach_support,
 				);
 			};
 			name = Debug;
@@ -877,7 +993,32 @@
 				GCC_VERSION = 4.2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = ../..;
+				HEADER_SEARCH_PATHS = (
+					../..,
+					../../include,
+					../../include/mach_support,
+				);
+			};
+			name = Release;
+		};
+		84129FDB0F3A4E5500A64427 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = make_target_paths;
+			};
+			name = Debug;
+		};
+		84129FDC0F3A4E5500A64427 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = make_target_paths;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -960,8 +1101,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				HEADER_SEARCH_PATHS = (
-					../mach_support,
-					..,
+					../icu,
+					../include,
+					../include/mach_support,
+					../dist/include,
 				);
 				INFOPLIST_FILE = ../Info.plist;
 				INIT_ROUTINE = "___CFInitialize";
@@ -1009,8 +1152,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				HEADER_SEARCH_PATHS = (
-					../mach_support,
-					..,
+					../icu,
+					../include,
+					../include/mach_support,
+					../dist/include,
 				);
 				INFOPLIST_FILE = ../Info.plist;
 				INIT_ROUTINE = "___CFInitialize";
@@ -1152,6 +1297,15 @@
 			buildConfigurations = (
 				1DEB91F008733DB70010E9CD /* Debug */,
 				1DEB91F108733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84129FDD0F3A4E9D00A64427 /* Build configuration list for PBXAggregateTarget "make_target_paths" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84129FDB0F3A4E5500A64427 /* Debug */,
+				84129FDC0F3A4E5500A64427 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
