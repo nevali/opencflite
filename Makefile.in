@@ -49,11 +49,11 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = $(CF_include_HEADERS) $(am__configure_deps) \
 	$(noinst_HEADERS) $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure compat/flsl.c compat/gettimeofday.c \
-	compat/strlcat.c compat/strlcpy.c config/compile \
-	config/config.guess config/config.sub config/depcomp \
-	config/install-sh config/ltmain.sh config/missing \
-	config/mkinstalldirs
+	$(top_srcdir)/configure INSTALL compat/flsl.c \
+	compat/gettimeofday.c compat/strlcat.c compat/strlcpy.c \
+	config/compile config/config.guess config/config.sub \
+	config/depcomp config/install-sh config/ltmain.sh \
+	config/missing config/mkinstalldirs
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -689,6 +689,7 @@ libCoreFoundation_la_SOURCES = $(CF_COMMON_SOURCES)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_LIBADD = $(CF_COMMON_LIBADD)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_SOURCES = $(CF_COMMON_SOURCES)
 EXTRA_DIST = APPLE_LICENSE	\
+				  INSTALL \
 				  LICENSE \
 				  BuildCFLite \
 				  BuildCFLite.windows \

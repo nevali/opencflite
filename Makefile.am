@@ -209,6 +209,7 @@ libCoreFoundation_profile_la_SOURCES	= $(CF_COMMON_SOURCES)
 endif
 
 EXTRA_DIST			= APPLE_LICENSE	\
+				  INSTALL \
 				  LICENSE \
 				  BuildCFLite \
 				  BuildCFLite.windows \
