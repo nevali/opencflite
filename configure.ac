@@ -9,19 +9,19 @@ AC_PREREQ(2.59)
 #
 # Initialize autoconf for the package
 #
-AC_INIT([CoreFoundation],[476.15],[bfulgham@users.sourceforge.net],[opencflite])
+AC_INIT([CoreFoundation],[476.17],[bfulgham@users.sourceforge.net],[opencflite])
 
 #
 # Interface number, revision and age of the library interface passed to
 # libtool when the library is linked.
 #
-AC_SUBST(CF_VERSION_INFO, [476:15:0])
+AC_SUBST(CF_VERSION_INFO, [476:17:0])
 
 #
 # Check the sanity of thes source directory by checking for the
 # presence of a key watch file
 #
-AC_CONFIG_SRCDIR([source/CoreFoundation.h])
+AC_CONFIG_SRCDIR([CoreFoundation.h])
 
 #
 # Tell autoconf where to find auxilliary build tools (e.g. config.guess,
@@ -225,29 +225,37 @@ AC_ARG_WITH(icu-libs,
 if test "x$ICU_CONFIG" != "xno"; then
 	ICU_CPPFLAGS="`${ICU_CONFIG} --cppflags`"
 	ICU_LDFLAGS="`${ICU_CONFIG} --ldflags`"
+	ICU_LIBS="`${ICU_CONFIG} --ldflags-libsonly`"
 else
-	if test -d "${uuid_dir}"; then
-		if test -d "${uuid_dir}/include"; then
-			UUID_CPPFLAGS="-I${uuid_dir}/include"
+	if test -d "${icu_dir}"; then
+		if test -d "${icu_dir}/include"; then
+			ICU_CPPFLAGS="-I${icu_dir}/include"
 		else
-			UUID_CPPFLAGS="-I${uuid_dir}"
+			ICU_CPPFLAGS="-I${icu_dir}"
 		fi
 
-		if test -d "${uuid_dir}/lib"; then
-			UUID_LDFLAGS="-L${uuid_dir}/lib"
+		if test -d "${icu_dir}/lib"; then
+			ICU_LDFLAGS="-L${icu_dir}/lib"
 		else
-			UUID_LDFLAGS="-L${uuid_dir}"
+			ICU_LDFLAGS="-L${icu_dir}"
 		fi
 	else
-		UUID_CPPFLAGS="-I${uuid_header_dir}"
-		UUID_LDFLAGS="-L${uuid_library_dir}"
+		ICU_CPPFLAGS="-I${icu_header_dir}"
+		ICU_LDFLAGS="-L${icu_library_dir}"
 	fi
 
-	AC_CHECK_LIB(icui18n, ucal_open)
-	AC_CHECK_LIB(icui18n, udat_open)
-	AC_CHECK_LIB(icui18n, ulocdata_open)
-	AC_CHECK_LIB(icui18n, unum_open)
-	AC_CHECK_LIB(icui18n, uset_open)
+	ICU_saved_libs="${LIBS}"
+	LIBS=""
+
+		AC_CHECK_LIB(icui18n, ucal_open)
+		AC_CHECK_LIB(icui18n, udat_open)
+		AC_CHECK_LIB(icui18n, ulocdata_open)
+		AC_CHECK_LIB(icui18n, unum_open)
+		AC_CHECK_LIB(icui18n, uset_open)
+
+	ICU_LIBS="${LIBS}"
+	LIBS="${ICU_saved_libs}"
+	unset ICU_saved_libs
 fi
 
 AC_CHECK_HEADERS([unicode/putil.h])
@@ -301,6 +309,7 @@ AC_ARG_WITH(uuid-libs,
 if test "x${UUID_CONFIG}" != "xno"; then
 	UUID_CPPFLAGS="`${UUID_CONFIG} --cppflags`"
 	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
+	UUID_LIBS="`${UUID_CONFIG} --libs`"
 else
 	if test -d "${uuid_dir}"; then
 		if test -d "${uuid_dir}/include"; then
@@ -319,11 +328,19 @@ else
 		UUID_LDFLAGS="-L${uuid_library_dir}"
 	fi
 
-	AC_CHECK_LIB(uuid, uuid_compare)
+	UUID_saved_libs="${LIBS}"
+	LIBS=""
+
+		AC_CHECK_LIB(uuid, uuid_compare)
+
+	UUID_LIBS="${LIBS}"
+	LIBS="${UUID_saved_libs}"
+	unset UUID_saved_libs
 fi
 
 CPPFLAGS="${UUID_CPPFLAGS} ${CPPFLAGS}"
 LDFLAGS="${UUID_LDFLAGS} ${LDFLAGS}"
+LIBS="${UUID_LIBS} ${LIBS}"
 
 AC_CHECK_HEADERS([uuid/uuid.h])
 
@@ -490,13 +507,19 @@ AC_CHECK_FUNCS([getgid getuid getegid geteuid])
 AC_CHECK_FUNCS([getpid])
 AC_CHECK_FUNCS([strerror])
 AC_CHECK_FUNCS([rint strchr strdup strrchr strstr strtod strtol strtoul])
-AC_CHECK_FUNCS([strlcat strlcmp strlcasecmp strlcpy])
-AC_CHECK_FUNCS([strncat strncmp strncasecmp strncpy])
-AC_CHECK_FUNCS([strncat ustrncmp ustrncasecmp strncpy])
+AC_CHECK_FUNCS([strncmp strncasecmp])
+AC_CHECK_FUNCS([ustrncmp ustrncasecmp])
 AC_CHECK_FUNCS([symlink])
 AC_CHECK_FUNCS([readlink])
 AC_CHECK_FUNCS([lstat stat])
 AC_CHECK_FUNCS([snprintf])
+
+# Figure out how to map strlcat and strlcpy if they don't exist by
+# either simply redefining them or by using a local compatibility
+# implementation.
+
+CF_REPLACE_STRLN_FUNC([cat])
+CF_REPLACE_STRLN_FUNC([cpy])
 
 #
 # Library functions we might need to provide local compatibility
@@ -529,16 +552,19 @@ AC_MSG_NOTICE([
   Prefix				: ${prefix}
   ICU compile options                   : ${ICU_CPPFLAGS}
   ICU link options                      : ${ICU_LDFLAGS}
+  ICU link libraries                    : ${ICU_LIBS}
   POSIX thread compile options          : ${PTHREAD_CFLAGS}
   POSIX thread link options             : ${PTHREAD_LIBS}
   UUID compile options                  : ${UUID_CPPFLAGS}
   UUID link options                     : ${UUID_LDFLAGS}
+  UUID link libraries			: ${UUID_LIBS}
   Time Zone compile options             : ${TZ_CPPFLAGS}
   Time Zone default file                : ${tz_default_file}
   Time Zone data directory              : ${tz_data_dir}
   Compiler                              : ${CC}
   Preprocessor flags                    : ${CPPFLAGS}
-  Compiler flags                        : ${CFLAGS}
-  Linker flags                          : ${LDFLAGS}
+  Compile flags                         : ${CFLAGS}
+  Link flags                            : ${LDFLAGS}
+  Link libraries                        : ${LIBS}
 
 ])

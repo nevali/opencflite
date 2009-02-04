@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -66,7 +77,7 @@
     #define getpid _getpid
 #endif
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 typedef void* (*THREAD_FUN_TYPE)(void*);
 #endif
 
@@ -189,7 +200,7 @@ __private_extern__ void *__CFStartSimpleThread(void *func, void *arg) {
     pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     pthread_attr_setstacksize(&attr, 60 * 1024);	// 60K stack for our internal threads is sufficient
-    OSMemoryBarrier(); // ensure arg is fully initialized and set in memory
+    _CFMemoryBarrier(); // ensure arg is fully initialized and set in memory
     pthread_create(&tid, &attr, (THREAD_FUN_TYPE)func, arg);
     pthread_attr_destroy(&attr);
 //warning CF: we dont actually know that a pthread_t is the same size as void *
@@ -520,7 +531,7 @@ static void _CFShowToFile(FILE *file, Boolean flush, const void *obj) {
          } else {
              fprintf_l(file, NULL, "\\u%04x", ch);
          }
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 		 if (ch < 128) {
              fprintf(file, "%c", ch);
 	     lastNL = (ch == '\n');
@@ -564,6 +575,8 @@ void CFLog(int32_t lev, CFStringRef format, ...) {
     // Date format: YYYY '-' MM '-' DD ' ' hh ':' mm ':' ss.fff
 #if DEPLOYMENT_TARGET_WINDOWS
     printf("%04d-%02d-%02d %02d:%02d:%06.3f %s[%d] CFLog (%d): ", (int)gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second, *_CFGetProgname(), getpid(), lev);
+#elif DEPLOYMENT_TARGET_LINUX
+	fprintf(stderr, "%04d-%02d-%02d %02d:%02d:%06.3f %s[%d:%x] CFLog: ", (int)gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second, *_CFGetProgname(), getpid(), (uintptr_t)pthread_self());
 #else
     fprintf_l(stderr, NULL, "%04d-%02d-%02d %02d:%02d:%06.3f %s[%d:%x] CFLog: ", (int)gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second, *_CFGetProgname(), getpid(), pthread_mach_thread_np(pthread_self()));
 #endif

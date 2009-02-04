@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -702,12 +713,14 @@ Boolean CFURLCreateDataAndPropertiesFromResource(CFAllocatorRef alloc, CFURLRef 
 		} else {
 #if DEPLOYMENT_TARGET_MACOSX
             result = __CFNetwork__CFURLCreateDataAndPropertiesFromResource(alloc, url, fetchedData, fetchedProperties, desiredProperties, errorCode);
+#elif DEPLOYMENT_TARGET_LINUX
+			result = false;
+#endif
 	    if (!result) {
 		if (fetchedData) *fetchedData = NULL;
 		if (fetchedProperties) *fetchedProperties = NULL;
 		if (errorCode) *errorCode = kCFURLUnknownSchemeError;
 	    }
-#endif
         }
         CFRelease(scheme);
         return result;

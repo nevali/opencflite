@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -169,6 +180,66 @@ extern void __CFGenericValidateType_(CFTypeRef cf, CFTypeID type, const char *fu
 #define __CFBitSet(V, N)  ((V) |= (1UL << (N)))
 #define __CFBitClear(V, N)  ((V) &= ~(1UL << (N)))
 
+#if DEPLOYMENT_TARGET_WINDOWS
+CF_INLINE bool _CFAtomicCompareAndSwap32Barrier(int32_t oldValue, int32_t newValue, volatile int32_t *theValue) {
+    int32_t actualOldValue = InterlockedCompareExchange((volatile LONG *)theValue, newValue, oldValue);
+    return actualOldValue == oldValue ? true : false;
+}
+CF_INLINE bool _CFAtomicCompareAndSwapPtrBarrier(void* oldValue, void* newValue, void* volatile *theValue) {
+	void *actualOldValue = InterlockedCompareExchangePointer((volatile PVOID*)theValue, newValue, (PVOID)oldValue);
+	return actualOldValue == oldValue ? true : false;
+}
+CF_INLINE int32_t _CFAtomicIncrement32(volatile int32_t *theValue) {
+	return (unsigned int)InterlockedIncrement((volatile LONG*)theValue);
+}
+CF_INLINE void _CFMemoryBarrier(void) {
+	MemoryBarrier();
+}
+#elif DEPLOYMENT_TARGET_MACOSX
+CF_INLINE bool _CFAtomicCompareAndSwap32Barrier(int32_t __oldValue, int32_t __newValue, volatile int32_t *__theValue) {
+	return OSAtomicCompareAndSwap32Barrier(__oldValue, __newValue, __theValue);
+}
+CF_INLINE bool _CFAtomicCompareAndSwapPtrBarrier(void* __oldValue, void* __newValue, void* volatile *__theValue) {
+	return OSAtomicCompareAndSwapPtrBarrier(__oldValue, __newValue, __theValue);
+}
+CF_INLINE int32_t _CFAtomicIncrement32(volatile int32_t *theValue) {
+	return OSAtomicIncrement32(theValue);
+}
+CF_INLINE void _CFMemoryBarrier(void) {
+	OSMemoryBarrier();
+}
+#elif DEPLOYMENT_TARGET_LINUX
+// Simply leverage GCC's atomic built-ins (see http://gcc.gnu.org/onlinedocs/gcc-4.1.0/gcc/Atomic-Builtins.html)
+CF_INLINE bool _CFAtomicCompareAndSwap32Barrier(int32_t __oldValue, int32_t __newValue, volatile int32_t *__theValue) {
+	return __sync_bool_compare_and_swap(__theValue, __oldValue, __newValue);
+}
+CF_INLINE bool _CFAtomicCompareAndSwapPtrBarrier(void* __oldValue, void* __newValue, void* volatile *__theValue) {
+	return __sync_bool_compare_and_swap(__theValue, __oldValue, __newValue);
+}
+CF_INLINE int32_t _CFAtomicIncrement32(volatile int32_t *theValue) {
+	return __sync_fetch_and_add(theValue, 1);
+}
+CF_INLINE void _CFMemoryBarrier(void) {
+	__sync_synchronize();
+}
+#else
+#error "Don't know how to perform atomic operations."
+#endif
+
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_FREEBSD
+#define	_CFIsSetUgid()	issetugid()
+#elif DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_SOLARIS
+#include <unistd.h>
+CF_INLINE bool _CFIsSetUgid(void) {
+	return (getuid() != geteuid() || getgid() != getegid());
+}
+#elif DEPLOYMENT_TARGET_WINDOWS
+#define	_CFIsSetUgid()	0
+#else
+#error "Don't know how to determine a setuid or setgid executable."
+#endif /* DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_FREEBSD */
+
+
 typedef struct ___CFThreadSpecificData {
     void *_unused1;
     void *_allocator;
@@ -309,11 +380,11 @@ extern int __CFConstantStringClassReference[];
 
 #if __CF_BIG_ENDIAN__
 #define CONST_STRING_DECL(S, V)			\
-static struct CF_CONST_STRING __ ## S ## __ = {{&__CFConstantStringClassReference, {0x0000, 0x07c8}}, V, sizeof(V) - 1}; \
+	static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0x00, 0x00, 0x07, 0xc8}}, (uint8_t *)V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #elif !DEPLOYMENT_TARGET_WINDOWS || (DEPLOYMENT_TARGET_WINDOWS && defined(__GNUC__))
 #define CONST_STRING_DECL(S, V)			\
-static struct CF_CONST_STRING __ ## S ## __ = {{&__CFConstantStringClassReference, {0x07c8, 0x0000}}, V, sizeof(V) - 1}; \
+	static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #elif 0 //DEPLOYMENT_TARGET_WINDOWS
 #define CONST_STRING_DECL(S, V)			\

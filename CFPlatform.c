@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -51,6 +62,7 @@ extern size_t strlcat(char *dst, const char *src, size_t siz);
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <stdio.h>
 #endif
 #if DEPLOYMENT_TARGET_MACOSX
 #include <mach-o/dyld.h>
@@ -195,8 +207,8 @@ const char *_CFProcessPath(void) {
     if (__CFProcessPath) return __CFProcessPath;
 
     char *thePath = NULL;
-#if DEPLOYMENT_TARGET_MACOSX
-    if (!issetugid()) {
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
+	if (!_CFIsSetUgid()) {
 #else
     if (!__CFProcessPath) {
 #endif
@@ -355,7 +367,7 @@ static uint32_t __CFUID = -1;
 
 static CFURLRef _CFCopyHomeDirURLForUser(struct passwd *upwd) {
     CFURLRef home = NULL;
-    if (!issetugid()) {
+    if (!_CFIsSetUgid()) {
 	const char *path = getenv("CFFIXED_USER_HOME");
 	if (path) {
 	    home = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)path, strlen(path), true);

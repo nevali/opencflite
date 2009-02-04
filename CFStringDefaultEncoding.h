@@ -1,4 +1,14 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -70,7 +80,7 @@ CF_INLINE void __CFStringGetUserDefaultEncoding(UInt32 *oScriptValue, UInt32 *oR
             char filename[MAXPATHLEN + 1];
 
 	    const char *path = NULL;
-	    if (!issetugid()) {
+	    if (!_CFIsSetUgid()) {
 		path = getenv("CFFIXED_USER_HOME");
 	    }
 	    if (!path) {
@@ -127,7 +137,7 @@ CF_INLINE uint32_t __CFStringGetInstallationRegion() {
         char filename[MAXPATHLEN + 1];
         
 	const char *path = NULL;
-	if (!issetugid()) {
+	if (!_CFIsSetUgid()) {
 	    path = getenv("CFFIXED_USER_HOME");
 	}
 	if (!path) {
@@ -172,7 +182,7 @@ CF_INLINE void __CFStringGetInstallationEncodingAndRegion(uint32_t *encoding, ui
         char filename[MAXPATHLEN + 1];
 
 	const char *path = NULL;
-	if (!issetugid()) {
+	if (!_CFIsSetUgid()) {
 	    path = getenv("CFFIXED_USER_HOME");
 	}
 	if (!path) {
@@ -208,7 +218,7 @@ CF_INLINE void __CFStringSaveUserDefaultEncoding(UInt32 iScriptValue, UInt32 iRe
         char filename[MAXPATHLEN + 1];
 
 	const char *path = NULL;
-	if (!issetugid()) {
+	if (!_CFIsSetUgid()) {
 	    path = getenv("CFFIXED_USER_HOME");
 	}
 	if (!path) {

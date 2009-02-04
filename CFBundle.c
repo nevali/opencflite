@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -54,9 +65,14 @@
 
 #if defined(BINARY_SUPPORT_DLFCN)
 #include <dlfcn.h>
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_SOLARIS
+#define CF_RTLD_FIRST	RTLD_FIRST
+#else
+#define CF_RTLD_FIRST	0
+#endif /* DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_SOLARIS */
 #endif /* BINARY_SUPPORT_DLFCN */
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 #include <fcntl.h>
 #endif
 
@@ -3771,7 +3787,7 @@ __private_extern__ Boolean _CFBundleDlfcnCheckLoaded(CFBundleRef bundle) {
         char buff[CFMaxPathSize];
 
         if (executableURL && CFURLGetFileSystemRepresentation(executableURL, true, (uint8_t *)buff, CFMaxPathSize)) {
-            int mode = RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD | RTLD_FIRST;
+            int mode = RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD | CF_RTLD_FIRST;
             void *handle = dlopen(buff, mode);
             if (handle) {
                 if (!bundle->_handleCookie) {
@@ -3818,7 +3834,11 @@ extern Boolean _CFBundleDlfcnPreflight(CFBundleRef bundle, CFErrorRef *error) {
         
         retval = false;
         if (executableURL && CFURLGetFileSystemRepresentation(executableURL, true, (uint8_t *)buff, CFMaxPathSize)) {
+#if DEPLOYMENT_TARGET_MACOSX && (MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED)
             retval = dlopen_preflight(buff);
+#else
+			retval = false;
+#endif /* DEPLOYMENT_TARGET_MACOSX && (MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED) */
             if (!retval && error) {
                 CFArrayRef archs = CFBundleCopyExecutableArchitectures(bundle);
                 CFStringRef debugString = NULL;
@@ -3867,7 +3887,7 @@ __private_extern__ Boolean _CFBundleDlfcnLoadBundle(CFBundleRef bundle, Boolean 
         CFURLRef executableURL = CFBundleCopyExecutableURL(bundle);
         char buff[CFMaxPathSize];
         if (executableURL && CFURLGetFileSystemRepresentation(executableURL, true, (uint8_t *)buff, CFMaxPathSize)) {
-            int mode = forceGlobal ? (RTLD_LAZY | RTLD_GLOBAL | RTLD_FIRST) : (RTLD_NOW | RTLD_LOCAL | RTLD_FIRST);
+            int mode = forceGlobal ? (RTLD_LAZY | RTLD_GLOBAL | CF_RTLD_FIRST) : (RTLD_NOW | RTLD_LOCAL | CF_RTLD_FIRST);
             bundle->_handleCookie = dlopen(buff, mode);
 #if LOG_BUNDLE_LOAD
             printf("dlfcn load bundle %p, dlopen of %s mode 0x%x returns handle %p\n", bundle, buff, mode, bundle->_handleCookie);
@@ -3902,7 +3922,7 @@ __private_extern__ Boolean _CFBundleDlfcnLoadFramework(CFBundleRef bundle, CFErr
         CFURLRef executableURL = CFBundleCopyExecutableURL(bundle);
         char buff[CFMaxPathSize];
         if (executableURL && CFURLGetFileSystemRepresentation(executableURL, true, (uint8_t *)buff, CFMaxPathSize)) {
-            int mode = RTLD_LAZY | RTLD_GLOBAL | RTLD_FIRST;
+            int mode = RTLD_LAZY | RTLD_GLOBAL | CF_RTLD_FIRST;
             bundle->_handleCookie = dlopen(buff, mode);
 #if LOG_BUNDLE_LOAD
             printf("dlfcn load framework %p, dlopen of %s mode 0x%x returns handle %p\n", bundle, buff, mode, bundle->_handleCookie);

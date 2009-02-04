@@ -1,4 +1,14 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -948,7 +958,7 @@ CFIndex __CFSocketRead(CFSocketRef s, UInt8* buffer, CFIndex length, int* error)
 	if (s->_leftoverBytes) {
 		CFIndex ctBuffer = CFDataGetLength(s->_leftoverBytes);
 #if defined(DEBUG)
-		fprintf(stderr, "%s(%d): WARNING: Draining %d leftover bytes first\n\n", __FUNCTION__, __LINE__, ctBuffer);
+		fprintf(stderr, "%s(%d): WARNING: Draining %lu leftover bytes first\n\n", __FUNCTION__, __LINE__, ctBuffer);
 #endif
 		if (ctBuffer > length)
 			ctBuffer = length;

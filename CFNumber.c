@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -958,13 +969,7 @@ CFNumberRef CFNumberCreate(CFAllocatorRef allocator, CFNumberType type, const vo
 	// Forcing the type AFTER it was cached would cause a race condition with other
 	// threads pulling the number object out of the cache and using it.
 	__CFBitfieldSetValue(((struct __CFNumber *)result)->_base._cfinfo[CF_INFO_BITS], 4, 0, (uint8_t)kCFNumberSInt32Type);
-#if DEPLOYMENT_TARGET_MACOSX
-	if (OSAtomicCompareAndSwapPtrBarrier(NULL, (void *)result, (void *volatile *)&__CFNumberCache[valToBeCached - MinCachedInt])) {
-#elif DEPLOYMENT_TARGET_WINDOWS
-   if (InterlockedCompareExchangePointer((volatile PVOID*)&__CFNumberCache[valToBeCached - MinCachedInt], (void *)result, (PVOID)&__CFNumberCache[valToBeCached - MinCachedInt])) {
-#else
-#error Unknown or unspecified DEPLOYMENT_TARGET 
-#endif
+	if (_CFAtomicCompareAndSwapPtrBarrier(NULL, (void *)result, (void *volatile *)&__CFNumberCache[valToBeCached - MinCachedInt])) {
 	    CFRetain(result);
 	} else {
 	    // Did not cache the number object, put original type back.

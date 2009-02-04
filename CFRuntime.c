@@ -1,4 +1,15 @@
 /*
+ * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
  * Copyright (c) 2008 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
@@ -915,15 +926,6 @@ CFHashCode _CFHash(CFTypeRef cf) {
     return (CFHashCode)cf;
 }
 
-#if DEPLOYMENT_TARGET_WINDOWS || 0
-static inline bool myOSAtomicCompareAndSwap32Barrier(int32_t oldValue, int32_t newValue, volatile int32_t *theValue) {
-    int32_t actualOldValue = InterlockedCompareExchange((volatile LONG *)theValue, newValue, oldValue);
-    return actualOldValue == oldValue ? true : false;
-}
-#else
-static bool (*myOSAtomicCompareAndSwap32Barrier)(int32_t __oldValue, int32_t __newValue, volatile int32_t *__theValue) = OSAtomicCompareAndSwap32Barrier;
-#endif
-
 CF_EXPORT CFTypeRef _CFRetain(CFTypeRef cf) {
     if (NULL == cf) return NULL;
 #if __LP64__
@@ -931,7 +933,7 @@ CF_EXPORT CFTypeRef _CFRetain(CFTypeRef cf) {
     do {
 	lowBits = ((CFRuntimeBase *)cf)->_rc;
 	if (0 == lowBits) return cf;	// Constant CFTypeRef
-    } while (!myOSAtomicCompareAndSwap32Barrier(lowBits, lowBits + 1, (int32_t *)&((CFRuntimeBase *)cf)->_rc));
+    } while (!_CFAtomicCompareAndSwap32Barrier(lowBits, lowBits + 1, (int32_t *)&((CFRuntimeBase *)cf)->_rc));
 #else
 #define RC_START 24
 #define RC_END 31
@@ -956,13 +958,13 @@ CF_EXPORT CFTypeRef _CFRetain(CFTypeRef cf) {
             prospectiveNewInfo = initialCheckInfo;
             __CFBitfieldSetValue(prospectiveNewInfo, RC_END, RC_START, ((1 << 7) | (1 << 6)));
             __CFSpinLock(&__CFRuntimeExternRefCountTableLock);
-            success = myOSAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
+            success = _CFAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
             if (__builtin_expect(success, 1)) {
                 CFBagAddValue(__CFRuntimeExternRefCountTable, DISGUISE(cf));
             }
             __CFSpinUnlock(&__CFRuntimeExternRefCountTableLock);
         } else {
-            success = myOSAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
+            success = _CFAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
         }
     } while (__builtin_expect(!success, 0));
 #endif
@@ -997,11 +999,11 @@ CF_EXPORT void _CFRelease(CFTypeRef cf) {
 	    // removal of objects from uniquing caches, which may race with other threads
 	    // which are allocating (looking up and finding) objects from those caches,
 	    // which (that thread) would be the thing doing the extra retain in that case.
-	    if (isAllocator || myOSAtomicCompareAndSwap32Barrier(1, 0, (int32_t *)&((CFRuntimeBase *)cf)->_rc)) {
+	    if (isAllocator || CFOSAtomicCompareAndSwap32Barrier(1, 0, (int32_t *)&((CFRuntimeBase *)cf)->_rc)) {
 		goto really_free;
 	    }
 	}
-    } while (!myOSAtomicCompareAndSwap32Barrier(lowBits, lowBits - 1, (int32_t *)&((CFRuntimeBase *)cf)->_rc));
+    } while (!_CFAtomicCompareAndSwap32Barrier(lowBits, lowBits - 1, (int32_t *)&((CFRuntimeBase *)cf)->_rc));
 #else
     volatile UInt32 *infoLocation = (UInt32 *)&(((CFRuntimeBase *)cf)->_cfinfo);
     CFIndex rcLowBits = __CFBitfieldGetValue(*infoLocation, RC_END, RC_START);
@@ -1050,14 +1052,14 @@ CF_EXPORT void _CFRelease(CFTypeRef cf) {
                 } else {
                     __CFBitfieldSetValue(prospectiveNewInfo, RC_END, RC_START, ((1 << 6) | (1 << 7)) - 1);
                 }
-                success = myOSAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
+                success = _CFAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
                 if (__builtin_expect(success, 1)) {
                     CFBagRemoveValue(__CFRuntimeExternRefCountTable, DISGUISE(cf));
                 }
                 __CFSpinUnlock(&__CFRuntimeExternRefCountTableLock);
             } else {
                 prospectiveNewInfo -= (1 << RC_START);
-                success = myOSAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
+                success = _CFAtomicCompareAndSwap32Barrier(*(int32_t *)&initialCheckInfo, *(int32_t *)&prospectiveNewInfo, (int32_t *)infoLocation);
             }
         }
     } while (__builtin_expect(!success, 0));

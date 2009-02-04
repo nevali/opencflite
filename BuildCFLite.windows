@@ -32,7 +32,7 @@ PRIVATE_HEADERS="CFBundlePriv.h CFCharacterSetPriv.h CFError_Private.h CFLogUtil
 OBJBASE=../CF-Objects
 #ARCHFLAGS="-arch ppc -arch ppc64 -arch i386 -arch x86_64"
 ARCHFLAGS=""
-CFLAGS="-c -pipe -std=gnu99 -g $WARNINGS -Wno-trigraphs $MACOSVERS -fexceptions -DCF_BUILDING_CF=1 $DEPLOYMENT_TARGET -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_5 -DU_SHOW_DRAFT_API=1 -I. -I./Compatability -I$OBJBASE -DVERSION=476.15 -DWINVER=0x0500 -D_WIN32_WINNT=0x0501"
+CFLAGS="-c -pipe -std=gnu99 -g $WARNINGS -Wno-trigraphs $MACOSVERS -fexceptions -DCF_BUILDING_CF=1 $DEPLOYMENT_TARGET -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_5 -DU_SHOW_DRAFT_API=1 -I. -I./Compatability -I$OBJBASE -DVERSION=476.17 -DWINVER=0x0500 -D_WIN32_WINNT=0x0501"
 # LFLAGS="-dynamiclib -mmacosx-version-min=10.5 -twolevel_namespace -init ___CFInitialize -compatibility_version 150 -current_version 476 -sectcreate __UNICODE __csbitmaps CFCharacterSetBitmaps.bitmap -sectcreate __UNICODE __properties CFUniCharPropertyDatabase.data -sectcreate __UNICODE __data $UNICODE_DATA_FILE -segprot __UNICODE r r"
 LFLAGS="-lmsvcrt -lnetapi32 -lobjc -lole32 -lws2_32 -lkernel32 -lrpcrt4"
 
@@ -58,7 +58,7 @@ Build () {
 	done
 	echo "Linking $STYLE ..."
 	echo $CC $STYLE_LFLAGS $ARCHFLAGS $OBJBASE/$STYLE/*.o $LFLAGS -licuuc -licuin -lobjc -o $OBJBASE/CoreFoundation_$STYLE
-	$CC -shared $STYLE_LFLAGS $ARCHFLAGS $OBJBASE/$STYLE/*.o $LFLAGS lib/icuuc.lib lib/icuin.lib -lobjc -o $OBJBASE/libCFlite_476_15.dll
+	$CC -shared $STYLE_LFLAGS $ARCHFLAGS $OBJBASE/$STYLE/*.o $LFLAGS lib/icuuc.lib lib/icuin.lib -lobjc -o $OBJBASE/libCFlite_476_17.dll
 	if [ $? -ne 0 ]; then
 		echo "*** Linking $STYLE failed ***"
 		exit 1
