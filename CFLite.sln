@@ -30,11 +30,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringExample", "examples\S
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AllocatorExample", "examples\Allocator\Allocator.vcproj", "{2A4D3906-539D-4D1E-9C97-47ABD83FD999}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
 	EndProjectSection
 EndProject
 Global

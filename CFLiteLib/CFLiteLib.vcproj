@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\dist\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -25,7 +25,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\AvailabilityMacros.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)\dist\bin&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\lib&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\dist\include\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;WIN32_LEAN_AND_MEAN;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -69,7 +70,7 @@
 				AdditionalLibraryDirectories="$(SolutionDir)\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(SolutionDir)\lib\$(TargetName).lib"
+				ImportLibrary="$(SolutionDir)\dist\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -83,6 +84,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				OutputFile="$(SolutionDir)\dist\bin\$(ProjectName)_$(ConfigurationName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -95,11 +97,12 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(SolutionDir)\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\dist\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -108,7 +111,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\AvailabilityMacros.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)\dist\bin&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\lib&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\dist\include\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -124,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;WIN32_LEAN_AND_MEAN;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -140,6 +143,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -150,7 +154,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(SolutionDir)\lib\$(TargetName).lib"
+				ImportLibrary="$(SolutionDir)\dist\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -164,6 +168,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				OutputFile="$(SolutionDir)\dist\bin\$(ProjectName)_$(ConfigurationName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -176,6 +181,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(SolutionDir)\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

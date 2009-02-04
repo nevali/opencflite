@@ -262,7 +262,14 @@ CFTypeRef _CFRuntimeCreateInstance(CFAllocatorRef allocator, CFTypeID typeID, CF
     if (NULL == memory) {
 	return NULL;
     }
-    memset(memory, 0, malloc_size(memory));
+#if DEPLOYMENT_TARGET_WINDOWS
+    // malloc_size won't work if the memory address has been moved (such as a custom allocator
+    // that adds its own barriers), so don't attempt to call it on the allocation return.
+    size_t msize = (usesSystemDefaultAllocator) ? malloc_size(memory) : size;
+#else
+    size_t msize = malloc_size(memory);
+#endif
+    memset(memory, 0, msize);
     if (__CFOASafe && category) {
 	__CFSetLastAllocationEventName(memory, (char *)category);
     } else if (__CFOASafe) {

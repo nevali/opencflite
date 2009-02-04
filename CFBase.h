@@ -78,25 +78,17 @@
 #undef __OBJC__
 #endif
 
-#ifdef _MSC_VER
-#include <CoreFoundation/GNUCompatibility/stdint.h>
-#include <CoreFoundation/GNUCompatibility/stdbool.h>
-#else
-#include <stdint.h>
-#include <stdbool.h>
 #endif
 
-#elif defined(__GNUC__)
 #include <stdint.h>
 #include <stdbool.h>
-#endif
 
 #if !defined(__APPLE__)
 #define weak_import
 #define __private_extern__
 #endif
 
-#include <CoreFoundation/AvailabilityMacros.h>
+#include <AvailabilityMacros.h>
 
     #if defined(__MACH__)
         #include <libkern/OSTypes.h>
