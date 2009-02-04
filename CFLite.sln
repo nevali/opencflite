@@ -25,6 +25,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReadPListExample", "example
 		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringExample", "examples\StringExample\StringExample.vcproj", "{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AllocatorExample", "examples\Allocator\Allocator.vcproj", "{2A4D3906-539D-4D1E-9C97-47ABD83FD999}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -43,6 +55,14 @@ Global
 		{CDF7218C-AE33-4367-B6F9-5728AE3C7F6E}.Debug|Win32.Build.0 = Debug|Win32
 		{CDF7218C-AE33-4367-B6F9-5728AE3C7F6E}.Release|Win32.ActiveCfg = Release|Win32
 		{CDF7218C-AE33-4367-B6F9-5728AE3C7F6E}.Release|Win32.Build.0 = Release|Win32
+		{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}.Debug|Win32.Build.0 = Debug|Win32
+		{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}.Release|Win32.ActiveCfg = Release|Win32
+		{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}.Release|Win32.Build.0 = Release|Win32
+		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Debug|Win32.Build.0 = Debug|Win32
+		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Release|Win32.ActiveCfg = Release|Win32
+		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

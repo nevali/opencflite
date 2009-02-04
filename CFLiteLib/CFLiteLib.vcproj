@@ -25,7 +25,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
+				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\AvailabilityMacros.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
+				CommandLine="copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\AvailabilityMacros.h&quot; &quot;$(SolutionDir)\CoreFoundation\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\CoreFoundation\GNUCompatibility\&quot;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

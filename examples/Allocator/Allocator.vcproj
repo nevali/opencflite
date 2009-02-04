@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="AllocatorExample"
-	ProjectGUID="{CDF7218C-AE33-4367-B6F9-5728AE3C7F6E}"
+	ProjectGUID="{2A4D3906-539D-4D1E-9C97-47ABD83FD999}"
 	RootNamespace="AllocatorExample"
 	Keyword="Win32Proj"
 	>
@@ -182,6 +182,22 @@
 			<File
 				RelativePath=".\AllocatorExample.c"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
