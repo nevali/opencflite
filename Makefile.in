@@ -689,21 +689,26 @@ libCoreFoundation_la_SOURCES = $(CF_COMMON_SOURCES)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_LIBADD = $(CF_COMMON_LIBADD)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_SOURCES = $(CF_COMMON_SOURCES)
 EXTRA_DIST = APPLE_LICENSE	\
+				  LICENSE \
 				  BuildCFLite \
 				  BuildCFLite.windows \
 				  CFLite/CFLite.xcodeproj/project.pbxproj \
 				  CFLiteLib/CFLiteLib.vcproj \
 				  CFLite.sln \
 				  CoreFoundation.xcodeproj/project.pbxproj \
+				  examples/Allocator/Allocator.vcproj \
+				  examples/Allocator/AllocatorExample.c \
 				  examples/CFMessagePort/CFMessagePort.webloc \
 				  examples/CFMessagePort/client.c \
 				  examples/CFMessagePort/server.c \
 				  examples/ReadPListExample/ReadPListExample.cpp \
 				  examples/ReadPListExample/ReadPListExample.vcproj \
 				  examples/ReadPListExample/schema.xml \
-				  examples/WritePListExample/data/expected_schema.xml \
+				  examples/StringExample/StringExample.c \
+				  examples/StringExample/StringExample.vcproj \
 				  examples/WritePListExample/WritePListExample.cpp \
 				  examples/WritePListExample/WritePListExample.vcproj \
+				  examples/WritePListExample/data/expected_schema.xml \
 				  icu/bin/icudt36.dll \
 				  icu/bin/icuin36.dll \
 				  icu/bin/icuuc36.dll \
