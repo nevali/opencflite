@@ -517,12 +517,23 @@ AC_CHECK_FUNCS([snprintf])
 # Figure out how to map strlcat and strlcpy if they don't exist by
 # either simply redefining them or by using a local compatibility
 # implementation.
+#
+# Some caveats are worth mentioning with respect to defining them to
+# strn{cat,cpy}. In particular, strl{cat,cpy}:
+# 
+#   1) ALWAYS NULL-terminate if the destination has length.
+#   2) Take the full size of the buffer (not the space left over).
+#   3) Don't NULL-fill the remainder of its destination.
+#   4) Return a size_t size rather than a char * pointer.
+#
+# While CoreFoundation has not been found to rely on any of these
+# differences, it may in the future.
 
 CF_REPLACE_STRLN_FUNC([cat])
 CF_REPLACE_STRLN_FUNC([cpy])
 
 #
-# Library functions we might need to provide local compatibility
+# Other ibrary functions we might need to provide local compatibility
 # implementations of.
 #
 AC_REPLACE_FUNCS([flsl gettimeofday])
