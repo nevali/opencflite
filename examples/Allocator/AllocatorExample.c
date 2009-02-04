@@ -247,7 +247,7 @@ static CFAllocatorRef CreateReducedMallocAllocator(CFAllocatorRef alloc, CFIndex
     info->numAdditionalAllocations = 0;
     for (cnt = 0; cnt < numBlocks; cnt++) rmMarkBlockAsAvailable(info, cnt);
     // Retain the allocator used to allocate the memory
-    info->allocator = (const __CFAllocator*)((alloc) ? CFRetain(alloc) : CFRetain(CFAllocatorGetDefault()));
+    info->allocator = (CFAllocatorRef)((alloc) ? CFRetain(alloc) : CFRetain(CFAllocatorGetDefault()));
     // And hang on to the info block
     context.info = info;
     // Finally, create and return the allocator
@@ -272,7 +272,7 @@ void countingAllocatorExample(void) {
     show(CFSTR("At start, number of allocations: %d"), NumOutstandingAllocations(countingAllocator));
 
     str1 = CFStringCreateWithCString(countingAllocator, "Hello World", kCFStringEncodingASCII);
-#ifndef WIN32
+#if defined(__APPLE__)
     str2 = CFStringCreateWithPascalString(countingAllocator, "\pHello World", kCFStringEncodingASCII);
 #endif
     mStr = CFStringCreateMutableCopy(countingAllocator, 0, str1);
@@ -315,7 +315,7 @@ void reducedMallocAllocatorExample(void) {
     show(CFSTR("At start, number of addt'l allocations: %d"), NumAdditionalAllocations(reducedMallocAllocator));
 
     str1 = CFStringCreateWithCString(reducedMallocAllocator, "Hello World", kCFStringEncodingASCII);
-#ifndef WIN32
+#if defined(__APPLE__)
     str2 = CFStringCreateWithPascalString(reducedMallocAllocator, "\pHello World", kCFStringEncodingASCII);
 #endif
     mStr = CFStringCreateMutableCopy(reducedMallocAllocator, 0, str1);
@@ -330,7 +330,7 @@ void reducedMallocAllocatorExample(void) {
     show(CFSTR("After mutations, number of addt'l allocations: %d"), NumAdditionalAllocations(reducedMallocAllocator));
 
     CFRelease(str1);
-#ifndef WIN32
+#if defined(__APPLE__)
     CFRelease(str2);
 #endif
     CFRelease(mStr);
