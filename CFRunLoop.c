@@ -1841,7 +1841,7 @@ static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInter
         Boolean freeHandles;
         if (destroyWaitSet) {
             // wait set is a local, no one else could modify it, no need to copy handles
-            handles = waitSet->handles;
+            handles = waitSet->ports;
             handleCount = waitSet->used;
             freeHandles = FALSE;
         } else {
