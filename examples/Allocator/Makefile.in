@@ -13,7 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -32,28 +31,34 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = include
-DIST_COMMON = $(CS_include_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/config.h.in
+@CF_BUILD_TESTS_TRUE@check_PROGRAMS = AllocatorExample$(EXEEXT)
+subdir = examples/Allocator
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/acinclude.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_HEADER = config.h
+CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
-SOURCES =
-DIST_SOURCES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(CS_includedir)"
-CS_includeHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(CS_include_HEADERS)
+am_AllocatorExample_OBJECTS = AllocatorExample.$(OBJEXT)
+AllocatorExample_OBJECTS = $(am_AllocatorExample_OBJECTS)
+AllocatorExample_DEPENDENCIES = ${top_builddir}/libCoreFoundation.la
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
+depcomp = $(SHELL) $(top_srcdir)/config/depcomp
+am__depfiles_maybe = depfiles
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+SOURCES = $(AllocatorExample_SOURCES)
+DIST_SOURCES = $(AllocatorExample_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -183,21 +188,14 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-CS_includedir = ${includedir}
-CS_include_HEADERS = AssertMacros.h		\
-			  AvailabilityMacros.h		\
-			  TargetConditionals.h
-
-EXTRA_DIST = c99/stdbool.h			\
-			  c99/stdint.h			\
-			  mach_support/bootstrap_priv.h	\
-			  mach_support/vproc_priv.h
-
-CF_SOURCE = ${top_srcdir}
-all: config.h
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+AM_CFLAGS = -I${top_srcdir}/include
+EXTRA_DIST = Allocator.vcproj
+AllocatorExample_LDADD = ${top_builddir}/libCoreFoundation.la
+AllocatorExample_SOURCES = AllocatorExample.c
+all: all-am
 
 .SUFFIXES:
+.SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -207,9 +205,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  include/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  examples/Allocator/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  include/Makefile
+	  $(AUTOMAKE) --foreign  examples/Allocator/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -228,45 +226,53 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-config.h: stamp-h1
-	@if test ! -f $@; then \
-	  rm -f stamp-h1; \
-	  $(MAKE) $(AM_MAKEFLAGS) stamp-h1; \
-	else :; fi
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
+AllocatorExample$(EXEEXT): $(AllocatorExample_OBJECTS) $(AllocatorExample_DEPENDENCIES) 
+	@rm -f AllocatorExample$(EXEEXT)
+	$(LINK) $(AllocatorExample_OBJECTS) $(AllocatorExample_LDADD) $(LIBS)
 
-stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
-	@rm -f stamp-h1
-	cd $(top_builddir) && $(SHELL) ./config.status include/config.h
-$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
-	cd $(top_srcdir) && $(AUTOHEADER)
-	rm -f stamp-h1
-	touch $@
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
 
-distclean-hdr:
-	-rm -f config.h stamp-h1
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AllocatorExample.Po@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	mv -f $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	mv -f $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.c.lo:
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	mv -f $$depbase.Tpo $$depbase.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-CS_includeHEADERS: $(CS_include_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(CS_includedir)" || $(MKDIR_P) "$(DESTDIR)$(CS_includedir)"
-	@list='$(CS_include_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(CS_includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(CS_includedir)/$$f'"; \
-	  $(CS_includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(CS_includedir)/$$f"; \
-	done
-
-uninstall-CS_includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(CS_include_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(CS_includedir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(CS_includedir)/$$f"; \
-	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -278,11 +284,11 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -294,10 +300,10 @@ TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
+CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
-	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -342,12 +348,10 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 check: check-am
-all-am: Makefile $(HEADERS) config.h
+all-am: Makefile
 installdirs:
-	for dir in "$(DESTDIR)$(CS_includedir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -374,11 +378,14 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-hdr distclean-tags
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-tags
 
 dvi: dvi-am
 
@@ -390,7 +397,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-CS_includeHEADERS
+install-data-am:
 
 install-dvi: install-dvi-am
 
@@ -409,12 +416,14 @@ install-ps: install-ps-am
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -424,29 +433,33 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-CS_includeHEADERS
+uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool ctags distclean distclean-generic distclean-hdr \
+.PHONY: CTAGS GTAGS all all-am check check-am clean \
+	clean-checkPROGRAMS clean-generic clean-libtool ctags \
+	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-CS_includeHEADERS \
-	install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-CS_includeHEADERS uninstall-am
+	tags uninstall uninstall-am
 
-all: CoreFoundation
 
-check install: all
+@CF_BUILD_TESTS_TRUE@check:
+@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./AllocatorExample
 
-CoreFoundation: | ${CF_SOURCE}
-	${LN_S} ${CF_SOURCE} $@
+@CF_BUILD_TESTS_TRUE@gdb:
+@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ${@} ./AllocatorExample
+
+@CF_BUILD_TESTS_TRUE@valgrind:
+@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ${@} ${VALGRINDFLAGS} ./AllocatorExample
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

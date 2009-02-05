@@ -110,6 +110,7 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PROG_LN_S
 AC_PROG_RANLIB
+AC_PATH_PROG(CMP, cmp)
 
 # Support building DLLs on Windows
 AC_LIBTOOL_WIN32_DLL
@@ -173,6 +174,14 @@ AC_ARG_ENABLE(profile,
 	[build_profile=yes])
 AC_MSG_RESULT(${build_profile})
 AM_CONDITIONAL([CF_BUILD_PROFILE], [test "x${build_profile}" = "xyes"])
+
+AC_MSG_CHECKING([whether to build tests and examples])
+AC_ARG_ENABLE(tests,
+	AS_HELP_STRING([--disable-tests],[Disable building of tests and examples (default=no).]),
+	[build_tests=${enableval}],
+	[build_tests=yes])
+AC_MSG_RESULT(${build_tests})
+AM_CONDITIONAL([CF_BUILD_TESTS], [test "x${build_tests}" = "xyes"])
 
 #
 # Checks for libraries
@@ -541,8 +550,17 @@ AC_REPLACE_FUNCS([flsl gettimeofday])
 #
 # Identify the various makefiles and auto-generated files for the package
 #
-AC_CONFIG_FILES([include/Makefile])
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([
+Makefile
+include/Makefile
+tests/Makefile
+examples/Makefile
+examples/Allocator/Makefile
+examples/CFMessagePort/Makefile
+examples/ReadPListExample/Makefile
+examples/StringExample/Makefile
+examples/WritePListExample/Makefile
+])
 
 #
 # Generate them
@@ -553,29 +571,30 @@ AC_MSG_NOTICE([
 
   Configuration Summary
   ---------------------
-  Package                               : ${PACKAGE_NAME}
-  Version                               : ${PACKAGE_VERSION}
-  Deployment target                     : ${deployment_target}
-  Build shared library                  : ${enable_shared}
-  Build static library                  : ${enable_static}
-  Build debug library                   : ${build_debug}
-  Build profile library                 : ${build_profile}
-  Prefix				: ${prefix}
-  ICU compile options                   : ${ICU_CPPFLAGS}
-  ICU link options                      : ${ICU_LDFLAGS}
-  ICU link libraries                    : ${ICU_LIBS}
-  POSIX thread compile options          : ${PTHREAD_CFLAGS}
-  POSIX thread link options             : ${PTHREAD_LIBS}
-  UUID compile options                  : ${UUID_CPPFLAGS}
-  UUID link options                     : ${UUID_LDFLAGS}
-  UUID link libraries			: ${UUID_LIBS}
-  Time Zone compile options             : ${TZ_CPPFLAGS}
-  Time Zone default file                : ${tz_default_file}
-  Time Zone data directory              : ${tz_data_dir}
-  Compiler                              : ${CC}
-  Preprocessor flags                    : ${CPPFLAGS}
-  Compile flags                         : ${CFLAGS}
-  Link flags                            : ${LDFLAGS}
-  Link libraries                        : ${LIBS}
+  Package                     : ${PACKAGE_NAME}
+  Version                     : ${PACKAGE_VERSION}
+  Deployment target           : ${deployment_target}
+  Build shared library        : ${enable_shared}
+  Build static library        : ${enable_static}
+  Build debug library         : ${build_debug}
+  Build profile library       : ${build_profile}
+  Build examples and tests    : ${build_tests}
+  Prefix		      : ${prefix}
+  ICU compile options         : ${ICU_CPPFLAGS}
+  ICU link options            : ${ICU_LDFLAGS}
+  ICU link libraries          : ${ICU_LIBS}
+  POSIX thread compile options: ${PTHREAD_CFLAGS}
+  POSIX thread link options   : ${PTHREAD_LIBS}
+  UUID compile options        : ${UUID_CPPFLAGS}
+  UUID link options           : ${UUID_LDFLAGS}
+  UUID link libraries	      : ${UUID_LIBS}
+  Time Zone compile options   : ${TZ_CPPFLAGS}
+  Time Zone default file      : ${tz_default_file}
+  Time Zone data directory    : ${tz_data_dir}
+  Compiler                    : ${CC}
+  Preprocessor flags          : ${CPPFLAGS}
+  Compile flags               : ${CFLAGS}
+  Link flags                  : ${LDFLAGS}
+  Link libraries              : ${LIBS}
 
 ])

@@ -878,6 +878,7 @@ LIPO
 OTOOL
 OTOOL64
 CXXCPP
+CMP
 AS
 DLLTOOL
 OBJDUMP
@@ -885,6 +886,8 @@ CF_BUILD_DEBUG_TRUE
 CF_BUILD_DEBUG_FALSE
 CF_BUILD_PROFILE_TRUE
 CF_BUILD_PROFILE_FALSE
+CF_BUILD_TESTS_TRUE
+CF_BUILD_TESTS_FALSE
 ICU_CONFIG
 UUID_CONFIG
 acx_pthread_config
@@ -1500,6 +1503,7 @@ Optional Features:
                           (default=no).
   --disable-profile       Disable the generation of a profile library instance
                           (default=no).
+  --disable-tests         Disable building of tests and examples (default=no).
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -5340,13 +5344,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:5343: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:5347: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:5346: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:5350: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:5349: output\"" >&5)
+  (eval echo "\"\$as_me:5353: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -6457,7 +6461,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6460 "configure"' > conftest.$ac_ext
+  echo '#line 6464 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8779,11 +8783,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8782: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8786: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8786: \$? = $ac_status" >&5
+   echo "$as_me:8790: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9103,11 +9107,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9106: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9110: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9110: \$? = $ac_status" >&5
+   echo "$as_me:9114: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9208,11 +9212,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9211: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9215: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9215: \$? = $ac_status" >&5
+   echo "$as_me:9219: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9263,11 +9267,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9266: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9270: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9270: \$? = $ac_status" >&5
+   echo "$as_me:9274: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12024,7 +12028,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 12027 "configure"
+#line 12031 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12124,7 +12128,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 12127 "configure"
+#line 12131 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14127,11 +14131,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14130: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14134: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14134: \$? = $ac_status" >&5
+   echo "$as_me:14138: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14226,11 +14230,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14229: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14233: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14233: \$? = $ac_status" >&5
+   echo "$as_me:14237: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14278,11 +14282,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14281: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14285: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14285: \$? = $ac_status" >&5
+   echo "$as_me:14289: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15380,6 +15384,46 @@ else
   RANLIB="$ac_cv_prog_RANLIB"
 fi
 
+# Extract the first word of "cmp", so it can be a program name with args.
+set dummy cmp; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_CMP+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $CMP in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_CMP="$CMP" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_CMP="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+CMP=$ac_cv_path_CMP
+if test -n "$CMP"; then
+  { echo "$as_me:$LINENO: result: $CMP" >&5
+echo "${ECHO_T}$CMP" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
 
 # Support building DLLs on Windows
 enable_win32_dll=yes
@@ -16149,6 +16193,26 @@ echo "${ECHO_T}${build_profile}" >&6; }
 else
   CF_BUILD_PROFILE_TRUE='#'
   CF_BUILD_PROFILE_FALSE=
+fi
+
+
+{ echo "$as_me:$LINENO: checking whether to build tests and examples" >&5
+echo $ECHO_N "checking whether to build tests and examples... $ECHO_C" >&6; }
+# Check whether --enable-tests was given.
+if test "${enable_tests+set}" = set; then
+  enableval=$enable_tests; build_tests=${enableval}
+else
+  build_tests=yes
+fi
+
+{ echo "$as_me:$LINENO: result: ${build_tests}" >&5
+echo "${ECHO_T}${build_tests}" >&6; }
+ if test "x${build_tests}" = "xyes"; then
+  CF_BUILD_TESTS_TRUE=
+  CF_BUILD_TESTS_FALSE='#'
+else
+  CF_BUILD_TESTS_TRUE='#'
+  CF_BUILD_TESTS_FALSE=
 fi
 
 
@@ -31493,9 +31557,7 @@ done
 #
 # Identify the various makefiles and auto-generated files for the package
 #
-ac_config_files="$ac_config_files include/Makefile"
-
-ac_config_files="$ac_config_files Makefile"
+ac_config_files="$ac_config_files Makefile include/Makefile tests/Makefile examples/Makefile examples/Allocator/Makefile examples/CFMessagePort/Makefile examples/ReadPListExample/Makefile examples/StringExample/Makefile examples/WritePListExample/Makefile"
 
 
 #
@@ -31643,6 +31705,13 @@ if test -z "${CF_BUILD_PROFILE_TRUE}" && test -z "${CF_BUILD_PROFILE_FALSE}"; th
   { { echo "$as_me:$LINENO: error: conditional \"CF_BUILD_PROFILE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"CF_BUILD_PROFILE\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${CF_BUILD_TESTS_TRUE}" && test -z "${CF_BUILD_TESTS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"CF_BUILD_TESTS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"CF_BUILD_TESTS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -32468,8 +32537,15 @@ do
     "include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
-    "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
+    "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+    "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
+    "examples/Allocator/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Allocator/Makefile" ;;
+    "examples/CFMessagePort/Makefile") CONFIG_FILES="$CONFIG_FILES examples/CFMessagePort/Makefile" ;;
+    "examples/ReadPListExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/ReadPListExample/Makefile" ;;
+    "examples/StringExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/StringExample/Makefile" ;;
+    "examples/WritePListExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/WritePListExample/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -32686,6 +32762,7 @@ LIPO!$LIPO$ac_delim
 OTOOL!$OTOOL$ac_delim
 OTOOL64!$OTOOL64$ac_delim
 CXXCPP!$CXXCPP$ac_delim
+CMP!$CMP$ac_delim
 AS!$AS$ac_delim
 DLLTOOL!$DLLTOOL$ac_delim
 OBJDUMP!$OBJDUMP$ac_delim
@@ -32693,6 +32770,8 @@ CF_BUILD_DEBUG_TRUE!$CF_BUILD_DEBUG_TRUE$ac_delim
 CF_BUILD_DEBUG_FALSE!$CF_BUILD_DEBUG_FALSE$ac_delim
 CF_BUILD_PROFILE_TRUE!$CF_BUILD_PROFILE_TRUE$ac_delim
 CF_BUILD_PROFILE_FALSE!$CF_BUILD_PROFILE_FALSE$ac_delim
+CF_BUILD_TESTS_TRUE!$CF_BUILD_TESTS_TRUE$ac_delim
+CF_BUILD_TESTS_FALSE!$CF_BUILD_TESTS_FALSE$ac_delim
 ICU_CONFIG!$ICU_CONFIG$ac_delim
 UUID_CONFIG!$UUID_CONFIG$ac_delim
 acx_pthread_config!$acx_pthread_config$ac_delim
@@ -32704,7 +32783,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 32; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 35; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -34116,59 +34195,61 @@ fi
 
   Configuration Summary
   ---------------------
-  Package                               : ${PACKAGE_NAME}
-  Version                               : ${PACKAGE_VERSION}
-  Deployment target                     : ${deployment_target}
-  Build shared library                  : ${enable_shared}
-  Build static library                  : ${enable_static}
-  Build debug library                   : ${build_debug}
-  Build profile library                 : ${build_profile}
-  Prefix				: ${prefix}
-  ICU compile options                   : ${ICU_CPPFLAGS}
-  ICU link options                      : ${ICU_LDFLAGS}
-  ICU link libraries                    : ${ICU_LIBS}
-  POSIX thread compile options          : ${PTHREAD_CFLAGS}
-  POSIX thread link options             : ${PTHREAD_LIBS}
-  UUID compile options                  : ${UUID_CPPFLAGS}
-  UUID link options                     : ${UUID_LDFLAGS}
-  UUID link libraries			: ${UUID_LIBS}
-  Time Zone compile options             : ${TZ_CPPFLAGS}
-  Time Zone default file                : ${tz_default_file}
-  Time Zone data directory              : ${tz_data_dir}
-  Compiler                              : ${CC}
-  Preprocessor flags                    : ${CPPFLAGS}
-  Compile flags                         : ${CFLAGS}
-  Link flags                            : ${LDFLAGS}
-  Link libraries                        : ${LIBS}
+  Package                     : ${PACKAGE_NAME}
+  Version                     : ${PACKAGE_VERSION}
+  Deployment target           : ${deployment_target}
+  Build shared library        : ${enable_shared}
+  Build static library        : ${enable_static}
+  Build debug library         : ${build_debug}
+  Build profile library       : ${build_profile}
+  Build examples and tests    : ${build_tests}
+  Prefix		      : ${prefix}
+  ICU compile options         : ${ICU_CPPFLAGS}
+  ICU link options            : ${ICU_LDFLAGS}
+  ICU link libraries          : ${ICU_LIBS}
+  POSIX thread compile options: ${PTHREAD_CFLAGS}
+  POSIX thread link options   : ${PTHREAD_LIBS}
+  UUID compile options        : ${UUID_CPPFLAGS}
+  UUID link options           : ${UUID_LDFLAGS}
+  UUID link libraries	      : ${UUID_LIBS}
+  Time Zone compile options   : ${TZ_CPPFLAGS}
+  Time Zone default file      : ${tz_default_file}
+  Time Zone data directory    : ${tz_data_dir}
+  Compiler                    : ${CC}
+  Preprocessor flags          : ${CPPFLAGS}
+  Compile flags               : ${CFLAGS}
+  Link flags                  : ${LDFLAGS}
+  Link libraries              : ${LIBS}
 
 " >&5
 echo "$as_me:
 
   Configuration Summary
   ---------------------
-  Package                               : ${PACKAGE_NAME}
-  Version                               : ${PACKAGE_VERSION}
-  Deployment target                     : ${deployment_target}
-  Build shared library                  : ${enable_shared}
-  Build static library                  : ${enable_static}
-  Build debug library                   : ${build_debug}
-  Build profile library                 : ${build_profile}
-  Prefix				: ${prefix}
-  ICU compile options                   : ${ICU_CPPFLAGS}
-  ICU link options                      : ${ICU_LDFLAGS}
-  ICU link libraries                    : ${ICU_LIBS}
-  POSIX thread compile options          : ${PTHREAD_CFLAGS}
-  POSIX thread link options             : ${PTHREAD_LIBS}
-  UUID compile options                  : ${UUID_CPPFLAGS}
-  UUID link options                     : ${UUID_LDFLAGS}
-  UUID link libraries			: ${UUID_LIBS}
-  Time Zone compile options             : ${TZ_CPPFLAGS}
-  Time Zone default file                : ${tz_default_file}
-  Time Zone data directory              : ${tz_data_dir}
-  Compiler                              : ${CC}
-  Preprocessor flags                    : ${CPPFLAGS}
-  Compile flags                         : ${CFLAGS}
-  Link flags                            : ${LDFLAGS}
-  Link libraries                        : ${LIBS}
+  Package                     : ${PACKAGE_NAME}
+  Version                     : ${PACKAGE_VERSION}
+  Deployment target           : ${deployment_target}
+  Build shared library        : ${enable_shared}
+  Build static library        : ${enable_static}
+  Build debug library         : ${build_debug}
+  Build profile library       : ${build_profile}
+  Build examples and tests    : ${build_tests}
+  Prefix		      : ${prefix}
+  ICU compile options         : ${ICU_CPPFLAGS}
+  ICU link options            : ${ICU_LDFLAGS}
+  ICU link libraries          : ${ICU_LIBS}
+  POSIX thread compile options: ${PTHREAD_CFLAGS}
+  POSIX thread link options   : ${PTHREAD_LIBS}
+  UUID compile options        : ${UUID_CPPFLAGS}
+  UUID link options           : ${UUID_LDFLAGS}
+  UUID link libraries	      : ${UUID_LIBS}
+  Time Zone compile options   : ${TZ_CPPFLAGS}
+  Time Zone default file      : ${tz_default_file}
+  Time Zone data directory    : ${tz_data_dir}
+  Compiler                    : ${CC}
+  Preprocessor flags          : ${CPPFLAGS}
+  Compile flags               : ${CFLAGS}
+  Link flags                  : ${LDFLAGS}
+  Link libraries              : ${LIBS}
 
 " >&6;}
