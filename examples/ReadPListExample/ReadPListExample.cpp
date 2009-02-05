@@ -15,25 +15,19 @@
 // Apple's "Read a PList" example program.
 // Taken from http://developer.apple.com/opensource/cflite.html
 //
+
+#include <stdio.h>
+
 #include <CoreFoundation/CoreFoundation.h>
 
-void readPropertyListFromFile (void);
-
-const char * kFilename = "./schema.xml";
-
-int main (int argc, const char* argv[]) {
-    // Read the plist.
-    readPropertyListFromFile ();	
-
-    return 0;
-}
-
-void readPropertyListFromFile (void) {
+static void readPropertyListFromFile (const char *path) {
     CFDataRef data = NULL;
 		
-    FILE* file = fopen (kFilename, "r");
+    FILE* file = fopen (path, "r");
 
-    if (file != NULL) {
+	if (file == NULL) {
+		fprintf(stderr, "Cannot open `%s' for reading.\n", path);
+	} else {
         int result = fseek (file, 0, SEEK_END);
         result = ftell (file);
         rewind (file);
@@ -57,8 +51,18 @@ void readPropertyListFromFile (void) {
 
         CFShow (CFSTR ("Property list (as read from file):"));
         CFShow (propertyList);
-    }
 
-    CFRelease (data);
+		CFRelease(data);
+    }
 }
 
+int main (int argc, const char* argv[]) {
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s <Property List>\n", argv[0]);
+		return 1;
+	}
+
+    readPropertyListFromFile (argv[1]);	
+
+    return 0;
+}
