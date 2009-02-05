@@ -14,6 +14,13 @@ SUBDIRS				= include . tests examples
 DEFS				+= -include ${CONFIG_HEADER}
 
 #
+# Data file for pkg-config
+#
+
+pkgconfigdir			= ${libdir}/pkgconfig
+pkgconfig_DATA			= CoreFoundation.pc
+
+#
 # Define where we will install and where CoreFoundation can find its
 # Unicode character mappings.
 #

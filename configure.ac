@@ -207,7 +207,7 @@ AC_MSG_NOTICE([checking required package dependencies])
 
 AC_MSG_NOTICE([checking International Components for Unicode (ICU) package])
 
-AC_PATH_PROG([ICU_CONFIG],[icu-config],[no])
+AC_PATH_PROG([ICU_CONFIG],[icu-config])
 
 AC_ARG_WITH(icu,
 	AS_HELP_STRING([--with-icu=DIR],
@@ -230,8 +230,7 @@ AC_ARG_WITH(icu-libs,
 	[icu_library_dir=${withval}],
 	[icu_library_dir="${icu_dir}/lib"])
 
-
-if test "x$ICU_CONFIG" != "xno"; then
+if test "x${ICU_CONFIG}" != "x"; then
 	ICU_CPPFLAGS="`${ICU_CONFIG} --cppflags`"
 	ICU_LDFLAGS="`${ICU_CONFIG} --ldflags`"
 	ICU_LIBS="`${ICU_CONFIG} --ldflags-libsonly`"
@@ -280,8 +279,13 @@ AC_CHECK_HEADERS([unicode/umsg.h])
 AC_CHECK_HEADERS([unicode/unum.h])
 AC_CHECK_HEADERS([unicode/uset.h])
 
+AC_SUBST(ICU_CPPFLAGS)
+AC_SUBST(ICU_LDFLAGS)
+AC_SUBST(ICU_LIBS)
+
 CPPFLAGS="${ICU_CPPFLAGS} ${CPPFLAGS}"
 LDFLAGS="${ICU_LDFLAGS} ${LDFLAGS}"
+LIBS="${ICU_LIBS} ${LIBS}"
 
 #
 # Sort out where the UUID components are at.
@@ -289,7 +293,7 @@ LDFLAGS="${ICU_LDFLAGS} ${LDFLAGS}"
 
 AC_MSG_NOTICE([checking Universally Unique Identifier (UUID) package])
 
-AC_PATH_PROG([UUID_CONFIG],[uuid-config],[no])
+AC_PATH_PROG([UUID_CONFIG],[uuid-config])
 
 AC_ARG_WITH(uuid,
 	AS_HELP_STRING([--with-uuid=DIR],
@@ -315,7 +319,7 @@ AC_ARG_WITH(uuid-libs,
 # If uuid-config exists, then just use it to derive compile options;
 # otherwise, try to figure things out based on the various 'with' options.
 
-if test "x${UUID_CONFIG}" != "xno"; then
+if test "x${UUID_CONFIG}" != "x"; then
 	UUID_CPPFLAGS="`${UUID_CONFIG} --cppflags`"
 	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
 	UUID_LIBS="`${UUID_CONFIG} --libs`"
@@ -346,6 +350,10 @@ else
 	LIBS="${UUID_saved_libs}"
 	unset UUID_saved_libs
 fi
+
+AC_SUBST(UUID_CPPFLAGS)
+AC_SUBST(UUID_LDFLAGS)
+AC_SUBST(UUID_LIBS)
 
 CPPFLAGS="${UUID_CPPFLAGS} ${CPPFLAGS}"
 LDFLAGS="${UUID_LDFLAGS} ${LDFLAGS}"
@@ -551,6 +559,7 @@ AC_REPLACE_FUNCS([flsl gettimeofday])
 # Identify the various makefiles and auto-generated files for the package
 #
 AC_CONFIG_FILES([
+CoreFoundation.pc
 Makefile
 include/Makefile
 tests/Makefile

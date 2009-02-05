@@ -52,7 +52,8 @@ host_triplet = @host@
 @CF_BUILD_PROFILE_TRUE@am__append_2 = libCoreFoundation_profile.la
 subdir = .
 DIST_COMMON = $(CF_include_HEADERS) $(am__configure_deps) \
-	$(noinst_HEADERS) $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(noinst_HEADERS) $(srcdir)/CoreFoundation.pc.in \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/configure INSTALL compat/flsl.c \
 	compat/gettimeofday.c compat/strlcat.c compat/strlcpy.c \
 	config/compile config/config.guess config/config.sub \
@@ -67,7 +68,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/include/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = CoreFoundation.pc
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -76,7 +77,7 @@ am__vpath_adj = case $$p in \
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(libCoreFoundation_la_datadir)" \
-	"$(DESTDIR)$(CF_includedir)"
+	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(CF_includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 LIBOBJDIR = compat/
@@ -367,7 +368,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	installcheck-recursive installdirs-recursive pdf-recursive \
 	ps-recursive uninstall-recursive
 libCoreFoundation_la_dataDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(libCoreFoundation_la_data_DATA)
+pkgconfigDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(libCoreFoundation_la_data_DATA) $(pkgconfig_DATA)
 CF_includeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(CF_include_HEADERS) $(noinst_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
@@ -427,6 +429,9 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
 ICU_CONFIG = @ICU_CONFIG@
+ICU_CPPFLAGS = @ICU_CPPFLAGS@
+ICU_LDFLAGS = @ICU_LDFLAGS@
+ICU_LIBS = @ICU_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -465,6 +470,9 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 UUID_CONFIG = @UUID_CONFIG@
+UUID_CPPFLAGS = @UUID_CPPFLAGS@
+UUID_LDFLAGS = @UUID_LDFLAGS@
+UUID_LIBS = @UUID_LIBS@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -520,6 +528,12 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = include . tests examples
+
+#
+# Data file for pkg-config
+#
+pkgconfigdir = ${libdir}/pkgconfig
+pkgconfig_DATA = CoreFoundation.pc
 
 #
 # Define where we will install and where CoreFoundation can find its
@@ -879,6 +893,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(srcdir) && $(AUTOCONF)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+CoreFoundation.pc: $(top_builddir)/config.status $(srcdir)/CoreFoundation.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
@@ -2509,6 +2525,23 @@ uninstall-libCoreFoundation_la_dataDATA:
 	  echo " rm -f '$(DESTDIR)$(libCoreFoundation_la_datadir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(libCoreFoundation_la_datadir)/$$f"; \
 	done
+install-pkgconfigDATA: $(pkgconfig_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
+	@list='$(pkgconfig_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(pkgconfigDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfigdir)/$$f'"; \
+	  $(pkgconfigDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfigdir)/$$f"; \
+	done
+
+uninstall-pkgconfigDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfig_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(pkgconfigdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfigdir)/$$f"; \
+	done
 install-CF_includeHEADERS: $(CF_include_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(CF_includedir)" || $(MKDIR_P) "$(DESTDIR)$(CF_includedir)"
@@ -2810,7 +2843,7 @@ check: check-recursive
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libCoreFoundation_la_datadir)" "$(DESTDIR)$(CF_includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libCoreFoundation_la_datadir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(CF_includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -2861,7 +2894,7 @@ info: info-recursive
 info-am:
 
 install-data-am: install-CF_includeHEADERS \
-	install-libCoreFoundation_la_dataDATA
+	install-libCoreFoundation_la_dataDATA install-pkgconfigDATA
 
 install-dvi: install-dvi-recursive
 
@@ -2901,7 +2934,7 @@ ps-am:
 
 uninstall-am: uninstall-CF_includeHEADERS \
 	uninstall-libCoreFoundation_la_dataDATA \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
 	install-strip
@@ -2918,14 +2951,14 @@ uninstall-am: uninstall-CF_includeHEADERS \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am \
 	install-libCoreFoundation_la_dataDATA install-libLTLIBRARIES \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
+	install-man install-pdf install-pdf-am install-pkgconfigDATA \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-recursive uninstall uninstall-CF_includeHEADERS \
 	uninstall-am uninstall-libCoreFoundation_la_dataDATA \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
