@@ -2,7 +2,7 @@
 
 CFDataRef myCallBack(CFMessagePortRef local, SInt32 msgid, CFDataRef data, void *info) {
      char *message = "Thanks for calling!";
-     CFDataRef returnData = CFDataCreate(NULL, message, strlen(message)+1);
+     CFDataRef returnData = CFDataCreate(NULL, (const UInt8 *)message, strlen(message)+1);
      printf("here is our received data: %s\n", CFDataGetBytePtr(data));
      return returnData;  // as stated in header, both data and returnData will be released for us after callback returns
 }
