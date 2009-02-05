@@ -461,7 +461,7 @@ uninstall-am:
 
 
 @CF_BUILD_TESTS_TRUE@check:
-@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./ReadPListExample schema.xml
+@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./ReadPListExample ${srcdir}/schema.xml
 
 @CF_BUILD_TESTS_TRUE@gdb:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ${@} ./ReadPListExample

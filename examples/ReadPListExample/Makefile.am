@@ -13,7 +13,7 @@ ReadPListExample_SOURCES	= ReadPListExample.cpp
 
 if CF_BUILD_TESTS
 check:
-	${LIBTOOL} --mode execute ./ReadPListExample schema.xml
+	${LIBTOOL} --mode execute ./ReadPListExample ${srcdir}/schema.xml
 
 gdb:
 	${LIBTOOL} --mode execute ${@} ./ReadPListExample
