@@ -1,5 +1,7 @@
 all: CoreFoundation
 
+check install: all
+
 CS_includedir		= ${includedir}
 
 CS_include_HEADERS	= AssertMacros.h		\

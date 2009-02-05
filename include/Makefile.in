@@ -442,6 +442,8 @@ uninstall-am: uninstall-CS_includeHEADERS
 
 all: CoreFoundation
 
+check install: all
+
 CoreFoundation: | ${CF_SOURCE}
 	${LN_S} ${CF_SOURCE} $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
