@@ -16248,8 +16248,8 @@ echo "$as_me: checking required package dependencies" >&6;}
 { echo "$as_me:$LINENO: checking International Components for Unicode (ICU) package" >&5
 echo "$as_me: checking International Components for Unicode (ICU) package" >&6;}
 
-# Extract the first word of "icu-configx", so it can be a program name with args.
-set dummy icu-configx; ac_word=$2
+# Extract the first word of "icu-config", so it can be a program name with args.
+set dummy icu-config; ac_word=$2
 { echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
 if test "${ac_cv_path_ICU_CONFIG+set}" = set; then
@@ -16321,9 +16321,7 @@ else
 fi
 
 
-echo "ICU_CONFIG: ${ICU_CONFIG}"
-
-if test "x$ICU_CONFIG" != "xno"; then
+if test "x${ICU_CONFIG}" != "x"; then
 	ICU_CPPFLAGS="`${ICU_CONFIG} --cppflags`"
 	ICU_LDFLAGS="`${ICU_CONFIG} --ldflags`"
 	ICU_LIBS="`${ICU_CONFIG} --ldflags-libsonly`"
@@ -18492,7 +18490,6 @@ done
 done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_UUID_CONFIG" && ac_cv_path_UUID_CONFIG="no"
   ;;
 esac
 fi
@@ -18542,7 +18539,7 @@ fi
 # If uuid-config exists, then just use it to derive compile options;
 # otherwise, try to figure things out based on the various 'with' options.
 
-if test "x${UUID_CONFIG}" != "xno"; then
+if test "x${UUID_CONFIG}" != "x"; then
 	UUID_CPPFLAGS="`${UUID_CONFIG} --cppflags`"
 	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
 	UUID_LIBS="`${UUID_CONFIG} --libs`"
