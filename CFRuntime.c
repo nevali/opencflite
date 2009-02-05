@@ -262,9 +262,11 @@ CFTypeRef _CFRuntimeCreateInstance(CFAllocatorRef allocator, CFTypeID typeID, CF
     if (NULL == memory) {
 	return NULL;
     }
-#if DEPLOYMENT_TARGET_WINDOWS
-    // malloc_size won't work if the memory address has been moved (such as a custom allocator
-    // that adds its own barriers), so don't attempt to call it on the allocation return.
+#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+    // malloc_size won't work if the memory address has been moved
+    // (such as a custom allocator that adds its own metadata
+    // (e.g. under/overflow guard data), so don't attempt to call it
+    // on the allocation return.
     size_t msize = (usesSystemDefaultAllocator) ? malloc_size(memory) : size;
 #else
     size_t msize = malloc_size(memory);
