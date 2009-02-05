@@ -272,7 +272,7 @@ void countingAllocatorExample(void) {
     show(CFSTR("At start, number of allocations: %d"), NumOutstandingAllocations(countingAllocator));
 
     str1 = CFStringCreateWithCString(countingAllocator, "Hello World", kCFStringEncodingASCII);
-#if defined(__APPLE__)
+#if !defined(__WIN32__)
     str2 = CFStringCreateWithPascalString(countingAllocator, "\pHello World", kCFStringEncodingASCII);
 #endif
     mStr = CFStringCreateMutableCopy(countingAllocator, 0, str1);
@@ -287,7 +287,7 @@ void countingAllocatorExample(void) {
     show(CFSTR("After mutations, number of allocations: %d"), NumOutstandingAllocations(countingAllocator));
 
     CFRelease(str1);
-#ifndef WIN32
+#if !defined(__WIN32__)
     CFRelease(str2);
 #endif
     CFRelease(mStr);
