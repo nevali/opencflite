@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\icu&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;WIN32_LEAN_AND_MEAN;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,7 +67,7 @@
 				AdditionalDependencies="netapi32.lib ole32.lib ws2_32.lib kernel32.lib icuuc.lib icuin.lib rpcrt4.lib msvcrt.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_$(ConfigurationName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SolutionDir)\lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\icu\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="$(SolutionDir)\dist\lib\$(TargetName).lib"
@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(SolutionDir)\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(SolutionDir)\icu\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\icu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;WIN32_LEAN_AND_MEAN;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -149,7 +149,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="netapi32.lib ole32.lib ws2_32.lib kernel32.lib icuuc.lib icuin.lib rpcrt4.lib msvcrt.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)\lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\icu\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -181,7 +181,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(SolutionDir)\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(SolutionDir)\icu\bin\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
