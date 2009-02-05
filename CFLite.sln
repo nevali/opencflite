@@ -1,12 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLite", "CFLiteLib\CFLiteLib.vcproj", "{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WritePListExample", "examples\WritePListExample\WritePListExample.vcproj", "{AD525151-D756-44E6-AEA7-12052F4F43E2}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -43,16 +37,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AllocatorExample", "example
 		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLite", "windows\CFLiteLib.vcproj", "{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Debug|Win32.Build.0 = Debug|Win32
-		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Release|Win32.ActiveCfg = Release|Win32
-		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Release|Win32.Build.0 = Release|Win32
 		{AD525151-D756-44E6-AEA7-12052F4F43E2}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AD525151-D756-44E6-AEA7-12052F4F43E2}.Debug|Win32.Build.0 = Debug|Win32
 		{AD525151-D756-44E6-AEA7-12052F4F43E2}.Release|Win32.ActiveCfg = Release|Win32
@@ -69,6 +65,10 @@ Global
 		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Debug|Win32.Build.0 = Debug|Win32
 		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Release|Win32.ActiveCfg = Release|Win32
 		{2A4D3906-539D-4D1E-9C97-47ABD83FD999}.Release|Win32.Build.0 = Release|Win32
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Debug|Win32.Build.0 = Debug|Win32
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Release|Win32.ActiveCfg = Release|Win32
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
