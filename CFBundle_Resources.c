@@ -507,7 +507,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
                 CFStringGetCharacters(curType, CFRangeMake(0, typeLen), typeChars);
                 _CFSearchBundleDirectory(alloc, result, workingUniChars, workingLen, nameUniChars, nameLen, typeChars, typeLen, cheapStr, tmpString, version);
                 if (limit <= CFArrayGetCount(result)) break;
-#if !DEPLOYMENT_TARGET_MACOSX && !DEPLOYMENT_TARGET_WINDOWS
+#if !DEPLOYMENT_TARGET_MACOSX && !DEPLOYMENT_TARGET_WINDOWS && !DEPLOYMENT_TARGET_LINUX
                     CFAllocatorDeallocate(alloc, typeChars);
                 }
 #endif
