@@ -220,8 +220,12 @@ libCoreFoundation_profile_la_SOURCES	= $(CF_COMMON_SOURCES)
 endif
 
 EXTRA_DIST			= APPLE_LICENSE	\
+				  CHANGES \
+				  CONTRIBUTORS \
 				  INSTALL \
 				  LICENSE \
+				  README \
+				  TODO \
 				  BuildCFLite \
 				  BuildCFLite.windows \
 				  CFLite/CFLite.xcodeproj/project.pbxproj \

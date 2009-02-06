@@ -51,10 +51,10 @@ host_triplet = @host@
 #
 @CF_BUILD_PROFILE_TRUE@am__append_2 = libCoreFoundation_profile.la
 subdir = .
-DIST_COMMON = $(CF_include_HEADERS) $(am__configure_deps) \
+DIST_COMMON = README $(CF_include_HEADERS) $(am__configure_deps) \
 	$(noinst_HEADERS) $(srcdir)/CoreFoundation.pc.in \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure INSTALL compat/flsl.c \
+	$(top_srcdir)/configure INSTALL TODO compat/flsl.c \
 	compat/gettimeofday.c compat/strlcat.c compat/strlcpy.c \
 	config/compile config/config.guess config/config.sub \
 	config/depcomp config/install-sh config/ltmain.sh \
@@ -708,8 +708,12 @@ libCoreFoundation_la_SOURCES = $(CF_COMMON_SOURCES)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_LIBADD = $(CF_COMMON_LIBADD)
 @CF_BUILD_PROFILE_TRUE@libCoreFoundation_profile_la_SOURCES = $(CF_COMMON_SOURCES)
 EXTRA_DIST = APPLE_LICENSE	\
+				  CHANGES \
+				  CONTRIBUTORS \
 				  INSTALL \
 				  LICENSE \
+				  README \
+				  TODO \
 				  BuildCFLite \
 				  BuildCFLite.windows \
 				  CFLite/CFLite.xcodeproj/project.pbxproj \
