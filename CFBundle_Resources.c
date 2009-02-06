@@ -498,7 +498,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
             for (i = 0; i < c; i++) {
                 CFStringRef curType = (CFStringRef)CFArrayGetValueAtIndex(subResTypes, i);
                 CFIndex typeLen = CFStringGetLength(curType);
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
                 STACK_BUFFER_DECL(UniChar, typeChars, typeLen);
 #else
                 UniChar *typeChars = (UniChar*)CFAllocatorAllocate(alloc, sizeof(UniChar) * typeLen, 0);

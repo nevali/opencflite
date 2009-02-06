@@ -973,7 +973,7 @@ Boolean CFCalendarComposeAbsoluteTime(CFCalendarRef calendar, /* out */ CFAbsolu
     CF_OBJC_FUNCDISPATCH3(CFCalendarGetTypeID(), Boolean, calendar, "_composeAbsoluteTime:::", atp, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
     int idx, cnt = strlen((char *)componentDesc);
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int, vector, cnt);
 #else
     int vector[256]; // Dynamic stack allocation is GNU specific
@@ -993,7 +993,7 @@ Boolean CFCalendarDecomposeAbsoluteTime(CFCalendarRef calendar, CFAbsoluteTime a
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
     int idx, cnt = strlen((char *)componentDesc);
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int *, vector, cnt);
 #else
     int* vector[256]; // Dynamic stack allocation is GNU specific
@@ -1012,7 +1012,7 @@ Boolean CFCalendarAddComponents(CFCalendarRef calendar, /* inout */ CFAbsoluteTi
     CF_OBJC_FUNCDISPATCH4(CFCalendarGetTypeID(), Boolean, calendar, "_addComponents::::", atp, options, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
     int idx, cnt = strlen((char *)componentDesc);
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int, vector, cnt);
 #else
     int vector[256]; // Dynamic stack allocation is GNU specific
@@ -1031,7 +1031,7 @@ Boolean CFCalendarGetComponentDifference(CFCalendarRef calendar, CFAbsoluteTime 
     CF_OBJC_FUNCDISPATCH5(CFCalendarGetTypeID(), Boolean, calendar, "_diffComponents:::::", startingAT, resultAT, options, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
     int idx, cnt = strlen((char *)componentDesc);
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int *, vector, cnt);
 #else
     int* vector[256]; // Dynamic stack allocation is GNU specific
