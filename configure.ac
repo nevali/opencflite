@@ -9,7 +9,11 @@ AC_PREREQ(2.59)
 #
 # Initialize autoconf for the package
 #
-AC_INIT([CoreFoundation],[476.17],[bfulgham@users.sourceforge.net],[opencflite])
+# Package release version conventions are x.y.z, where x and y track
+# the Apple CoreFoundation release version and z tracks the OpenCFLite
+# release thereof.
+#
+AC_INIT([CoreFoundation],[476.17.0],[bfulgham@users.sourceforge.net],[opencflite])
 
 #
 # Interface number, revision and age of the library interface passed to
