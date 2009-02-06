@@ -320,7 +320,7 @@ AC_ARG_WITH(uuid-libs,
 # otherwise, try to figure things out based on the various 'with' options.
 
 if test "x${UUID_CONFIG}" != "x"; then
-	UUID_CPPFLAGS="`${UUID_CONFIG} --cppflags`"
+	UUID_CPPFLAGS="`${UUID_CONFIG} --cflags`"
 	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
 	UUID_LIBS="`${UUID_CONFIG} --libs`"
 else
