@@ -191,7 +191,8 @@ top_srcdir = @top_srcdir@
 SUBDIRS = ReadPListExample	\
 			  WritePListExample	\
 			  StringExample		\
-			  Allocator
+			  Allocator		\
+			  CFMessagePort
 
 all: all-recursive
 

@@ -1,4 +1,5 @@
 SUBDIRS			= ReadPListExample	\
 			  WritePListExample	\
 			  StringExample		\
-			  Allocator
+			  Allocator		\
+			  CFMessagePort

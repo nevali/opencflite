@@ -1,7 +1,7 @@
 AM_CFLAGS		= -I${top_srcdir}/include
 
 if CF_BUILD_TESTS
-check_PROGRAMS		= client server
+EXTRA_PROGRAMS		= client server
 endif
 
 client_LDADD		= ${top_builddir}/libCoreFoundation.la
