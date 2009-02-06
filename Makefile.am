@@ -228,8 +228,8 @@ EXTRA_DIST			= APPLE_LICENSE	\
 				  TODO \
 				  BuildCFLite \
 				  BuildCFLite.windows \
-				  CFLite/CFLite.xcodeproj/project.pbxproj \
-				  CFLiteLib/CFLiteLib.vcproj \
+				  macosx/CFLite.xcodeproj/project.pbxproj \
+				  windows/CFLiteLib.vcproj \
 				  CFLite.sln \
 				  CoreFoundation.xcodeproj/project.pbxproj \
 				  icu/bin/WHAT_IS_THIS.txt \
