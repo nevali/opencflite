@@ -1506,10 +1506,10 @@ Optional Features:
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --disable-debug         Disable the generation of a debug library instance
-                          (default=no).
+                          [default=no].
   --disable-profile       Disable the generation of a profile library instance
-                          (default=no).
-  --disable-tests         Disable building of tests and examples (default=no).
+                          [default=no].
+  --disable-tests         Disable building of tests and examples [default=no].
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1518,25 +1518,25 @@ Optional Packages:
                           both]
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-icu=DIR          Specify location of International Components for
-                          Unicode (ICU) headers and libraries (default=/usr).
+                          Unicode (ICU) headers and libraries [default=/usr].
   --with-icu-includes=DIR Specify location of International Components for
-                          Unicode (ICU) headers (default=/usr/include).
+                          Unicode (ICU) headers [default=/usr/include].
   --with-icu-libs=DIR     Specify location of International Components for
-                          Unicode (ICU) libraries (default=/usr/lib).
+                          Unicode (ICU) libraries [default=/usr/lib].
   --with-uuid=DIR         Specify location of Universally Unique Identifier
-                          (UUID) headers and libraries (default=/usr).
+                          (UUID) headers and libraries [default=/usr].
   --with-uuid-includes=DIR
                           Specify location of Universally Unique Identifier
-                          (UUID) headers (default=/usr/include).
+                          (UUID) headers [default=/usr/include].
   --with-uuid-libs=DIR    Specify location of Universally Unique Identifier
-                          (UUID) libraries (default=/usr/lib).
+                          (UUID) libraries [default=/usr/lib].
   --with-tz-default=FILE  Specify the location of the default local time zone
                           data file on the target system
-                          (default=/etc/localtime).
+                          [default=/etc/localtime].
   --with-tz-data=DIR      Specify the location of the time zone data files on
-                          the target system (default=/usr/share/zoneinfo).
+                          the target system [default=/usr/share/zoneinfo].
   --with-tz-includes=DIR  Specify location of Time Zone (tzcode) headers
-                          (default=/usr/include).
+                          [default=/usr/include].
 
 Some influential environment variables:
   CC          C compiler command

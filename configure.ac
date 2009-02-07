@@ -165,7 +165,7 @@ AC_MSG_NOTICE([checking library build options])
 
 AC_MSG_CHECKING([whether to build a debug library instance])
 AC_ARG_ENABLE(debug,
-	AS_HELP_STRING([--disable-debug], [Disable the generation of a debug library instance (default=no).]),
+	AS_HELP_STRING([--disable-debug], [Disable the generation of a debug library instance @<:@default=no@:>@.]),
 	[build_debug=${enableval}],
 	[build_debug=yes])
 AC_MSG_RESULT(${build_debug})
@@ -173,7 +173,7 @@ AM_CONDITIONAL([CF_BUILD_DEBUG], [test "x${build_debug}" = "xyes"])
 
 AC_MSG_CHECKING([whether to build a profile library instance])
 AC_ARG_ENABLE(profile,
-	AS_HELP_STRING([--disable-profile], [Disable the generation of a profile library instance (default=no).]),
+	AS_HELP_STRING([--disable-profile], [Disable the generation of a profile library instance @<:@default=no@:>@.]),
 	[build_profile=${enableval}],
 	[build_profile=yes])
 AC_MSG_RESULT(${build_profile})
@@ -181,7 +181,7 @@ AM_CONDITIONAL([CF_BUILD_PROFILE], [test "x${build_profile}" = "xyes"])
 
 AC_MSG_CHECKING([whether to build tests and examples])
 AC_ARG_ENABLE(tests,
-	AS_HELP_STRING([--disable-tests],[Disable building of tests and examples (default=no).]),
+	AS_HELP_STRING([--disable-tests],[Disable building of tests and examples @<:@default=no@:>@.]),
 	[build_tests=${enableval}],
 	[build_tests=yes])
 AC_MSG_RESULT(${build_tests})
@@ -215,7 +215,7 @@ AC_PATH_PROG([ICU_CONFIG],[icu-config])
 
 AC_ARG_WITH(icu,
 	AS_HELP_STRING([--with-icu=DIR],
-		       [Specify location of International Components for Unicode (ICU) headers and libraries (default=/usr).]),
+		       [Specify location of International Components for Unicode (ICU) headers and libraries @<:@default=/usr@:>@.]),
 	[
 		if test "x${withval}" = "xno"; then
 			AC_MSG_ERROR([${PACKAGE_NAME} requires the International Components for Unicode (ICU) package])
@@ -225,12 +225,12 @@ AC_ARG_WITH(icu,
 	[icu_dir="/usr"])
 AC_ARG_WITH(icu-includes,
 	AS_HELP_STRING([--with-icu-includes=DIR],
-		       [Specify location of International Components for Unicode (ICU) headers (default=/usr/include).]),
+		       [Specify location of International Components for Unicode (ICU) headers @<:@default=/usr/include@:>@.]),
 	[icu_header_dir=${withval}],
 	[icu_header_dir="${icu_dir}/include"])
 AC_ARG_WITH(icu-libs,
 	AS_HELP_STRING([--with-icu-libs=DIR],
-		       [Specify location of International Components for Unicode (ICU) libraries (default=/usr/lib).]),
+		       [Specify location of International Components for Unicode (ICU) libraries @<:@default=/usr/lib@:>@.]),
 	[icu_library_dir=${withval}],
 	[icu_library_dir="${icu_dir}/lib"])
 
@@ -301,7 +301,7 @@ AC_PATH_PROG([UUID_CONFIG],[uuid-config])
 
 AC_ARG_WITH(uuid,
 	AS_HELP_STRING([--with-uuid=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) headers and libraries (default=/usr).]),
+		       [Specify location of Universally Unique Identifier (UUID) headers and libraries @<:@default=/usr@:>@.]),
 	[
 		if test "x${withval}" = "xno"; then
 			AC_MSG_ERROR([${PACKAGE_NAME} requires the Universally Unique Identifier (UUID) package])
@@ -311,12 +311,12 @@ AC_ARG_WITH(uuid,
 	[uuid_dir="/usr"])
 AC_ARG_WITH(uuid-includes,
 	AS_HELP_STRING([--with-uuid-includes=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) headers (default=/usr/include).]),
+		       [Specify location of Universally Unique Identifier (UUID) headers @<:@default=/usr/include@:>@.]),
 	[uuid_header_dir=${withval}],
 	[uuid_header_dir="${uuid_dir}/include"])
 AC_ARG_WITH(uuid-libs,
 	AS_HELP_STRING([--with-uuid-libs=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) libraries (default=/usr/lib).]),
+		       [Specify location of Universally Unique Identifier (UUID) libraries @<:@default=/usr/lib@:>@.]),
 	[uuid_library_dir=${withval}],
 	[uuid_library_dir="${uuid_dir}/lib"])
 
@@ -398,7 +398,7 @@ AC_CHECK_HEADERS([math.h])
 AC_MSG_CHECKING([where to find the default local time zone data file])
 AC_ARG_WITH(tz-default,
 	AS_HELP_STRING([--with-tz-default=FILE],
-		       [Specify the location of the default local time zone data file on the target system (default=/etc/localtime).]),
+		       [Specify the location of the default local time zone data file on the target system @<:@default=/etc/localtime@:>@.]),
 	[tz_default_file=${withval}],
 	[tz_default_file="/etc/localtime"])
 AC_MSG_RESULT(${tz_default_file})
@@ -407,7 +407,7 @@ AC_DEFINE_UNQUOTED([TZDEFAULT],["${tz_default_file}"],[Define this to the locati
 AC_MSG_CHECKING([where to find the time zone data files])
 AC_ARG_WITH(tz-data,
 	AS_HELP_STRING([--with-tz-data=DIR],
-		       [Specify the location of the time zone data files on the target system (default=/usr/share/zoneinfo).]),
+		       [Specify the location of the time zone data files on the target system @<:@default=/usr/share/zoneinfo@:>@.]),
 	[tz_data_dir=${withval}],
 	[tz_data_dir="/usr/share/zoneinfo"])
 AC_MSG_RESULT(${tz_data_dir})
@@ -423,7 +423,7 @@ AC_DEFINE_UNQUOTED([TZDIR],["${tz_data_dir}"],[Define this to the location of th
 
 AC_ARG_WITH(tz-includes,
 	AS_HELP_STRING([--with-tz-includes=DIR],
-		       [Specify location of Time Zone (tzcode) headers (default=/usr/include).]),
+		       [Specify location of Time Zone (tzcode) headers @<:@default=/usr/include@:>@.]),
 	[
 		if test "x${withval}" != "xyes"; then
 			if test -d "${withval}/include"; then
