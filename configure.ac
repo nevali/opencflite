@@ -205,70 +205,108 @@ AM_CONDITIONAL([CF_BUILD_TESTS], [test "x${build_tests}" = "xyes"])
 
 AC_MSG_NOTICE([checking required package dependencies])
 
+AC_PATH_PROG([PKG_CONFIG],[pkg-config])
+
 #
 # Sort out where the ICU components are at.
 #
 
-AC_MSG_NOTICE([checking International Components for Unicode (ICU) package])
+AC_MSG_NOTICE([checking the International Components for Unicode (ICU) package])
 
 AC_PATH_PROG([ICU_CONFIG],[icu-config])
 
 AC_ARG_WITH(icu,
 	AS_HELP_STRING([--with-icu=DIR],
-		       [Specify location of International Components for Unicode (ICU) headers and libraries @<:@default=/usr@:>@.]),
+		       [Specify location of the International Components for Unicode (ICU) headers and libraries.]),
 	[
 		if test "x${withval}" = "xno"; then
 			AC_MSG_ERROR([${PACKAGE_NAME} requires the International Components for Unicode (ICU) package])
+		else
+			icu_dir=${withval}
 		fi
-		icu_dir=${withval}
 	],
-	[icu_dir="/usr"])
+	[icu_dir=])
 AC_ARG_WITH(icu-includes,
 	AS_HELP_STRING([--with-icu-includes=DIR],
-		       [Specify location of International Components for Unicode (ICU) headers @<:@default=/usr/include@:>@.]),
+		       [Specify location of International Components for Unicode (ICU) headers.]),
 	[icu_header_dir=${withval}],
-	[icu_header_dir="${icu_dir}/include"])
+	[icu_header_dir=])
 AC_ARG_WITH(icu-libs,
 	AS_HELP_STRING([--with-icu-libs=DIR],
-		       [Specify location of International Components for Unicode (ICU) libraries @<:@default=/usr/lib@:>@.]),
+		       [Specify location of International Components for Unicode (ICU) libraries.]),
 	[icu_library_dir=${withval}],
-	[icu_library_dir="${icu_dir}/lib"])
+	[icu_library_dir=])
 
-if test "x${ICU_CONFIG}" != "x"; then
+# We always prefer checking the values of the various '--with-icu-...' 
+# options first to using icu-config because the former might be used
+# in a cross-compilation environment on a system that also contains
+# icu-config. In such a case, the user wants what he/she specified
+# rather than what icu-config indicates.
+
+if test "x${icu_dir}" != "x" -o "x${icu_header_dir}" != "x" -o "x${icu_library_dir}" != "x"; then
+	if test "x${icu_dir}" != "x"; then
+		if test -d "${icu_dir}"; then
+			if test -d "${icu_dir}/include"; then
+				ICU_CPPFLAGS="-I${icu_dir}/include"
+			else
+				ICU_CPPFLAGS="-I${icu_dir}"
+			fi
+
+			if test -d "${icu_dir}/lib"; then
+				ICU_LDFLAGS="-L${icu_dir}/lib"
+			else
+				ICU_LDFLAGS="-L${icu_dir}"
+			fi
+		else
+			AC_MSG_ERROR([No such directory ${icu_dir}])
+		fi
+	fi
+
+	if test "x${icu_header_dir}" != "x"; then
+		if test -d "${icu_header_dir}"; then
+			ICU_CPPFLAGS="-I${icu_header_dir}"
+		else
+			AC_MSG_ERROR([No such directory ${icu_header_dir}])
+		fi
+	fi
+
+	if test "x${icu_library_dir}" != "x"; then
+		if test -d "${icu_library_dir}"; then
+			ICU_LDFLAGS="-L${icu_library_dir}"
+		else
+			AC_MSG_ERROR([No such directory ${icu_library_dir}])
+		fi
+	fi
+
+	# Most ICU libraries have versioned symbols
+	# (e.g. ucal_open_3_8), so the stock AC_CHECK_LIB will not
+	# work here given the way it checks for symbol
+	# availability. Punt and assume the library set normally
+	# reported by icu-config.
+
+	ICU_LIBS="${ICU_LDFLAGS} -licui18n -licuuc -licudata"
+
+elif test "x${ICU_CONFIG}" != "x"; then
 	ICU_CPPFLAGS="`${ICU_CONFIG} --cppflags`"
 	ICU_LDFLAGS="`${ICU_CONFIG} --ldflags`"
 	ICU_LIBS="`${ICU_CONFIG} --ldflags-libsonly`"
+
+elif test "x${PKG_CONFIG}" != "x" -a "${PKG_CONFIG} --exists icu"; then
+	ICU_CPPFLAGS="`${PKG_CONFIG} --cflags icu`"
+	ICU_LDFLAGS="`${PKG_CONFIG} --libs-only-L icu`"
+	ICU_LIBS="`${PKG_CONFIG} --libs-only-l icu`"
+
 else
-	if test -d "${icu_dir}"; then
-		if test -d "${icu_dir}/include"; then
-			ICU_CPPFLAGS="-I${icu_dir}/include"
-		else
-			ICU_CPPFLAGS="-I${icu_dir}"
-		fi
-
-		if test -d "${icu_dir}/lib"; then
-			ICU_LDFLAGS="-L${icu_dir}/lib"
-		else
-			ICU_LDFLAGS="-L${icu_dir}"
-		fi
-	else
-		ICU_CPPFLAGS="-I${icu_header_dir}"
-		ICU_LDFLAGS="-L${icu_library_dir}"
-	fi
-
-	ICU_saved_libs="${LIBS}"
-	LIBS=""
-
-		AC_CHECK_LIB(icui18n, ucal_open)
-		AC_CHECK_LIB(icui18n, udat_open)
-		AC_CHECK_LIB(icui18n, ulocdata_open)
-		AC_CHECK_LIB(icui18n, unum_open)
-		AC_CHECK_LIB(icui18n, uset_open)
-
-	ICU_LIBS="${LIBS}"
-	LIBS="${ICU_saved_libs}"
-	unset ICU_saved_libs
+	AC_MSG_ERROR([Cannot find the International Components for Unicode (ICU) package.])
 fi
+
+AC_SUBST(ICU_CPPFLAGS)
+AC_SUBST(ICU_LDFLAGS)
+AC_SUBST(ICU_LIBS)
+
+CPPFLAGS="${ICU_CPPFLAGS} ${CPPFLAGS}"
+LDFLAGS="${ICU_LDFLAGS} ${LDFLAGS}"
+LIBS="${ICU_LIBS} ${LIBS}"
 
 AC_CHECK_HEADERS([unicode/putil.h])
 AC_CHECK_HEADERS([unicode/ucal.h])
@@ -283,14 +321,6 @@ AC_CHECK_HEADERS([unicode/umsg.h])
 AC_CHECK_HEADERS([unicode/unum.h])
 AC_CHECK_HEADERS([unicode/uset.h])
 
-AC_SUBST(ICU_CPPFLAGS)
-AC_SUBST(ICU_LDFLAGS)
-AC_SUBST(ICU_LIBS)
-
-CPPFLAGS="${ICU_CPPFLAGS} ${CPPFLAGS}"
-LDFLAGS="${ICU_LDFLAGS} ${LDFLAGS}"
-LIBS="${ICU_LIBS} ${LIBS}"
-
 #
 # Sort out where the UUID components are at.
 #
@@ -301,48 +331,64 @@ AC_PATH_PROG([UUID_CONFIG],[uuid-config])
 
 AC_ARG_WITH(uuid,
 	AS_HELP_STRING([--with-uuid=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) headers and libraries @<:@default=/usr@:>@.]),
+		       [Specify location of Universally Unique Identifier (UUID) headers and libraries.]),
 	[
 		if test "x${withval}" = "xno"; then
 			AC_MSG_ERROR([${PACKAGE_NAME} requires the Universally Unique Identifier (UUID) package])
 		fi
 		uuid_dir=${withval}
 	],
-	[uuid_dir="/usr"])
+	[uuid_dir=])
 AC_ARG_WITH(uuid-includes,
 	AS_HELP_STRING([--with-uuid-includes=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) headers @<:@default=/usr/include@:>@.]),
+		       [Specify location of Universally Unique Identifier (UUID) headers.]),
 	[uuid_header_dir=${withval}],
-	[uuid_header_dir="${uuid_dir}/include"])
+	[uuid_header_dir=])
 AC_ARG_WITH(uuid-libs,
 	AS_HELP_STRING([--with-uuid-libs=DIR],
-		       [Specify location of Universally Unique Identifier (UUID) libraries @<:@default=/usr/lib@:>@.]),
+		       [Specify location of Universally Unique Identifier (UUID) libraries.]),
 	[uuid_library_dir=${withval}],
-	[uuid_library_dir="${uuid_dir}/lib"])
+	[uuid_library_dir=])
 
-# If uuid-config exists, then just use it to derive compile options;
-# otherwise, try to figure things out based on the various 'with' options.
+# We always prefer checking the values of the various '--with-uuid-...' 
+# options first to using uuid-config because the former might be used
+# in a cross-compilation environment on a system that also contains
+# uuid-config. In such a case, the user wants what he/she specified
+# rather than what uuid-config indicates.
 
-if test "x${UUID_CONFIG}" != "x"; then
-	UUID_CPPFLAGS="`${UUID_CONFIG} --cflags`"
-	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
-	UUID_LIBS="`${UUID_CONFIG} --libs`"
-else
-	if test -d "${uuid_dir}"; then
-		if test -d "${uuid_dir}/include"; then
-			UUID_CPPFLAGS="-I${uuid_dir}/include"
+if test "x${uuid_dir}" != "x" -o "x${uuid_header_dir}" != "x" -o "x${uuid_library_dir}" != "x"; then
+	if test "x${uuid_dir}" != "x"; then
+		if test -d "${uuid_dir}"; then
+			if test -d "${uuid_dir}/include"; then
+				UUID_CPPFLAGS="-I${uuid_dir}/include"
+			else
+				UUID_CPPFLAGS="-I${uuid_dir}"
+			fi
+
+			if test -d "${uuid_dir}/lib"; then
+				UUID_LDFLAGS="-L${uuid_dir}/lib"
+			else
+				UUID_LDFLAGS="-L${uuid_dir}"
+			fi
 		else
-			UUID_CPPFLAGS="-I${uuid_dir}"
+			AC_MSG_ERROR([No such directory ${uuid_dir}])
 		fi
+	fi
 
-		if test -d "${uuid_dir}/lib"; then
-			UUID_LDFLAGS="-L${uuid_dir}/lib"
+	if test "x${uuid_header_dir}" != "x"; then
+		if test -d "${uuid_header_dir}"; then
+			UUID_CPPFLAGS="-I${uuid_header_dir}"
 		else
-			UUID_LDFLAGS="-L${uuid_dir}"
+			AC_MSG_ERROR([No such directory ${uuid_header_dir}])
 		fi
-	else
-		UUID_CPPFLAGS="-I${uuid_header_dir}"
-		UUID_LDFLAGS="-L${uuid_library_dir}"
+	fi
+
+	if test "x${uuid_library_dir}" != "x"; then
+		if test -d "${uuid_library_dir}"; then
+			UUID_LDFLAGS="-L${uuid_library_dir}"
+		else
+			AC_MSG_ERROR([No such directory ${uuid_library_dir}])
+		fi
 	fi
 
 	UUID_saved_libs="${LIBS}"
@@ -350,9 +396,22 @@ else
 
 		AC_CHECK_LIB(uuid, uuid_compare)
 
-	UUID_LIBS="${LIBS}"
+	UUID_LIBS="${UUID_LDFLAGS} ${LIBS}"
 	LIBS="${UUID_saved_libs}"
 	unset UUID_saved_libs
+
+elif test "x${UUID_CONFIG}" != "x"; then
+	UUID_CPPFLAGS="`${UUID_CONFIG} --cflags`"
+	UUID_LDFLAGS="`${UUID_CONFIG} --ldflags`"
+	UUID_LIBS="`${UUID_CONFIG} --libs`"
+
+elif test "x${PKG_CONFIG}" != "x" -a "${PKG_CONFIG} --exists uuid"; then
+	UUID_CPPFLAGS="`${PKG_CONFIG} --cflags uuid`"
+	UUID_LDFLAGS="`${PKG_CONFIG} --libs-only-L uuid`"
+	UUID_LIBS="`${PKG_CONFIG} --libs-only-l uuid`"
+
+else
+	AC_MSG_ERROR([Cannot find the Universally Unique Identifier (UUID) package.])
 fi
 
 AC_SUBST(UUID_CPPFLAGS)
