@@ -3810,7 +3810,7 @@ __private_extern__ Boolean _CFBundleDlfcnCheckLoaded(CFBundleRef bundle) {
 
 static SInt32 _CFBundleCurrentArchitecture(void) {
     SInt32 arch = 0;
-#if defined(__ppc__)
+#if defined(__ppc__) || defined(__powerpc__)
     arch = kCFBundleExecutableArchitecturePPC;
 #elif defined(__ppc64__)
     arch = kCFBundleExecutableArchitecturePPC64;

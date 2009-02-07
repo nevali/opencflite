@@ -119,7 +119,7 @@ CF_EXPORT CFStringRef _CFStringCreateHostName(void);
 CF_EXPORT void _CFMachPortInstallNotifyPort(CFRunLoopRef rl, CFStringRef mode);
 #endif
 
-#if defined(__ppc__) || defined(__ppc64__)
+#if defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__)
     #define HALT asm __volatile__("trap")
 #elif defined(__i386__) || defined(__x86_64__)
     #if defined(__GNUC__)
