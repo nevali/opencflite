@@ -156,6 +156,69 @@ if test "x$GCC" = "xyes" ; then
     done
 fi
 
+# Check whether the current compiler supports atomic built-ins
+
+AC_MSG_NOTICE([checking for compiler atomic built-ins])
+
+AC_CACHE_CHECK([whether the target supports __sync_fetch_and_add],
+	       [cf_cv_have_sync_fetch_and_add],
+	       [
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+				]],[[
+					int foo = 0;
+					return __sync_fetch_and_add(&foo, 1);
+				]])],
+				[cf_cv_have_sync_fetch_and_add=yes],
+				[cf_cv_have_sync_fetch_and_add=no])
+		])
+
+if test "x${cf_cv_have_sync_fetch_and_add}" != "xno"; then
+	AC_DEFINE(HAVE___SYNC_FETCH_AND_ADD, 1,
+		  [Define this if your target compiler supports __sync_fetch_and_add])
+else
+	AC_MSG_ERROR([Support for __sync_fetch_and_add is required.])
+fi
+
+AC_CACHE_CHECK([whether the target supports __sync_bool_compare_and_swap],
+	       [cf_cv_have_sync_bool_compare_and_swap],
+	       [
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+				]],[[
+					int foo;
+					return __sync_bool_compare_and_swap(&foo, 0, 1);
+				]])],
+				[cf_cv_have_sync_bool_compare_and_swap=yes],
+				[cf_cv_have_sync_bool_compare_and_swap=no])
+		])
+
+if test "x${cf_cv_have_sync_bool_compare_and_swap}" != "xno"; then
+	AC_DEFINE(HAVE___SYNC_BOOL_COMPARE_AND_SWAP, 1,
+		  [Define this if your target compiler supports __sync_bool_compare_and_swap])
+else
+	AC_MSG_ERROR([Support for __sync_bool_compare_and_swap is required.])
+fi
+
+AC_CACHE_CHECK([whether the target supports __sync_synchronize],
+	       [cf_cv_have_sync_synchronize],
+	       [
+			AC_LINK_IFELSE([
+				AC_LANG_PROGRAM([[
+				]],[[
+					__sync_synchronize();
+				]])],
+				[cf_cv_have_sync_synchronize=yes],
+				[cf_cv_have_sync_synchronize=no])
+		])
+
+if test "x${cf_cv_have_sync_synchronize}" != "xno"; then
+	AC_DEFINE(HAVE___SYNC_SYNCHRONIZE, 1,
+		  [Define this if your target compiler supports __sync_synchronize])
+else
+	AC_MSG_ERROR([Support for __sync_synchronize is required.])
+fi
+
 #
 # Check whether or not we should build the package with debug and profile
 # versions of the library

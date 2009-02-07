@@ -16155,6 +16155,223 @@ echo "${ECHO_T}no" >&6; }
     done
 fi
 
+# Check whether the current compiler supports atomic built-ins
+
+{ echo "$as_me:$LINENO: checking for compiler atomic built-ins" >&5
+echo "$as_me: checking for compiler atomic built-ins" >&6;}
+
+{ echo "$as_me:$LINENO: checking whether the target supports __sync_fetch_and_add" >&5
+echo $ECHO_N "checking whether the target supports __sync_fetch_and_add... $ECHO_C" >&6; }
+if test "${cf_cv_have_sync_fetch_and_add+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+			cat >conftest.$ac_ext <<_ACEOF
+
+				/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+					int foo = 0;
+					return __sync_fetch_and_add(&foo, 1);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  cf_cv_have_sync_fetch_and_add=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	cf_cv_have_sync_fetch_and_add=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $cf_cv_have_sync_fetch_and_add" >&5
+echo "${ECHO_T}$cf_cv_have_sync_fetch_and_add" >&6; }
+
+if test "x${cf_cv_have_sync_fetch_and_add}" != "xno"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE___SYNC_FETCH_AND_ADD 1
+_ACEOF
+
+else
+	{ { echo "$as_me:$LINENO: error: Support for __sync_fetch_and_add is required." >&5
+echo "$as_me: error: Support for __sync_fetch_and_add is required." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+{ echo "$as_me:$LINENO: checking whether the target supports __sync_bool_compare_and_swap" >&5
+echo $ECHO_N "checking whether the target supports __sync_bool_compare_and_swap... $ECHO_C" >&6; }
+if test "${cf_cv_have_sync_bool_compare_and_swap+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+			cat >conftest.$ac_ext <<_ACEOF
+
+				/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+					int foo;
+					return __sync_bool_compare_and_swap(&foo, 0, 1);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  cf_cv_have_sync_bool_compare_and_swap=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	cf_cv_have_sync_bool_compare_and_swap=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $cf_cv_have_sync_bool_compare_and_swap" >&5
+echo "${ECHO_T}$cf_cv_have_sync_bool_compare_and_swap" >&6; }
+
+if test "x${cf_cv_have_sync_bool_compare_and_swap}" != "xno"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE___SYNC_BOOL_COMPARE_AND_SWAP 1
+_ACEOF
+
+else
+	{ { echo "$as_me:$LINENO: error: Support for __sync_bool_compare_and_swap is required." >&5
+echo "$as_me: error: Support for __sync_bool_compare_and_swap is required." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+{ echo "$as_me:$LINENO: checking whether the target supports __sync_synchronize" >&5
+echo $ECHO_N "checking whether the target supports __sync_synchronize... $ECHO_C" >&6; }
+if test "${cf_cv_have_sync_synchronize+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+			cat >conftest.$ac_ext <<_ACEOF
+
+				/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+					__sync_synchronize();
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  cf_cv_have_sync_synchronize=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	cf_cv_have_sync_synchronize=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $cf_cv_have_sync_synchronize" >&5
+echo "${ECHO_T}$cf_cv_have_sync_synchronize" >&6; }
+
+if test "x${cf_cv_have_sync_synchronize}" != "xno"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE___SYNC_SYNCHRONIZE 1
+_ACEOF
+
+else
+	{ { echo "$as_me:$LINENO: error: Support for __sync_synchronize is required." >&5
+echo "$as_me: error: Support for __sync_synchronize is required." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 #
 # Check whether or not we should build the package with debug and profile
 # versions of the library
