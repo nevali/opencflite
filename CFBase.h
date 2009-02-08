@@ -63,21 +63,8 @@
 #endif
 
 #if defined(__WIN32__)
-
-/* This craziness is needed to work around Windows BOOL definition */
-#if defined(__OBJC__)
-#define NEED_OBJC
-#else
-#define __OBJC__
-#endif
-
 #include <windows.h>
 #include <winsock2.h>
-
-#if !defined(NEED_OBJC)
-#undef __OBJC__
-#endif
-
 #endif
 
 #include <stdint.h>

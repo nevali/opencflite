@@ -61,8 +61,12 @@
 	Copyright 2005 Apple Computer, Inc., All Rights Reserved
 */
 
-
+#if defined(WIN32)
+#include <stdio.h>
+#else
 #include <unistd.h>
+#endif
+
 #include "AssertMacros.h"
 #if 0
 #include <CoreServices/CoreServices.h>
@@ -126,10 +130,12 @@ int main (int argc, char * const argv[])
 	int err;
 	int ch;
 	char dot[] = ".";
-#if 0 //defined(__APPLE__)
+#if defined(__APPLE__)
 	FSRef ref;
 	OSStatus result;
 	FSCatalogInfo catalogInfo;
+#elif defined(WIN32)
+   const char* optarg = 0;
 #endif
 	CFURLRef url;
 	UInt8 buffer[kBufferLength];
@@ -141,6 +147,18 @@ int main (int argc, char * const argv[])
 	require_action(argc > 1, command_err, usage());
 
 	/* crack command line args */
+#if defined(WIN32)
+	err = EXIT_FAILURE;
+   if (0 == strcmp("-h", argv[1]))
+   	require_action(err == EXIT_SUCCESS, command_err, usage());
+
+   if (0 == strcmp("-u", argv[1]) && argc == 3)
+   {
+      optarg = argv[2];
+      url = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8 *)optarg, strlen(optarg), kCFStringEncodingMacRoman, NULL);
+      err = EXIT_SUCCESS;
+   }
+#else
 	while ( ((ch = getopt(argc, argv, "hu:")) != -1) && (err == EXIT_SUCCESS) )
 	{
 		switch (ch)
@@ -159,6 +177,7 @@ int main (int argc, char * const argv[])
 				break;
 		}
 	}
+#endif
 	
 	if ( !err )
 	{
@@ -169,11 +188,13 @@ int main (int argc, char * const argv[])
 	}
 	
 	require_action(err == EXIT_SUCCESS, command_err, usage());
+      fprintf(stderr, "FOO55!\n");
 
 	/* if we have a URL, then don't create one from the path */
 	if ( url == NULL )
 	{
-#if 0 //defined(__APPLE__)
+      fprintf(stderr, "FOO-Foo-Foo!\n");
+#if defined(__APPLE__)
 		/* convert the path to a FSRef */
 		result = FSPathMakeRef((UInt8 *)((argc == 2) ? argv[1] : dot), &ref, NULL);
 		require_noerr_action(result, FSPathMakeRef, err = EXIT_FAILURE);
@@ -214,9 +235,11 @@ CFURLGetBytes:
 
 	CFRelease(url);
 	
+#if defined(__APPLE__)
 FSCopyURLForVolume:
 FSGetCatalogInfo:
 FSPathMakeRef:
+#endif
 command_err:
 
     return ( err );
