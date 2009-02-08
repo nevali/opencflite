@@ -2,7 +2,7 @@
 # built before tests and examples, so we explicitly add '.' to the
 # list of subdirectories.l
 
-SUBDIRS				= include . tests examples
+SUBDIRS				= include compat . tests examples
 
 #
 # We don't want to modify any of the package source to include the
@@ -45,7 +45,7 @@ CF_COMMON_CFLAGS		= $(AM_CFLAGS)
 CF_COMMON_LDFLAGS		= $(AM_LDFLAGS)				\
 				  -version-info $(CF_VERSION_INFO)
 
-CF_COMMON_LIBADD		= $(AM_LDADD) $(LIBOBJS)
+CF_COMMON_LIBADD		= $(AM_LDADD) compat/libcompat.la 
 
 noinst_HEADERS			= auto_stubs.h				\
 				  CFBundle_BinaryTypes.h		\

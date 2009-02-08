@@ -53,10 +53,9 @@ AC_CONFIG_LIBOBJ_DIR([compat])
 #
 # Initialize automake for the package, specifying the minimum automake
 # version allowed and that we are not an official GNU package, but
-# rather a non-GNU package leveraging automake. Also, define subdir-objects
-# so that we can reference LIBOBJS outside of the 'compat' directory.
+# rather a non-GNU package leveraging automake.
 #
-AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
+AM_INIT_AUTOMAKE([1.9 foreign])
 
 #
 # Enable maintainer mode to prevent the package from constantly trying
@@ -688,6 +687,7 @@ AC_CONFIG_FILES([
 CoreFoundation.pc
 Makefile
 include/Makefile
+compat/Makefile
 tests/Makefile
 examples/Makefile
 examples/Allocator/Makefile
