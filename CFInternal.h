@@ -79,14 +79,6 @@ extern int flsl(long mask);
 #if DEPLOYMENT_TARGET_WINDOWS
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #define __builtin_expect(expr, val) (expr)
-
-#if _MSC_VER
-// Fake objc types that MSVC doesn't handle
-typedef long id;
-typedef long Class;
-typedef long SEL;
-#endif
-
 #endif
 
 #if defined(__BIG_ENDIAN__)
@@ -749,7 +741,7 @@ struct __objcFastEnumerationStateEquivalent {
 
 unsigned long _CFStorageFastEnumeration(CFStorageRef storage, struct __objcFastEnumerationStateEquivalent *state, void *stackbuffer, unsigned long count);
 
-
+#if DEPLOYMENT_TARGET_MACOSX
 // Allocate an id[count], new slots are nil
 extern void *__CFAllocateObjectArray(unsigned long count);
 extern void *__CFReallocateObjectArray(id *array, unsigned long count);
@@ -778,6 +770,7 @@ extern void __CFFreeObjectArray(id *array);
 extern void *__CFFullMethodName(Class cls, id obj, SEL sel);
 extern void *__CFExceptionProem(id obj, SEL sel);
 extern void __CFRequireConcreteImplementation(Class absClass, id obj, SEL sel);
+#endif
 
 #endif /* ! __COREFOUNDATION_CFINTERNAL__ */
 

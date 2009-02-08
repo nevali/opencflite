@@ -149,7 +149,9 @@ static CFRuntimeClass ** __CFRuntimeClassTable = NULL;
 int32_t __CFRuntimeClassTableSize = 0;
 static int32_t __CFRuntimeClassTableCount = 0;
 
+#if DEPLOYMENT_TARGET_MACOSX
 __private_extern__ void * (*__CFSendObjCMsg)(const void *, SEL, ...) = NULL;
+#endif
 
 __private_extern__ malloc_zone_t *__CFCollectableZone = NULL;
 
@@ -686,7 +688,9 @@ static void __exceptionInit(void) {}
 static void __collatorInit(void) {}
 static void __forwarding_prep_0___(void) {}
 static void __forwarding_prep_1___(void) {}
+#if DEPLOYMENT_TARGET_MACOSX
 static void __NSFastEnumerationMutationHandler(id obj) {}
+#endif
 const void *__CFArgStuff = NULL;
 __private_extern__ void *__CFAppleLanguages = NULL;
 
