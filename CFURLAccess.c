@@ -395,7 +395,7 @@ static CFStringRef charsetFromContentTypeHeader(CFStringRef contentType) {
 
 #define STATIC_BUFFER_SIZE 1024
 
-static BOOL isHexDigit(char c)
+static Boolean isHexDigit(char c)
 {
     return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
@@ -457,12 +457,12 @@ static CFDataRef percentEscapeDecodeBuffer(CFAllocatorRef alloc, const UInt8* sr
 
 // base 64 digits: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
-static BOOL isBase64Digit(char c)
+static Boolean isBase64Digit(char c)
 {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '+') || (c == '/');
 }
 
-static BOOL isBase64DigitOrEqualSign(char c)
+static Boolean isBase64DigitOrEqualSign(char c)
 {
     return isBase64Digit(c) || c == '=';
 }
