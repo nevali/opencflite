@@ -692,6 +692,7 @@ tests/Makefile
 examples/Makefile
 examples/Allocator/Makefile
 examples/CFMessagePort/Makefile
+examples/DisplayURL/Makefile
 examples/ReadPListExample/Makefile
 examples/StringExample/Makefile
 examples/WritePListExample/Makefile
