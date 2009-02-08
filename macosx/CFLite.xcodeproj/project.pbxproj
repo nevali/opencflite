@@ -135,6 +135,7 @@
 		845EDB370ED3374D0033E001 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 845EDB360ED3374D0033E001 /* Info.plist */; };
 		8481BA510F3EA6AB00BD5189 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		8481BA540F3EA6C800BD5189 /* DisplayURL.c in Sources */ = {isa = PBXBuildFile; fileRef = 8481BA460F3EA68A00BD5189 /* DisplayURL.c */; };
+		8481BA810F3EB2D300BD5189 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8481BA800F3EB2D300BD5189 /* CoreServices.framework */; };
 		84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DA170D0EDDEEEE00B6A2E6 /* date_test.c */; };
 		84DE4E550ED287D40023DFE2 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
@@ -208,6 +209,7 @@
 		845EDB360ED3374D0033E001 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = SOURCE_ROOT; };
 		8481BA460F3EA68A00BD5189 /* DisplayURL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DisplayURL.c; path = ../examples/DisplayURL/DisplayURL.c; sourceTree = SOURCE_ROOT; };
 		8481BA4B0F3EA69C00BD5189 /* DisplayURL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DisplayURL; sourceTree = BUILT_PRODUCTS_DIR; };
+		8481BA800F3EB2D300BD5189 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		848B55480ECFAE4D003D696F /* CFApplicationPreferences.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFApplicationPreferences.c; path = ../CFApplicationPreferences.c; sourceTree = SOURCE_ROOT; };
 		848B55490ECFAE4D003D696F /* CFArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFArray.c; path = ../CFArray.c; sourceTree = SOURCE_ROOT; };
 		848B554A0ECFAE4D003D696F /* CFBag.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFBag.c; path = ../CFBag.c; sourceTree = SOURCE_ROOT; };
@@ -390,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8481BA510F3EA6AB00BD5189 /* CFLite.framework in Frameworks */,
+				8481BA810F3EB2D300BD5189 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +499,7 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				8481BA800F3EB2D300BD5189 /* CoreServices.framework */,
 				8448EF670ED2796500716715 /* CFLite.framework */,
 				844949820ED27E8700EEB9C0 /* WritePListExample */,
 				844949920ED27F1100EEB9C0 /* ReadPListExample */,

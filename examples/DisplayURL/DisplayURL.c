@@ -68,7 +68,7 @@
 #endif
 
 #include "AssertMacros.h"
-#if 0
+#if defined(__APPLE__)
 #include <CoreServices/CoreServices.h>
 #else
 #include <CoreFoundation/CoreFoundation.h>
@@ -188,12 +188,10 @@ int main (int argc, char * const argv[])
 	}
 	
 	require_action(err == EXIT_SUCCESS, command_err, usage());
-      fprintf(stderr, "FOO55!\n");
-
+ 
 	/* if we have a URL, then don't create one from the path */
 	if ( url == NULL )
 	{
-      fprintf(stderr, "FOO-Foo-Foo!\n");
 #if defined(__APPLE__)
 		/* convert the path to a FSRef */
 		result = FSPathMakeRef((UInt8 *)((argc == 2) ? argv[1] : dot), &ref, NULL);
