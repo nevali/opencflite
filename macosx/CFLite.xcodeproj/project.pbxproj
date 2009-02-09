@@ -132,6 +132,8 @@
 		844949890ED27EDF00EEB9C0 /* WritePListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 840CBF6C0ED24F4500931057 /* WritePListExample.cpp */; };
 		844949A20ED27F3100EEB9C0 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		844949A40ED27F8500EEB9C0 /* ReadPListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */; };
+		844F5D5A0F3FB23100239823 /* DNSServiceMetaQuery.c in Sources */ = {isa = PBXBuildFile; fileRef = 844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */; };
+		844F5D5E0F3FB24E00239823 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		845EDB370ED3374D0033E001 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 845EDB360ED3374D0033E001 /* Info.plist */; };
 		8481BA510F3EA6AB00BD5189 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		8481BA540F3EA6C800BD5189 /* DisplayURL.c in Sources */ = {isa = PBXBuildFile; fileRef = 8481BA460F3EA68A00BD5189 /* DisplayURL.c */; };
@@ -177,11 +179,18 @@
 			remoteGlobalIDString = 8448EF660ED2796500716715;
 			remoteInfo = CFLite;
 		};
-		8481BA4F0F3EA6A400BD5189 /* PBXContainerItemProxy */ = {
+		844F5D5C0F3FB24900239823 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8448EF660ED2796500716715 /* CFLite */;
+			remoteInfo = CFLite;
+		};
+		8481BA4F0F3EA6A400BD5189 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8448EF660ED2796500716715;
 			remoteInfo = CFLite;
 		};
 		84DA17200EDDF45200B6A2E6 /* PBXContainerItemProxy */ = {
@@ -206,6 +215,8 @@
 		844949820ED27E8700EEB9C0 /* WritePListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WritePListExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949920ED27F1100EEB9C0 /* ReadPListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReadPListExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ReadPListExample.cpp; path = ../examples/ReadPListExample/ReadPListExample.cpp; sourceTree = SOURCE_ROOT; };
+		844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DNSMetaServiceQuery; sourceTree = BUILT_PRODUCTS_DIR; };
+		844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DNSServiceMetaQuery.c; path = ../examples/DNSServiceMetaQuery/DNSServiceMetaQuery.c; sourceTree = SOURCE_ROOT; };
 		845EDB360ED3374D0033E001 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = SOURCE_ROOT; };
 		8481BA460F3EA68A00BD5189 /* DisplayURL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DisplayURL.c; path = ../examples/DisplayURL/DisplayURL.c; sourceTree = SOURCE_ROOT; };
 		8481BA4B0F3EA69C00BD5189 /* DisplayURL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DisplayURL; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -387,6 +398,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		844F5D520F3FB1F600239823 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				844F5D5E0F3FB24E00239823 /* CFLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8481BA490F3EA69C00BD5189 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -507,6 +526,7 @@
 				841BE8400F395D5A001F2A66 /* StringExample */,
 				841BE91F0F395F8E001F2A66 /* AllocatorExample */,
 				8481BA4B0F3EA69C00BD5189 /* DisplayURL */,
+				844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -620,6 +640,7 @@
 		84DA17160EDDEFB100B6A2E6 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */,
 				8481BA460F3EA68A00BD5189 /* DisplayURL.c */,
 				841BE91A0F395F65001F2A66 /* AllocatorExample.c */,
 				841BE83B0F395D3E001F2A66 /* StringExample.c */,
@@ -774,6 +795,23 @@
 			productReference = 844949920ED27F1100EEB9C0 /* ReadPListExample */;
 			productType = "com.apple.product-type.tool";
 		};
+		844F5D530F3FB1F600239823 /* DNSMetaServiceQuery */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 844F5D580F3FB22C00239823 /* Build configuration list for PBXNativeTarget "DNSMetaServiceQuery" */;
+			buildPhases = (
+				844F5D510F3FB1F600239823 /* Sources */,
+				844F5D520F3FB1F600239823 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				844F5D5D0F3FB24900239823 /* PBXTargetDependency */,
+			);
+			name = DNSMetaServiceQuery;
+			productName = DNSMetaServiceQuery;
+			productReference = 844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */;
+			productType = "com.apple.product-type.tool";
+		};
 		8481BA4A0F3EA69C00BD5189 /* DisplayURL */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8481BA560F3EA6E600BD5189 /* Build configuration list for PBXNativeTarget "DisplayURL" */;
@@ -828,6 +866,7 @@
 				841BE91E0F395F8E001F2A66 /* AllocatorExample */,
 				84129FDA0F3A4E5400A64427 /* make_target_paths */,
 				8481BA4A0F3EA69C00BD5189 /* DisplayURL */,
+				844F5D530F3FB1F600239823 /* DNSMetaServiceQuery */,
 			);
 		};
 /* End PBXProject section */
@@ -963,6 +1002,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		844F5D510F3FB1F600239823 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				844F5D5A0F3FB23100239823 /* DNSServiceMetaQuery.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8481BA480F3EA69C00BD5189 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1006,6 +1053,11 @@
 			isa = PBXTargetDependency;
 			target = 8448EF660ED2796500716715 /* CFLite */;
 			targetProxy = 844949B90ED2845100EEB9C0 /* PBXContainerItemProxy */;
+		};
+		844F5D5D0F3FB24900239823 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8448EF660ED2796500716715 /* CFLite */;
+			targetProxy = 844F5D5C0F3FB24900239823 /* PBXContainerItemProxy */;
 		};
 		8481BA500F3EA6A400BD5189 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1313,6 +1365,38 @@
 			};
 			name = Release;
 		};
+		844F5D560F3FB1F700239823 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = DNSMetaServiceQuery;
+			};
+			name = Debug;
+		};
+		844F5D570F3FB1F700239823 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = DNSMetaServiceQuery;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		8481BA4D0F3EA69E00BD5189 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
@@ -1439,6 +1523,15 @@
 			buildConfigurations = (
 				844949940ED27F1200EEB9C0 /* Debug */,
 				844949950ED27F1200EEB9C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		844F5D580F3FB22C00239823 /* Build configuration list for PBXNativeTarget "DNSMetaServiceQuery" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				844F5D560F3FB1F700239823 /* Debug */,
+				844F5D570F3FB1F700239823 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
