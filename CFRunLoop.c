@@ -74,8 +74,17 @@ static pthread_t kNilThreadT = { nil, nil };
 #define lockCount(a) a.LockCount
 #define NativeThread pthread_t
 #elif DEPLOYMENT_TARGET_WINDOWS
+DWORD GetFakeThreadId(HANDLE t);
+
 static HANDLE kNilThreadT = 0;
-#define lockCount(a) a.LockCount
+#define pthreadPointer(a) (void*)GetFakeThreadId(a)
+#define pthread_self() GetCurrentThread()
+bool pthread_equal(HANDLE a, HANDLE b) {
+   return pthreadPointer(a) == pthreadPointer(b);
+}
+// Note: Windows RTL_CRITICAL_SECTION LockCount is initialized to -1
+// indicating no lock.  So add one so lock count shows a valid 'count'.
+#define lockCount(a) (a.LockCount + 1)
 #define NativeThread HANDLE
 #elif DEPLOYMENT_TARGET_LINUX
 static pthread_t kNilThreadT = (pthread_t)0;
@@ -1096,6 +1105,11 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
     if (pthread_main_np() && pthread_equal(t, pthread_self())) {
         t = kNilThreadT;
     }
+#elif DEPLOYMENT_TARGET_WINDOWS
+    if (pthreadPointer(t) == (void*)GetCurrentThreadId ()) {
+       t = kNilThreadT;
+    }
+#endif
     loop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(t));
     if (!loop) {
         __CFSpinUnlock(&loopsLock);
@@ -1110,8 +1124,12 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
            loop = newLoop;
         }
     }
+#if !(DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX)
     if (!setMainLoop && pthread_main_np()) {
-        if (pthread_equal(t, kNilThreadT)) {
+#elif DEPLOYMENT_TARGET_WINDOWS
+    if (!setMainLoop) {
+#endif
+    if (pthread_equal(t, kNilThreadT)) {
 	         CFDictionarySetValue(runLoops, pthreadPointer(pthread_self()), loop);
 	     } else {
             CFRunLoopRef mainLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(kNilThreadT));
@@ -1119,17 +1137,18 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
         }
         setMainLoop = 1;
     }
-#endif /* !(DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX) */
     __CFSpinUnlock(&loopsLock);
     return loop;
 }
 
 __private_extern__ void _CFRunLoop1(void) {
     __CFSpinLock(&loopsLock);
-#if !DEPLOYMENT_TARGET_WINDOWS
-    // FIXMEFIXMEE
     if (runLoops) {
+#if !DEPLOYMENT_TARGET_WINDOWS
 	pthread_t t = pthread_self();
+#else
+   HANDLE t = GetCurrentThread();
+#endif
 	CFRunLoopRef currentLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(t));
 	CFRunLoopRef mainLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(kNilThreadT));
 	if (currentLoop && mainLoop != currentLoop) {
@@ -1137,7 +1156,6 @@ __private_extern__ void _CFRunLoop1(void) {
 	    CFRelease(currentLoop);
 	}
     }
-#endif
     __CFSpinUnlock(&loopsLock);
 }
 
@@ -1149,7 +1167,7 @@ CFRunLoopRef CFRunLoopGetMain(void) {
 CFRunLoopRef CFRunLoopGetCurrent(void) {
     CHECK_FOR_FORK();
 #if DEPLOYMENT_TARGET_WINDOWS
-    return _CFRunLoop0(kNilThreadT);   // FIXMEFIXME
+    return _CFRunLoop0(GetCurrentThread());
 #else
     return _CFRunLoop0(pthread_self());
 #endif
@@ -1157,7 +1175,6 @@ CFRunLoopRef CFRunLoopGetCurrent(void) {
 
 void _CFRunLoopSetCurrent(CFRunLoopRef rl) {
     __CFSpinLock(&loopsLock);
-#if !DEPLOYMENT_TARGET_WINDOWS
     CFRunLoopRef currentLoop = runLoops ? (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(pthread_self())) : NULL;
     if (rl != currentLoop) {
 	// intentionally leak currentLoop so we don't kill any ports in the child
@@ -1174,7 +1191,6 @@ void _CFRunLoopSetCurrent(CFRunLoopRef rl) {
 	    CFDictionaryRemoveValue(runLoops, pthreadPointer(pthread_self()));
 	}
     }
-#endif
     __CFSpinUnlock(&loopsLock);
 }
 
@@ -3107,3 +3123,57 @@ void CFRunLoopTimerGetContext(CFRunLoopTimerRef rlt, CFRunLoopTimerContext *cont
 
 #endif
 
+#if DEPLOYMENT_TARGET_WINDOWS
+#include <Winternl.h>
+typedef NTSTATUS (__stdcall *pfnNtQueryInformationThread) (HANDLE, THREADINFOCLASS, PVOID, ULONG, PULONG);
+
+typedef struct _CLIENT_ID
+{
+DWORD UniqueProcess; 
+DWORD UniqueThread;
+} CLIENT_ID, *PCLIENT_ID;
+
+typedef struct _THREAD_BASIC_INFORMATION
+{
+NTSTATUS ExitStatus;
+PVOID TebBaseAddress;
+CLIENT_ID ClientId;
+LONG AffinityMask;
+LONG Priority;
+LONG BasePriority;
+} THREAD_BASIC_INFORMATION, *PTHREAD_BASIC_INFORMATION;
+
+/**
+ * This API function exists in Vista and beyond, but is not
+ * available in other OS releases.
+ *
+ * It uses undocumented/internal calls and is very evil.
+ * Thankfully, Vista+ users can call the true API function.
+ */
+DWORD GetFakeThreadId(HANDLE t)
+{
+   static HMODULE hModule = LoadLibraryA("ntdll.dll");
+   static pfnNtQueryInformationThread queryInformationThread = 0;
+
+   if (!t)
+      return 0;   // Don't process null handles
+
+   if (!queryInformationThread)
+   {
+      queryInformationThread = (pfnNtQueryInformationThread) GetProcAddress(hModule, "NtQueryInformationThread");
+      if (!queryInformationThread)
+         return 0;	// failed to get proc address
+   }
+
+   THREAD_BASIC_INFORMATION tbi;
+   THREADINFOCLASS tic = (THREADINFOCLASS)0; // basic information
+   if (queryInformationThread(GetCurrentThread(), tic, &tbi, sizeof(tbi), NULL))
+   {
+      // NtQueryInformationThread failed...
+      FreeLibrary(hModule);
+      return 0;
+   }
+
+    return tbi.ClientId.UniqueThread;
+}
+#endif

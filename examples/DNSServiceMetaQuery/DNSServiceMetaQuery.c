@@ -69,8 +69,7 @@
 static char* if_indextoname (DWORD ifIndex, char* nameBuff);
 
 #define usleep(X)  Sleep(((X)+999)/1000)
-#define IF_NAMESIZE MAXLEN_IFDESCR
-#define ns_t_ptr        12
+#define ns_t_ptr    12
 #define ns_c_in 1
 #else
 #include <dns_sd.h>
@@ -244,12 +243,12 @@ MySocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address
     #pragma unused(address)
     #pragma unused(data)
 #endif
-    
+
     DNSServiceErrorType err;
  
-    MyDNSServiceState * query = (MyDNSServiceState *)info;  // context passed in to CFSocketCreateWithNative().
+    MyDNSServiceState* query = (MyDNSServiceState*)info;  // context passed in to CFSocketCreateWithNative().
     assert(query != NULL);
-    
+
     /* Read a reply from the mDNSResponder, which will end up calling MyMetaQueryCallback(). */
     err= DNSServiceProcessResult(query->service);
     if (err != kDNSServiceErr_NoError)
@@ -265,7 +264,7 @@ MySocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address
 
 
 void
-MyDNSServiceAddServiceToRunLoop(MyDNSServiceState * query)
+MyDNSServiceAddServiceToRunLoop(MyDNSServiceState* query)
 {
     CFSocketNativeHandle sock;
     CFOptionFlags        sockFlags;
@@ -292,7 +291,6 @@ MyDNSServiceAddServiceToRunLoop(MyDNSServiceState * query)
 }
 
 
-
 static void
 MyConvertInterfaceIndexToName(uint32_t interface, char * interfaceName)
 {
@@ -304,9 +302,8 @@ MyConvertInterfaceIndexToName(uint32_t interface, char * interfaceName)
 }
 
 
-
 static void
-MyMetaQueryCallback(DNSServiceRef service, DNSServiceFlags flags, uint32_t interface, DNSServiceErrorType error,
+DNSSD_API MyMetaQueryCallback(DNSServiceRef service, DNSServiceFlags flags, uint32_t interfaceID, DNSServiceErrorType error,
     const char * fullname, uint16_t rrtype, uint16_t rrclass, uint16_t rdlen, const void * rdata, uint32_t ttl, void * context)
 {    
 #if defined(_APPLE_)
@@ -315,20 +312,29 @@ MyMetaQueryCallback(DNSServiceRef service, DNSServiceFlags flags, uint32_t inter
     #pragma unused(ttl)
     #pragma unused(context)
 #endif
-    
+
     assert(strcmp(fullname, kServiceMetaQueryName) == 0);
                     
     if (error == kDNSServiceErr_NoError) {
     
+#if defined(_GNUC_)
         char interfaceName[IF_NAMESIZE] = "";
         char domain[MAX_DOMAIN_NAME]    = "";
         char type[MAX_DOMAIN_NAME]      = "";
-    
+#else
+        char interfaceName[MAX_DOMAIN_NAME];
+        char domain[MAX_DOMAIN_NAME];
+        char type[MAX_DOMAIN_NAME];
+
+        memset(interfaceName, 0x00, MAX_DOMAIN_NAME);
+        memset(domain, 0x00, MAX_DOMAIN_NAME);
+        memset(type, 0x00, MAX_DOMAIN_NAME);
+#endif
         /* Get the type and domain from the discovered PTR record. */
         MyGetTypeAndDomain(rdata, rdlen, type, domain);        
 
         /* Convert an interface index into a BSD-style interface name. */
-        MyConvertInterfaceIndexToName(interface, interfaceName);
+        MyConvertInterfaceIndexToName(interfaceID, interfaceName);
         
         if (flags & kDNSServiceFlagsAdd) {
             fprintf(stderr, "ADD      %-28s  %-14s %s\n", type, domain, interfaceName);
