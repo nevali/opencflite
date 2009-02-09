@@ -52,6 +52,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DisplayURL", "examples\Disp
 		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNSServiceMetaQuery", "examples\DNSServiceMetaQuery\DNSServiceMetaQuery.vcproj", "{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -82,6 +91,10 @@ Global
 		{6816B34F-DE8C-48EC-8F31-11176DA5FE11}.Debug|Win32.Build.0 = Debug|Win32
 		{6816B34F-DE8C-48EC-8F31-11176DA5FE11}.Release|Win32.ActiveCfg = Release|Win32
 		{6816B34F-DE8C-48EC-8F31-11176DA5FE11}.Release|Win32.Build.0 = Release|Win32
+		{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9}.Debug|Win32.Build.0 = Debug|Win32
+		{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9}.Release|Win32.ActiveCfg = Release|Win32
+		{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
