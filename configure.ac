@@ -693,6 +693,7 @@ examples/Makefile
 examples/Allocator/Makefile
 examples/CFMessagePort/Makefile
 examples/DisplayURL/Makefile
+examples/DNSServiceMetaQuery/Makefile
 examples/ReadPListExample/Makefile
 examples/StringExample/Makefile
 examples/WritePListExample/Makefile

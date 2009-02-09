@@ -3,4 +3,5 @@ SUBDIRS			= ReadPListExample	\
 			  StringExample		\
 			  Allocator		\
 			  CFMessagePort		\
-			  DisplayURL
+			  DisplayURL		\
+			  DNSServiceMetaQuery

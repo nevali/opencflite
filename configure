@@ -31550,7 +31550,7 @@ done
 #
 # Identify the various makefiles and auto-generated files for the package
 #
-ac_config_files="$ac_config_files CoreFoundation.pc Makefile include/Makefile compat/Makefile tests/Makefile examples/Makefile examples/Allocator/Makefile examples/CFMessagePort/Makefile examples/DisplayURL/Makefile examples/ReadPListExample/Makefile examples/StringExample/Makefile examples/WritePListExample/Makefile"
+ac_config_files="$ac_config_files CoreFoundation.pc Makefile include/Makefile compat/Makefile tests/Makefile examples/Makefile examples/Allocator/Makefile examples/CFMessagePort/Makefile examples/DisplayURL/Makefile examples/DNSServiceMetaQuery/Makefile examples/ReadPListExample/Makefile examples/StringExample/Makefile examples/WritePListExample/Makefile"
 
 
 #
@@ -32539,6 +32539,7 @@ do
     "examples/Allocator/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Allocator/Makefile" ;;
     "examples/CFMessagePort/Makefile") CONFIG_FILES="$CONFIG_FILES examples/CFMessagePort/Makefile" ;;
     "examples/DisplayURL/Makefile") CONFIG_FILES="$CONFIG_FILES examples/DisplayURL/Makefile" ;;
+    "examples/DNSServiceMetaQuery/Makefile") CONFIG_FILES="$CONFIG_FILES examples/DNSServiceMetaQuery/Makefile" ;;
     "examples/ReadPListExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/ReadPListExample/Makefile" ;;
     "examples/StringExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/StringExample/Makefile" ;;
     "examples/WritePListExample/Makefile") CONFIG_FILES="$CONFIG_FILES examples/WritePListExample/Makefile" ;;
