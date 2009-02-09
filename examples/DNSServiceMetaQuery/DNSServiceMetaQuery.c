@@ -57,14 +57,27 @@
         1.0   May 28, 2004
 */
 
+#if defined(WIN32)
+#include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <winsock2.h>
+#include <dns_sd.h>
+#include <Iprtrmib.h>
+#include <Iphlpapi.h>
+
+static char* if_indextoname (DWORD ifIndex, char* nameBuff);
+
+#define usleep(X)  Sleep(((X)+999)/1000)
+#define IF_NAMESIZE MAXLEN_IFDESCR
+#define ns_t_ptr        12
+#define ns_c_in 1
+#else
 #include <dns_sd.h>
 #include <nameser.h>
 #include <sys/socket.h>
 #include <net/if.h>
 #include <assert.h>
-
-#if defined(WIN32)
-#else
 #include <unistd.h>
 #endif
 
@@ -225,10 +238,12 @@ connected to the mDNSResponder daemon.  This happens when the mDNSResponder deli
 static void
 MySocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void * data, void * info)
 {
+#if defined(_APPLE_)
     #pragma unused(s)
     #pragma unused(type)
     #pragma unused(address)
     #pragma unused(data)
+#endif
     
     DNSServiceErrorType err;
  
@@ -294,10 +309,12 @@ static void
 MyMetaQueryCallback(DNSServiceRef service, DNSServiceFlags flags, uint32_t interface, DNSServiceErrorType error,
     const char * fullname, uint16_t rrtype, uint16_t rrclass, uint16_t rdlen, const void * rdata, uint32_t ttl, void * context)
 {    
+#if defined(_APPLE_)
     #pragma unused(service)
     #pragma unused(rrclass)
     #pragma unused(ttl)
     #pragma unused(context)
+#endif
     
     assert(strcmp(fullname, kServiceMetaQueryName) == 0);
                     
@@ -363,14 +380,16 @@ MyDNSServiceMetaQuery(MyDNSServiceState * query, DNSServiceQueryRecordReply call
 int
 main (int argc, const char * argv[])
 {
+#if defined(_APPLE_)
     #pragma unused(argc)
     #pragma unused(argv)
+#endif
     
     MyDNSServiceState query;
     DNSServiceErrorType error;
     
     /* Start the DNS-SD services meta-query, create the CFRunLoopSource, add it to the run loop. */
-    error = MyDNSServiceMetaQuery(&query, MyMetaQueryCallback);
+    error = MyDNSServiceMetaQuery(&query, (DNSServiceQueryRecordReply)MyMetaQueryCallback);
     if (error == kDNSServiceErr_NoError) {
     
         /* Start the run loop to receive asynchronous callbacks via MyMetaQueryCallback. */
@@ -382,6 +401,83 @@ main (int argc, const char * argv[])
     } else {
         fprintf(stderr, "MyDNSServiceMetaQuery returned %d\n", error);
     }
-    
+
     return 0;
 }
+
+#if defined(WIN32)
+/*
+ * The following implementation is from Apple's Bonjour implementation.
+ * It's so annoying that this is not provided on user-level Windows OS's
+ * (you have to get server 2008 to have this implemented in the OS.)
+ *
+* Copyright (c) 2004 Apple Computer, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+static char*
+if_indextoname( DWORD ifIndex, char * nameBuff)
+{
+        PIP_ADAPTER_INFO        pAdapterInfo = NULL;
+        PIP_ADAPTER_INFO        pAdapter = NULL;
+        DWORD                           dwRetVal = 0;
+        char                    *       ifName = NULL;
+        ULONG                           ulOutBufLen = 0;
+
+        if (GetAdaptersInfo( NULL, &ulOutBufLen) != ERROR_BUFFER_OVERFLOW)
+        {
+                goto exit;
+        }
+
+        pAdapterInfo = (IP_ADAPTER_INFO *) malloc(ulOutBufLen);
+
+        if (pAdapterInfo == NULL)
+        {
+                goto exit;
+        }
+
+        dwRetVal = GetAdaptersInfo( pAdapterInfo, &ulOutBufLen );
+
+        if (dwRetVal != NO_ERROR)
+        {
+                goto exit;
+        }
+
+        pAdapter = pAdapterInfo;
+        while (pAdapter)
+        {
+                if (pAdapter->Index == ifIndex)
+                {
+                        // It would be better if we passed in the length of nameBuff to this
+                        // function, so we would have absolute certainty that no buffer
+                        // overflows would occur.  Buffer overflows *shouldn't* occur because
+                        // nameBuff is of size MAX_ADAPTER_NAME_LENGTH.
+                        strcpy( nameBuff, pAdapter->AdapterName );
+                        ifName = nameBuff;
+                        break;
+                }
+
+                pAdapter = pAdapter->Next;
+        }
+
+exit:
+
+        if (pAdapterInfo != NULL)
+        {
+                free( pAdapterInfo );
+                pAdapterInfo = NULL;
+        }
+
+        return ifName;
+}
+#endif
