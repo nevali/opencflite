@@ -73,7 +73,7 @@ static char* if_indextoname (DWORD ifIndex, char* nameBuff);
 #define ns_c_in 1
 #else
 #include <dns_sd.h>
-#include <nameser.h>
+#include <arpa/nameser.h>
 #include <sys/socket.h>
 #include <net/if.h>
 #include <assert.h>
