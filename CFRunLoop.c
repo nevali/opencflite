@@ -64,6 +64,8 @@
 #endif
 #elif DEPLOYMENT_TARGET_LINUX
 #include <dlfcn.h>
+#include <pthread.h>
+#include <semaphore.h>
 #endif
 
 static int _LogCFRunLoop = 0;
@@ -77,17 +79,15 @@ static pthread_t kNilThreadT = { nil, nil };
 DWORD GetFakeThreadId(HANDLE t);
 
 static HANDLE kNilThreadT = 0;
+static DWORD __kCFMainThread = 0;
 #define pthreadPointer(a) (void*)GetFakeThreadId(a)
-#define pthread_self() GetCurrentThread()
-bool pthread_equal(HANDLE a, HANDLE b) {
-   return pthreadPointer(a) == pthreadPointer(b);
-}
 // Note: Windows RTL_CRITICAL_SECTION LockCount is initialized to -1
 // indicating no lock.  So add one so lock count shows a valid 'count'.
 #define lockCount(a) (a.LockCount + 1)
 #define NativeThread HANDLE
 #elif DEPLOYMENT_TARGET_LINUX
 static pthread_t kNilThreadT = (pthread_t)0;
+static pthread_t __kCFMainThread = (pthread_t)0;
 #define pthreadPointer(a) (void *)a
 #define lockCount(a) a.lock
 #define NativeThread pthread_t
@@ -97,7 +97,6 @@ static pthread_t kNilThreadT = (pthread_t)0;
 #define lockCount(a) a
 #define NativeThread pthread_t
 #endif
-
 
 #if DEPLOYMENT_TARGET_MACOSX
 #include <sys/types.h>
@@ -201,17 +200,34 @@ CF_INLINE void __CFPortFree(__CFPort port) {
 
 #elif DEPLOYMENT_TARGET_LINUX
 
-typedef int __CFPort;
-#define CFPORT_NULL -1
+typedef sem_t * __CFPort;
+#define CFPORT_NULL NULL
 #define CFPORTSET_NULL NULL
 #define MAX_PORTS 16
 
 CF_INLINE __CFPort __CFPortAllocate(void) {
-	return CFPORT_NULL;
+	__CFPort port = CFPORT_NULL;
+	int status;
+
+	port = (__CFPort)CFAllocatorAllocate(kCFAllocatorSystemDefault,
+										 sizeof(sem_t), 0);
+	CFAssert1(port != CFPORT_NULL, __kCFLogAssertion,
+			  "%s(): Could not allocate port memory.", __PRETTY_FUNCTION__);
+	if (port != CFPORT_NULL) {
+		status = sem_init(port, false, 0);
+		CFAssert1(status == 0, __kCFLogAssertion,
+				  "%s(): Could not initialize port.", __PRETTY_FUNCTION__);
+	}
+
+	return port;
 }
 
 CF_INLINE void __CFPortFree(__CFPort port) {
-	return;
+	int status;
+	CFAssert1(port != CFPORT_NULL, __kCFLogAssertion,
+			  "%s(): Attemping to free an invalid port.", __PRETTY_FUNCTION__);
+	status = sem_destroy(port);
+	CFAllocatorDeallocate(kCFAllocatorSystemDefault, port);
 }
 
 #endif /* DEPLOYMENT_TARGET_MACOSX */
@@ -1043,9 +1059,49 @@ static const CFRuntimeClass __CFRunLoopClass = {
     __CFRunLoopCopyDescription
 };
 
+CF_INLINE NativeThread _CFThreadSelf(void) {
+#if DEPLOYMENT_TARGET_MACOS || DEPLOYMENT_TARGET_FREEBSD || DEPLOYMENT_TARGET_LINUX
+	return pthread_self();
+#elif DEPLOYMENT_TARGET_WINDOWS
+	return GetCurrentThread();
+#else
+	HALT;
+	return kNilThreadT;
+#endif
+}
+
+CF_INLINE Boolean _CFThreadIsMain(void) {
+	Boolean result = false;
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_FREEBSD
+	result = pthread_main_np();
+#elif DEPLOYMENT_TARGET_LINUX
+	result = (__kCFMainThread == _CFThreadSelf());
+#elif DEPLOYMENT_TARGET_WINDOWS
+	result = (__kCFMainThread == GetCurrentThreadId());
+#else
+	HALT;
+#endif
+	return result;
+}
+
+CF_INLINE Boolean _CFThreadsAreEqual(NativeThread a, NativeThread b) {
+	Boolean result = false;
+#if DEPLOYMENT_TARGET_MACOS || DEPLOYMENT_TARGET_FREEBSD || DEPLOYMENT_TARGET_LINUX
+	result = pthread_equal(a, b);
+#elif DEPLOYMENT_TARGET_WINDOWS
+	result = (pthreadPointer(a) == pthreadPointer(b));
+#else
+	HALT;
+#endif
+	return result;
+}
+
 __private_extern__ void __CFRunLoopInitialize(void) {
     __kCFRunLoopTypeID = _CFRuntimeRegisterClass(&__CFRunLoopClass);
     __kCFRunLoopModeTypeID = _CFRuntimeRegisterClass(&__CFRunLoopModeClass);
+#if DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_WINDOWS
+    __kCFMainThread = _CFThreadSelf();
+#endif
 }
  
 CFTypeID CFRunLoopGetTypeID(void) {
@@ -1101,15 +1157,9 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
 	    }
        __CFSpinLock(&loopsLock);
     }
-#if !(DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX)
-    if (pthread_main_np() && pthread_equal(t, pthread_self())) {
+    if (_CFThreadIsMain() && _CFThreadsAreEqual(t, _CFThreadSelf())) {
         t = kNilThreadT;
     }
-#elif DEPLOYMENT_TARGET_WINDOWS
-    if (pthreadPointer(t) == (void*)GetCurrentThreadId ()) {
-       t = kNilThreadT;
-    }
-#endif
     loop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(t));
     if (!loop) {
         __CFSpinUnlock(&loopsLock);
@@ -1124,16 +1174,12 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
            loop = newLoop;
         }
     }
-#if !(DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX)
-    if (!setMainLoop && pthread_main_np()) {
-#elif DEPLOYMENT_TARGET_WINDOWS
-    if (!setMainLoop) {
-#endif
-    if (pthread_equal(t, kNilThreadT)) {
-	         CFDictionarySetValue(runLoops, pthreadPointer(pthread_self()), loop);
+    if (!setMainLoop && _CFThreadIsMain()) {
+		if (_CFThreadsAreEqual(t, kNilThreadT)) {
+			CFDictionarySetValue(runLoops, pthreadPointer(_CFThreadSelf()), loop);
 	     } else {
             CFRunLoopRef mainLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(kNilThreadT));
-            CFDictionarySetValue(runLoops, pthreadPointer(pthread_self()), mainLoop);
+            CFDictionarySetValue(runLoops, pthreadPointer(_CFThreadSelf()), mainLoop);
         }
         setMainLoop = 1;
     }
@@ -1144,11 +1190,7 @@ __private_extern__ CFRunLoopRef _CFRunLoop0(NativeThread t) {
 __private_extern__ void _CFRunLoop1(void) {
     __CFSpinLock(&loopsLock);
     if (runLoops) {
-#if !DEPLOYMENT_TARGET_WINDOWS
-	pthread_t t = pthread_self();
-#else
-   HANDLE t = GetCurrentThread();
-#endif
+	NativeThread t = _CFThreadSelf();
 	CFRunLoopRef currentLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(t));
 	CFRunLoopRef mainLoop = (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(kNilThreadT));
 	if (currentLoop && mainLoop != currentLoop) {
@@ -1166,16 +1208,12 @@ CFRunLoopRef CFRunLoopGetMain(void) {
 
 CFRunLoopRef CFRunLoopGetCurrent(void) {
     CHECK_FOR_FORK();
-#if DEPLOYMENT_TARGET_WINDOWS
-    return _CFRunLoop0(GetCurrentThread());
-#else
-    return _CFRunLoop0(pthread_self());
-#endif
+    return _CFRunLoop0(_CFThreadSelf());
 }
 
 void _CFRunLoopSetCurrent(CFRunLoopRef rl) {
     __CFSpinLock(&loopsLock);
-    CFRunLoopRef currentLoop = runLoops ? (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(pthread_self())) : NULL;
+    CFRunLoopRef currentLoop = runLoops ? (CFRunLoopRef)CFDictionaryGetValue(runLoops, pthreadPointer(_CFThreadSelf())) : NULL;
     if (rl != currentLoop) {
 	// intentionally leak currentLoop so we don't kill any ports in the child
 	// if (currentLoop) CFRelease(currentLoop);
@@ -1186,9 +1224,9 @@ void _CFRunLoopSetCurrent(CFRunLoopRef rl) {
 		CFDictionarySetValue(runLoops, pthreadPointer(kNilThreadT), mainLoop);
 	    }
 	    CFRetain(rl);
-	    CFDictionarySetValue(runLoops, pthreadPointer(pthread_self()), rl);
+	    CFDictionarySetValue(runLoops, pthreadPointer(_CFThreadSelf()), rl);
 	} else {
-	    CFDictionaryRemoveValue(runLoops, pthreadPointer(pthread_self()));
+	    CFDictionaryRemoveValue(runLoops, pthreadPointer(_CFThreadSelf()));
 	}
     }
     __CFSpinUnlock(&loopsLock);
@@ -1659,7 +1697,7 @@ int _CFRunLoopInputsReady(void) {
     // CFRunLoopRef current = CFRunLoopGetMain()
     // if (current != CFRunLoopGetMain()) return true;
 #if DEPLOYMENT_TARGET_MACOSX
-    if (!pthread_main_np()) return true;
+    if (!_CFThreadIsMain()) return true;
 
     // XXX_PCB:  can't be any messages waiting if the wait set is NULL.
     if (_LastMainWaitSet == MACH_PORT_NULL) return false;
@@ -2140,7 +2178,7 @@ void CFRunLoopWakeUp(CFRunLoopRef rl) {
 #elif DEPLOYMENT_TARGET_WINDOWS
     SetEvent(rl->_wakeUpPort);
 #elif DEPLOYMENT_TARGET_LINUX
-	// XXX
+	sem_post(rl->_wakeUpPort);
 #endif
 }
 

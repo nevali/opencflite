@@ -43,6 +43,8 @@
 #include <CoreFoundation/CFString.h>
 #if defined(__MACH__)
     #include <mach/port.h>
+#elif DEPLOYMENT_TARGET_LINUX
+	#include <semaphore.h>
 #endif
 
 CF_EXTERN_C_BEGIN
@@ -133,8 +135,8 @@ typedef struct {
 #if defined(__MACH__)
     mach_port_t	(*getPort)(void *info);
     void *	(*perform)(void *msg, CFIndex size, CFAllocatorRef allocator, void *info);
-#elif defined(__linux__)
-    long	(*getPort)(void *info);
+#elif DEPLOYMENT_TARGET_LINUX
+    sem_t *	(*getPort)(void *info);
     void	(*perform)(void *info);
 #else
     HANDLE	(*getPort)(void *info);
