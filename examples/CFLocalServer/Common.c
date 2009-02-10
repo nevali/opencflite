@@ -343,7 +343,7 @@ extern int InstallSignalToSocket(
             // (SignalToSocketHandler).  Specificy SA_SIGINFO so that 
             // the handler gets lots of yummy signal information.
             
-			for (thisSigNum = 0; thisSigNum < NSIG; thisSigNum++) {
+			for (thisSigNum = 1; thisSigNum < NSIG; thisSigNum++) {
 				if ( sigismember(sigSet, thisSigNum) ) {
 					struct sigaction newSignalAction;
 					
