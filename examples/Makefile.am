@@ -5,4 +5,5 @@ SUBDIRS			= ReadPListExample	\
 			  CFMessagePort		\
 			  DisplayURL		\
 			  DNSServiceMetaQuery	\
-			  CFLocalServer
+			  CFLocalServer		\
+			  CFRunLoopTimerExample

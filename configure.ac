@@ -696,6 +696,7 @@ examples/Makefile
 examples/Allocator/Makefile
 examples/CFLocalServer/Makefile
 examples/CFMessagePort/Makefile
+examples/CFRunLoopTimerExample/Makefile
 examples/DisplayURL/Makefile
 examples/DNSServiceMetaQuery/Makefile
 examples/ReadPListExample/Makefile
