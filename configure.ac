@@ -569,7 +569,9 @@ AC_HEADER_STDC
 AC_HEADER_TIME
 
 AC_CHECK_HEADERS([alloca.h])
+AC_CHECK_HEADERS([arpa/nameser.h])
 AC_CHECK_HEADERS([assert.h])
+AC_CHECK_HEADERS([dns_sd.h])
 AC_CHECK_HEADERS([errno.h])
 AC_CHECK_HEADERS([fcntl.h])
 AC_CHECK_HEADERS([limits.h])
@@ -691,6 +693,7 @@ compat/Makefile
 tests/Makefile
 examples/Makefile
 examples/Allocator/Makefile
+examples/CFLocalServer/Makefile
 examples/CFMessagePort/Makefile
 examples/DisplayURL/Makefile
 examples/DNSServiceMetaQuery/Makefile

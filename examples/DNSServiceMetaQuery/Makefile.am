@@ -7,6 +7,6 @@ if CF_BUILD_TESTS
 EXTRA_PROGRAMS			= DNSServiceMetaQuery
 endif
 
-DNSServiceMetaQuery_LDADD	= ${top_builddir}/libCoreFoundation.la
+DNSServiceMetaQuery_LDADD	= ${top_builddir}/libCoreFoundation.la -ldns_sd
 
 DNSServiceMetaQuery_SOURCES	= DNSServiceMetaQuery.c

@@ -4,4 +4,5 @@ SUBDIRS			= ReadPListExample	\
 			  Allocator		\
 			  CFMessagePort		\
 			  DisplayURL		\
-			  DNSServiceMetaQuery
+			  DNSServiceMetaQuery	\
+			  CFLocalServer
