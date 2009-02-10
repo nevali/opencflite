@@ -207,9 +207,9 @@ static void ClientEvent(
 	// kCFSocketWriteCallBack, dispatching them to ClientGotData and 
 	// ClientGotSpace, respectively.
 {
-    #pragma unused(address)
 	ClientState *	client;
 	
+	(void)address;
     assert(s != NULL);
 
     client = (ClientState *) info;
@@ -1013,10 +1013,10 @@ static void ClientPrintInfo(const void *value, void *context)
 	// which is why the value parameter is a (const void *) rather 
 	// than a (ClientState *).  context is not used in this... context (-;
 {
-	#pragma unused(context)
     ClientState *  client;
     static const char * kBoolToStr[2] = { "false", "true" };
 
+	(void)context;
     client = (ClientState *) value;
     assert(client != NULL);
     assert(client->fMagic == kClientStateMagic);
@@ -1069,9 +1069,9 @@ static void ListeningSocketAcceptCallback(
 	// file descriptor that describes the new connection.  This routine 
 	// responds by calling into the client layer to create a new client.
 {
-    #pragma unused(s)
-    #pragma unused(address)
-    #pragma unused(info)
+    (void)s;
+	(void)address;
+	(void)info;
     
     assert(type == kCFSocketAcceptCallBack);
     assert(   (int *) data  != NULL );
@@ -1093,8 +1093,8 @@ static void SignalRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
     // is to a) stop the server when the user types ^C (SIGINT), or 
 	// b) print some information about the server (SIGUSR1).
 {
-    #pragma unused(sigInfo)
-    #pragma unused(refCon)
+	(void)sigInfo;
+	(void)refCon;
     
     switch (sigInfo->si_signo) {
         case SIGUSR1:

@@ -353,10 +353,10 @@ static void ConnectionGotData(
     // documentation.  As this is a callback of type kCFSocketDataCallBack, 
     // data contains newly arrived data that CFSocket has already read for us.
 {
-    #pragma unused(address)
     CFDataRef       newData;
     ConnectionRef   conn;
 
+	(void)address;
     assert(s != NULL);
     assert(type == kCFSocketDataCallBack);
 
@@ -718,10 +718,11 @@ static Boolean GotPacket(ConnectionRef conn, const PacketHeader *packet, void *r
     // so that it is called when a packet arrives.  For a description of the 
     // parameters, see the comments next to ConnectionCallbackProcPtr.
 {
-    #pragma unused(conn)
     Boolean         result;
     CFRunLoopRef    runLoop;
     
+	(void)conn;
+
     // When we register this callback, we pass a reference to the runloop 
     // as the refCon.  Extract that reference here.
     
@@ -832,8 +833,8 @@ static void SIGINTRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
     // the magic of InstallSignalToSocket).  It's purpose 
     // is to stop the runloop when the user types ^C.
 {
-    #pragma unused(sigInfo)
-    #pragma unused(refCon)
+    (void)sigInfo;
+	(void)refCon;
     
     // Stop the runloop.  Note that we can get a reference to the runloop by 
 	// calling CFRunLoopGetCurrent because this is called from the runloop.
