@@ -76,11 +76,11 @@ static pthread_t kNilThreadT = { nil, nil };
 #define lockCount(a) a.LockCount
 #define NativeThread pthread_t
 #elif DEPLOYMENT_TARGET_WINDOWS
-DWORD GetFakeThreadId(HANDLE t);
+DWORD GetInternalThreadId(HANDLE t);
 
 static HANDLE kNilThreadT = 0;
 static DWORD __kCFMainThread = 0;
-#define pthreadPointer(a) (void*)GetFakeThreadId(a)
+#define pthreadPointer(a) (void*)GetInternalThreadId(a)
 // Note: Windows RTL_CRITICAL_SECTION LockCount is initialized to -1
 // indicating no lock.  So add one so lock count shows a valid 'count'.
 #define lockCount(a) (a.LockCount + 1)
@@ -1099,8 +1099,10 @@ CF_INLINE Boolean _CFThreadsAreEqual(NativeThread a, NativeThread b) {
 __private_extern__ void __CFRunLoopInitialize(void) {
     __kCFRunLoopTypeID = _CFRuntimeRegisterClass(&__CFRunLoopClass);
     __kCFRunLoopModeTypeID = _CFRuntimeRegisterClass(&__CFRunLoopModeClass);
-#if DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_LINUX
     __kCFMainThread = _CFThreadSelf();
+#elif DEPLOYMENT_TARGET_WINDOWS
+    __kCFMainThread = GetInternalThreadId (_CFThreadSelf());
 #endif
 }
  
@@ -3188,7 +3190,7 @@ LONG BasePriority;
  * It uses undocumented/internal calls and is very evil.
  * Thankfully, Vista+ users can call the true API function.
  */
-DWORD GetFakeThreadId(HANDLE t)
+DWORD GetInternalThreadId(HANDLE t)
 {
    static HMODULE hModule = LoadLibraryA("ntdll.dll");
    static pfnNtQueryInformationThread queryInformationThread = 0;
