@@ -91,6 +91,7 @@ First checked in.
 #define NI_NUMERICSERV 0x08
 
 typedef int socklen_t;
+typedef long ssize_t;
 #else
 #include <assert.h>
 #include <unistd.h>
@@ -99,10 +100,6 @@ typedef int socklen_t;
 #include <sys/param.h>
 #include <sys/un.h>
 #include <netdb.h>
-#endif
-
-#if !defined(_APPLE_)
-typedef long ssize_t;
 #endif
 
 // Our prototypes

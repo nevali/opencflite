@@ -195,7 +195,6 @@ static int ConnectionOpen(ConnectionRef *connPtr)
     if (err == 0) {
         struct sockaddr_un connReq;
 
-        connReq.sun_len    = sizeof(connReq);
         connReq.sun_family = AF_UNIX;
         strcpy(connReq.sun_path, kServerSocketPath);
 
