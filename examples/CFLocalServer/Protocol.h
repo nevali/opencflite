@@ -1,6 +1,13 @@
 /*
  *    Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>
  *    All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the BSD-style license (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
  */
 
 /*
@@ -65,7 +72,6 @@ First checked in.
 
 #include <CoreFoundation/CoreFoundation.h>
 
-#include <inttypes.h>
 
 /////////////////////////////////////////////////////////////////
 

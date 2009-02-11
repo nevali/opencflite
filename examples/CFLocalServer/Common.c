@@ -1,6 +1,14 @@
 /*
  *    Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>
+ *    Copyright (c) 2009 Brent Fulgham <bfulgham@gmail.com>
  *    All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the BSD-style license (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
  */
 
 /*
@@ -63,6 +71,27 @@ First checked in.
 
 // System interfaces
 
+#if defined(WIN32)
+#include <stdio.h>
+#define snprintf _snprintf
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <winsock2.h>
+#include <fcntl.h>
+#include <process.h>
+
+#define SOCK_MAXADDRLEN 255
+#define MAXPATHLEN MAX_PATH
+
+#define NI_MAXHOST 1025
+#define NI_MAXSERV 32
+
+#define NI_NUMERICHOST 0x02
+#define NI_NUMERICSERV 0x08
+
+typedef int socklen_t;
+#else
 #include <assert.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -70,6 +99,11 @@ First checked in.
 #include <sys/param.h>
 #include <sys/un.h>
 #include <netdb.h>
+#endif
+
+#if !defined(_APPLE_)
+typedef long ssize_t;
+#endif
 
 // Our prototypes
 
@@ -90,6 +124,7 @@ extern int MoreUNIXErrno(int result)
     return err;
 }
 
+#if !defined(_WIN32)
 extern int MoreUNIXIgnoreSIGPIPE(void)
     // See comment in header.
 {
@@ -107,6 +142,7 @@ extern int MoreUNIXIgnoreSIGPIPE(void)
 	
 	return err;
 }
+#endif
 
 extern int MoreUNIXRead( int fd,       void *buf, size_t bufSize, size_t *bytesRead   )
     // See comment in header.
@@ -190,16 +226,23 @@ extern int MoreUNIXSetNonBlocking(int fd)
     int err;
     int flags;
  
+#if defined(_WIN32)
+    unsigned long nonblockopt = 1;
+    flags = ioctlsocket (fd, FIONREAD, 0);
+    err = ioctlsocket (fd, FIONBIO, &nonblockopt);
+#else
     // According to the man page, F_GETFL can't error!
     
     flags = fcntl(fd, F_GETFL, NULL);
     
     err = fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+#endif
     err = MoreUNIXErrno(err);
     
     return err;
 }
 
+#if !defined(_WIN32)
 static int					gSignalSinkFD   = -1;
 static CFSocketRef			gSignalSourceCF = NULL;
 static SignalSocketCallback	gClientCallback = NULL;
@@ -398,6 +441,7 @@ extern int InstallSignalToSocket(
 	
 	return err;
 }
+#endif
 
 static char * SockAddrToString(int fd, Boolean peer)
     // Gets either the socket name or the peer name from the socket 
@@ -515,6 +559,7 @@ extern void DebugPrintDescriptorTable(void)
 
     fprintf(stderr, "Descriptors:\n");
 
+#if !defined(_WIN32)
     descCount = getdtablesize();
     for (descIndex = 0; descIndex < descCount; descIndex++) {
         if ( fcntl(descIndex, F_GETFD, NULL) != -1 ) {
@@ -571,6 +616,7 @@ extern void DebugPrintDescriptorTable(void)
             }
         }
     }
+#endif
 }
 
 extern void InitPacketHeader(PacketHeader *packet, OSType packetType, size_t packetSize, Boolean rpc)

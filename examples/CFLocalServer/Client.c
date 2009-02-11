@@ -1,6 +1,14 @@
 /*
  *    Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>
+ *    Copyright (c) 2009 Brent Fulgham.  All rights reserved.
  *    All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the BSD-style license (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
  */
 
 /*
@@ -67,10 +75,21 @@ First checked in.
 
 #include <stdlib.h>
 #include <assert.h>
+
+#if defined(WIN32)
+#include <errno.h>
+#define ECANCELED 15
+#include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <winsock2.h>
+
+#else
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <signal.h>
+#endif
 
 // Project interfaces
 
@@ -176,6 +195,7 @@ static int ConnectionOpen(ConnectionRef *connPtr)
     if (err == 0) {
         struct sockaddr_un connReq;
 
+        connReq.sun_len    = sizeof(connReq);
         connReq.sun_family = AF_UNIX;
         strcpy(connReq.sun_path, kServerSocketPath);
 
@@ -826,6 +846,7 @@ static void DoQuit(ConnectionRef conn)
     PrintResult("quit", err, NULL);
 }
 
+#if !defined(_WIN32)
 static void SIGINTRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
     // This routine is called in response to a SIGINT signal. 
     // It is not, however, a signal handler.  Rather, we 
@@ -846,6 +867,7 @@ static void SIGINTRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
     
     fprintf(stderr, "\n");
 }
+#endif
 
 static void PrintUsage(const char *argv0)
     // Print the program's usage.
@@ -882,6 +904,7 @@ int main (int argc, const char * argv[])
         err = ECANCELED;
     }
     
+#if !defined(_WIN32)
     // SIGPIPE is evil, so tell the system not to send it to us.
     
     if (err == 0) {
@@ -904,6 +927,7 @@ int main (int argc, const char * argv[])
             NULL
         );
     }
+#endif
     
     // Connect to the server.
     

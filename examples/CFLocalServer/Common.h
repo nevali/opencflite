@@ -1,6 +1,14 @@
 /*
  *    Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>
+ *    Copyright (c) 2009 Brent Fulgham <bfulgham@gmail.com>
  *    All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the BSD-style license (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
  */
 
 /*
@@ -71,6 +79,19 @@ First checked in.
 
 #include "Protocol.h"
 
+#if defined(_WIN32)
+// Windows doesn't understand UNIX sockets by default
+struct sockaddr_un
+{
+   unsigned char sun_len;
+   short sun_family;       // AF_UNIX
+   char  sun_path[108];
+};
+
+#define SUN_LEN(su) \
+   (sizeof(*(su)) - sizeof((su)->sun_path) + strlen((su)->sun_path))
+
+#endif
 /////////////////////////////////////////////////////////////////
 
 extern int MoreUNIXErrno(int result);
@@ -81,6 +102,7 @@ extern int MoreUNIXWrite(int fd, const void *buf, size_t bufSize, size_t *bytesW
 
 extern int MoreUNIXSetNonBlocking(int fd);
     
+#if !defined(_WIN32)
 typedef void (*SignalSocketCallback)(const siginfo_t *sigInfo, void *refCon);
     // This callback is called when a signal occurs.  It's called in the 
     // context of the runloop specified when you registered the callback.  
@@ -124,3 +146,5 @@ extern void InitPacketHeader(PacketHeader *packet, OSType packetType, size_t pac
     // in the parameters.  The rpc parameter controls whether the fID 
     // field is set to kPacketIDNone (rpc false, hence no ID) or an 
     // incrementing sequence number (rpc true).
+
+#endif
