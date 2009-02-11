@@ -1,5 +1,25 @@
-		      Changes and What's New in OpenCFLite
+                      Changes and What's New in OpenCFLite
                       ------------------------------------
+
+2007-02-11 v476.17.1
+
+  * Basic, development-level run loop support for Windows and Linux.
+
+  * Ensure private globals are marked as such on non-Apple GCC
+    compilers.
+
+  * Added DisplayURL, DNSServiceMetaQuery, CFLocalServer and
+    CFRunLoopTimer examples.
+
+  * Added appropriate preprocessor checks for __powerpc__ to handle
+    PowerPC compilers that emit that rather than __ppc__.
+
+  * Windows and Mac OS X build clean-ups.
+
+  * Improved Linux build configuration by respecting '--with' options
+    in preference to the presence of <foo>-config and, in general,
+    improved behavior in cross-compilation scenarios and in error
+    cases.
 
 2007-02-06 v476.17.0
 
