@@ -4,6 +4,8 @@
 
 AM_CFLAGS			= -I${top_srcdir}/include
 
+EXTRA_DIST			= CFRunLoopTimerExample.vcproj
+
 if CF_BUILD_TESTS
 EXTRA_PROGRAMS			= CFRunLoopTimerExample
 endif
