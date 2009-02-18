@@ -647,6 +647,9 @@ extern void __CFBagInitialize(void);
 extern void __CFBooleanInitialize(void);
 extern void __CFCharacterSetInitialize(void);
 extern void __CFLocaleInitialize(void);
+#if DEPLOYMENT_TARGET_WIN32
+extern CFStringRef __CFLocaleWindowsLCIDToISOLocaleNameUsingHyphen(LCID id);
+#endif
 extern void __CFDataInitialize(void);
 extern void __CFDateInitialize(void);
 extern void __CFDictionaryInitialize(void);
@@ -684,11 +687,11 @@ extern void __CFStreamInitialize(void);
 extern void __CFPreferencesDomainInitialize(void);
 extern void __CFUserNotificationInitialize(void);
 
+#if DEPLOYMENT_TARGET_MACOSX
 static void __exceptionInit(void) {}
 static void __collatorInit(void) {}
 static void __forwarding_prep_0___(void) {}
 static void __forwarding_prep_1___(void) {}
-#if DEPLOYMENT_TARGET_MACOSX
 static void __NSFastEnumerationMutationHandler(id obj) {}
 #endif
 const void *__CFArgStuff = NULL;
@@ -765,9 +768,9 @@ void __CFInitialize(void) {
 
         /*** _CFRuntimeCreateInstance() can finally be called generally after this line. ***/
 
-	__CFRuntimeClassTableCount = 7;
-	__CFStringInitialize();		// CFString's TypeID must be 0x7, now and forever
-	__CFRuntimeClassTableCount = 16;
+        __CFRuntimeClassTableCount = 7;
+        __CFStringInitialize();		// CFString's TypeID must be 0x7, now and forever
+        __CFRuntimeClassTableCount = 16;
         __CFDictionaryInitialize();
         __CFArrayInitialize();
         __CFDataInitialize();
@@ -798,9 +801,7 @@ void __CFInitialize(void) {
 #endif //__MACH__
         __CFUUIDInitialize();
 #if DEPLOYMENT_TARGET_MACOSX
-       __CFMessagePortInitialize();
-#endif
-#if DEPLOYMENT_TARGET_MACOSX
+        __CFMessagePortInitialize();
         __CFMachPortInitialize();
 #endif
         __CFStreamInitialize();
@@ -850,8 +851,6 @@ void __CFInitialize(void) {
     }
 }
 
-//#if DEPLOYMENT_TARGET_WINDOWS
-
 #ifdef _BUILD_NET_FOUNDATION_
 #ifdef __cplusplus
 extern "C"{
@@ -891,10 +890,8 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved ) {
         //cfBundle = RegisterCoreFoundationBundle(); -- Not in sources!
     } else if (dwReason == DLL_PROCESS_DETACH) {
         if (cfBundle) CFRelease(cfBundle);
-#if !0
         __CFStringCleanup();
         __CFSocketCleanup();
-#endif
         __CFUniCharCleanup();
         __CFStreamCleanup();
         __CFBaseCleanup();

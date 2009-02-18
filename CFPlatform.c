@@ -224,7 +224,7 @@ const char *_CFProcessPath(void) {
     if (!__CFProcessPath) {
         char buf[CFMaxPathSize] = {0};
         HINSTANCE hinst = GetModuleHandle(NULL);
-        DWORD rlen = hinst ? GetModuleFileNameA(hinst, buf, 1028) : 0;
+        DWORD rlen = hinst ? GetModuleFileNameA(hinst, buf, CFMaxPathSize) : 0;
 	     thePath = rlen ? buf : NULL;
 #elif DEPLOYMENT_TARGET_MACOSX
     int execIndex = 0;

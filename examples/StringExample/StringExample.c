@@ -46,7 +46,6 @@
 // Note that the CFString formatting function accepts "%@" as a way to display CF types.
 // For types other than CFString and CFNumber, the result of %@ is mostly for debugging
 // and can differ between releases and different platforms.
-
 void show(CFStringRef formatString, ...) {
     CFStringRef resultString;
     CFDataRef data;
@@ -73,25 +72,24 @@ void simpleStringExample(void) {
     CFDataRef data;
     char *bytes;
 
-    // Create a simple immutable string from a Pascal string and convert it to Unicode
+    show(CFSTR("------------------Simple Strings---------------"));
 
+    // Create a simple immutable string from a Pascal string and convert it to Unicode
     str = CFStringCreateWithPascalString(NULL, "\pFoo Bar", kCFStringEncodingASCII);
 
     // Create the Unicode representation of the string
     // "0", lossByte, indicates that if there's a conversion error, fail (and return NULL)
-
     data = CFStringCreateExternalRepresentation(NULL, str, kCFStringEncodingUnicode, 0);
 
-    show(CFSTR("String       : %@"), str);
-    show(CFSTR("Unicode data : %@"), data);
+    show(CFSTR("String          : %@"), str);
+    show(CFSTR("Unicode data    : %@"), data);
 
     CFRelease(str);
  
     // Create a string from the Unicode data...
-
     str = CFStringCreateFromExternalRepresentation(NULL, data, kCFStringEncodingUnicode);
 
-    show(CFSTR("String Out   : %@"), str);
+    show(CFSTR("String Out      : %@"), str);
 
     CFRelease(str);
 
@@ -122,40 +120,41 @@ void stringGettingContentsAsCStringExample(void) {
     CFRange rangeToProcess;
     const char *bytes;
 
+    show(CFSTR("------------------C String Manipulations---------------"));
+
     // Create some test CFString
     // Note that in general the string might contain Unicode characters which cannot
     // be converted to a 8-bit character encoding
-
     str = CFStringCreateWithCString(NULL, "Hello World", kCFStringEncodingASCII);
 
+    show(CFSTR("Original String : %@"), str);
+   
     // First, the fast but unpredictable way to get at the C String contents...
     // This is O(1), meaning it takes constant time.
     // This might return NULL!
-
     bytes = CFStringGetCStringPtr(str, kCFStringEncodingASCII);
-
+   
     // If that fails, you can try to get the contents by copying it out
-
     if (bytes == NULL) {
-	char localBuffer[10];
+        char localBuffer[10];
         Boolean success;
 
-	// This might also fail, either if you provide a buffer that is too small, 
-	// or the string cannot be converted into the specified encoding
-
-  	success = CFStringGetCString(str, localBuffer, 10, kCFStringEncodingASCII);
+        // This might also fail, either if you provide a buffer that is too small, 
+        // or the string cannot be converted into the specified encoding
+        success = CFStringGetCString(str, localBuffer, 10, kCFStringEncodingASCII);
     }
+    else
+        show(CFSTR("From CStringPtr : %@"), bytes);   
     
     // A pretty simple solution is to use a CFData; this frees you from guessing at the buffer size
     // But it does allocate a CFData...
-
     data = CFStringCreateExternalRepresentation(NULL, str, kCFStringEncodingASCII, 0);
     if (data) {
+        show(CFSTR("External Rep: %@"), data);   
         bytes = (const char *)CFDataGetBytePtr(data);
     }
 
     // More complicated but efficient solution is to use a fixed size buffer, and put a loop in
-
     rangeToProcess = CFRangeMake(0, CFStringGetLength(str));
 
     while (rangeToProcess.length > 0) {
@@ -166,7 +165,7 @@ void stringGettingContentsAsCStringExample(void) {
         if (numChars == 0) break;	// Means we failed to convert anything...
 
         // Otherwise we converted some stuff; process localBuffer containing usedBufferLength bytes
-		// Note that the bytes in localBuffer are not NULL terminated
+        // Note that the bytes in localBuffer are not NULL terminated
 		
         // Update the remaining range to continue looping
         rangeToProcess.location += numChars;
@@ -180,46 +179,48 @@ void stringGettingAtCharactersExample(void) {
     CFStringRef str;
     const UniChar *chars;
 
-    // Create some test CFString
+    show(CFSTR("------------------Character Manipulations---------------"));
 
+    // Create some test CFString
     str = CFStringCreateWithCString(NULL, "Hello World", kCFStringEncodingASCII);
+
+    show(CFSTR("Original String : %@"), str);
 
     // The fastest way to get the contents; this might return NULL though
     // depending on the system, the release, etc, so don't depend on it 
     // (unless you used CFStringCreateMutableWithExternalCharactersNoCopy())
-
     chars = CFStringGetCharactersPtr(str);
 
     // If that fails, you can try copying the UniChars out
     // either into some stack buffer or some allocated piece of memory...
     // Using the former is fine, but you need to know the size; the latter
     // always works but requires allocating some memory; not too efficient.
-
     if (chars == NULL) {
-	CFIndex length = CFStringGetLength(str);
+        CFIndex length = CFStringGetLength(str);
         UniChar *buffer = (UniChar*)malloc(length * sizeof(UniChar));
         CFStringGetCharacters(str, CFRangeMake(0, length), buffer);
-	// Process the chars...
+        // Process the chars...
         free(buffer);
     }
+    else
+        show(CFSTR("Characters      : %@"), str);
 
     // You can use CFStringGetCharacterAtIndex() to get at the characters one at a time,
     // but doing a lot of characters this way might get slow...
     // An option is to use "inline buffer" functionality which mixes the convenience of
     // one-at-a-time char access with efficiency of bulk access
-
     {
         CFStringInlineBuffer inlineBuffer;
         CFIndex length = CFStringGetLength(str);
-  	CFIndex cnt;
+        CFIndex cnt;
 
-	CFStringInitInlineBuffer(str, &inlineBuffer, CFRangeMake(0, length));
+        CFStringInitInlineBuffer(str, &inlineBuffer, CFRangeMake(0, length));
 
-	for (cnt = 0; cnt < length; cnt++) {
+        for (cnt = 0; cnt < length; cnt++) {
             UniChar ch = CFStringGetCharacterFromInlineBuffer(&inlineBuffer, cnt);
-	    // Process character...
-	    (void)ch;   // Dummy processing to prevent compiler warning...
-	}
+            // Process character...
+	         (void)ch;   // Dummy processing to prevent compiler warning...
+        }
     }
     
 }
@@ -229,6 +230,8 @@ void stringWithExternalContentsExample(void) {
 #define BufferSize 1000
     CFMutableStringRef mutStr;
     UniChar *myBuffer;
+
+    show(CFSTR("------------------External Contents Examples---------------"));
 
     // Allocate a contents store that is empty (but has space for BufferSize chars)...
     myBuffer = (UniChar*)malloc(BufferSize * sizeof(UniChar));
@@ -266,17 +269,135 @@ void stringWithExternalContentsExample(void) {
 
     CFRelease(mutStr);
     // Here we don't free the buffer, as CFString does that
-
 }
 
+void stringManipulation(void) {
+   
+   CFMutableStringRef strChange;
+   CFStringRef strOuter, find, replace, find2, replace2, find3, replace3, bigger, smaller, result;
+   CFComparisonResult comp;
+   CFLocaleRef curLocale;
+   
+   show(CFSTR("------------------String Manipulations---------------"));
+   
+   // Create a simple immutable string from a Pascal string and convert it to Unicode
+   strOuter = CFStringCreateWithCString(NULL, "Hello Cruel World", kCFStringEncodingASCII);
+   strChange = CFStringCreateMutableCopy(NULL, CFStringGetLength(strOuter), strOuter);
+   find = CFStringCreateWithCString(NULL, "Cruel", kCFStringEncodingASCII);
+   replace = CFStringCreateWithCString(NULL, "Cool", kCFStringEncodingASCII);
+   find2 = CFStringCreateWithCString(NULL, "Keep", kCFStringEncodingASCII);
+   replace2 = CFStringCreateWithCString(NULL, "Be", kCFStringEncodingASCII);
+   find3 = CFStringCreateWithCString(NULL, "Change.", kCFStringEncodingASCII);
+   replace3 = CFStringCreateWithCString(NULL, "Ball.", kCFStringEncodingASCII);
 
+   bigger  = CFStringCreateWithCString(NULL, "version 2.5", kCFStringEncodingASCII);
+   smaller = CFStringCreateWithCString(NULL, "version 2.0", kCFStringEncodingASCII);
 
-int main () {
+   show(CFSTR("String Outer       : %@"), strOuter);
+   show(CFSTR("String Find        : %@"), find);
+   show(CFSTR("String Replace     : %@"), replace);
+   
+   CFStringFindAndReplace(strChange, find, replace, CFRangeMake(0, CFStringGetLength(strChange)), 0);
+   
+   show(CFSTR("Replaced           : %@"), strChange);
+   
+   CFStringAppendCString(strChange, "!  Keep the change.", kCFStringEncodingASCII);
+   
+   show(CFSTR("Appended           : %@"), strChange);
+   
+   curLocale = CFLocaleCopyCurrent ();
+
+   CFStringUppercase(strChange, curLocale);
+   
+   show(CFSTR("Upper Cased        : %@"), strChange);
+   
+   CFStringLowercase(strChange, curLocale);
+   
+   show(CFSTR("Lower Cased        : %@"), strChange);
+   
+   CFStringCapitalize(strChange, curLocale);
+   
+   show(CFSTR("Capitalized        : %@"), strChange);
+
+   CFStringUppercase(strChange, curLocale);
+   
+   show(CFSTR("Up Cased (again)   : %@"), strChange);
+
+   CFStringFindAndReplace(strChange, find2, replace2, CFRangeMake(0, CFStringGetLength(strChange)), 0);
+
+   show(CFSTR("Replaced?          : %@"), strChange);
+   
+   CFStringFindAndReplace(strChange, find2, replace2, CFRangeMake(0, CFStringGetLength(strChange)), kCFCompareCaseInsensitive);
+   
+   show(CFSTR("Case insensitive   : %@"), strChange);
+   
+   CFStringCapitalize(strChange, curLocale);
+   
+   show(CFSTR("Capitalized        : %@"), strChange);
+
+   CFStringFindAndReplace(strChange, replace2, find2, CFRangeMake(0, CFStringGetLength(strChange)), kCFCompareAnchored);
+   
+   show(CFSTR("Should Be Unchanged: %@"), strChange);
+
+   CFStringFindAndReplace(strChange, find3, replace3, CFRangeMake(0, CFStringGetLength(strChange)), kCFCompareAnchored|kCFCompareBackwards);
+   
+   show(CFSTR("Should Be Changed  : %@"), strChange);
+   
+   show(CFSTR("Which is bigger %@ or %@?"), bigger, smaller);
+   
+   comp = CFStringCompare(bigger, smaller, 0);   
+   result = (comp == kCFCompareGreaterThan) ? bigger : smaller;   
+   show(CFSTR("Base Compare Says  : %@"), result);
+
+   comp = CFStringCompare(bigger, smaller, kCFCompareNumerically);
+   result = (comp == kCFCompareGreaterThan) ? bigger : smaller;   
+   show(CFSTR("Numerical Compare  : %@"), result);
+
+   CFRelease(curLocale);
+   CFRelease(replace);
+   CFRelease(find);
+   CFRelease(replace2);   
+   CFRelease(find2);
+   CFRelease(replace3);   
+   CFRelease(find3);
+   CFRelease(bigger);   
+   CFRelease(smaller);
+   CFRelease(strChange);
+}
+
+void stringHandling(void) {
+   
+   show(CFSTR("------------------Number Magic---------------"));
+
+   CFStringRef number;
+   CFNumberRef val, compare;
+   CFNumberFormatterRef fmt;
+   CFLocaleRef curLocale;
+   int theValue = 89;
+
+   number = CFStringCreateWithCString(NULL, "eighty", kCFStringEncodingASCII);
+   compare = CFNumberCreate(0, kCFNumberIntType, &theValue);
+
+   show(CFSTR("Make a Number from : %@"), number);
+
+   curLocale = CFLocaleCopyCurrent ();
+   fmt = CFNumberFormatterCreate (0, curLocale, kCFNumberFormatterSpellOutStyle);
+   val = CFNumberFormatterCreateNumberFromString(0, fmt, number, 0, kCFNumberFormatterParseIntegersOnly);
+      
+   show(CFSTR("val=%@, compare=%@\n"), val, compare);   
+
+   CFRelease(curLocale);
+   CFRelease(number);
+}
+
+int main () {   
     simpleStringExample();
     stringGettingContentsAsCStringExample();
     stringGettingAtCharactersExample();
     stringWithExternalContentsExample();
-    
+    stringManipulation();
+    stringHandling();
+   
     return 0;
 }
 

@@ -365,7 +365,7 @@ extern int __CFConstantStringClassReference[];
 
 /* CFNetwork also has a copy of the CONST_STRING_DECL macro (for use on platforms without constant string support in cc); please warn cfnetwork-core@group.apple.com of any necessary changes to this macro. -- REW, 1/28/2002 */
 #if DEPLOYMENT_TARGET_WINDOWS
-#define ___WindowsConstantStringClassReference &__CFConstantStringClassReference
+#define ___WindowsConstantStringClassReference (uintptr_t)&__CFConstantStringClassReference
 #else
 #define ___WindowsConstantStringClassReference NULL
 #endif
@@ -378,7 +378,7 @@ const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #define CONST_STRING_DECL(S, V)			\
 	static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
-#elif 0 //DEPLOYMENT_TARGET_WINDOWS
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define CONST_STRING_DECL(S, V)			\
 static struct CF_CONST_STRING __ ## S ## __ = {{___WindowsConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
@@ -389,11 +389,11 @@ CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 
 #else
 #define CONST_STRING_DECL(S, V)			\
-static struct CF_CONST_STRING __ ## S ## __ = {{NULL, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
+static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)NULL, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
 
 #define CONST_STRING_DECL_EXPORT(S, V)			\
-struct CF_CONST_STRING __ ## S ## __ = {{NULL, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
+struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)NULL, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
 CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 
 #endif // __WIN32__

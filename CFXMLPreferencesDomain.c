@@ -84,7 +84,7 @@ static void __CFMilliSleep(uint32_t msecs) {
     input.tv_nsec = (msecs - input.tv_sec * 1000) * 1000000;
     nanosleep(&input, NULL);
 #elif DEPLOYMENT_TARGET_WINDOWS
-    Sleep (msecs);
+    Sleep((msecs + 900) / 1000);
 #else
 #error Dont know how to define sleep for this platform
 #endif
