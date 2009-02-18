@@ -34,7 +34,7 @@
         Copyright (c) 2006-2007, Apple Inc. All rights reserved.
 */
 
-#if (DEPLOYMENT_TARGET_MACOSX || 0)
+#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
 
 /* -------- -------- -------- -------- -------- -------- -------- -------- */
 

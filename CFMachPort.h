@@ -37,7 +37,7 @@
 #if !defined(__COREFOUNDATION_CFMACHPORT__)
 #define __COREFOUNDATION_CFMACHPORT__ 1
 
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__)
 
 #include <CoreFoundation/CFRunLoop.h>
 #include <mach/port.h>

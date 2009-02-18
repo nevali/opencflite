@@ -1012,7 +1012,7 @@ CF_EXPORT void _CFRelease(CFTypeRef cf) {
 	    // removal of objects from uniquing caches, which may race with other threads
 	    // which are allocating (looking up and finding) objects from those caches,
 	    // which (that thread) would be the thing doing the extra retain in that case.
-	    if (isAllocator || CFOSAtomicCompareAndSwap32Barrier(1, 0, (int32_t *)&((CFRuntimeBase *)cf)->_rc)) {
+	    if (isAllocator || _CFAtomicCompareAndSwap32Barrier(1, 0, (int32_t *)&((CFRuntimeBase *)cf)->_rc)) {
 		goto really_free;
 	    }
 	}

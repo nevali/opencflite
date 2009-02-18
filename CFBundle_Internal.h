@@ -50,9 +50,9 @@ CF_EXTERN_C_BEGIN
 #define __kCFLogBundle       3
 #define __kCFLogPlugIn       3
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX || 0
+#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__)) || DEPLOYMENT_TARGET_LINUX || 0
 #define PLATFORM_PATH_STYLE kCFURLPOSIXPathStyle
-#elif DEPLOYMENT_TARGET_WINDOWS || 0
+#elif DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
 #define PLATFORM_PATH_STYLE kCFURLWindowsPathStyle
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET

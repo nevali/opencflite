@@ -123,9 +123,9 @@ extern const char* _CFDLLPath(void);
 // Memory map the file
 
 CF_INLINE void __CFUniCharCharacterSetPath(char *cpath) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if defined(__APPLE__)
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif defined(__WIN32__)
     strlcpy(cpath, _CFDLLPath(), MAXPATHLEN);
 #else
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);

@@ -138,6 +138,10 @@
 		8481BA510F3EA6AB00BD5189 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		8481BA540F3EA6C800BD5189 /* DisplayURL.c in Sources */ = {isa = PBXBuildFile; fileRef = 8481BA460F3EA68A00BD5189 /* DisplayURL.c */; };
 		8481BA810F3EB2D300BD5189 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8481BA800F3EB2D300BD5189 /* CoreServices.framework */; };
+		84915D510F4B5CEA00A3C0DD /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
+		84915D540F4B5D0500A3C0DD /* CFRunLoopTimerExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 84915D530F4B5D0500A3C0DD /* CFRunLoopTimerExample.c */; };
+		849160410F4B958900A3C0DD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */; };
+		84CD60F50F4A04530049B4EC /* SimpleWebServer.c in Sources */ = {isa = PBXBuildFile; fileRef = 84CD60D00F4A030E0049B4EC /* SimpleWebServer.c */; };
 		84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DA170D0EDDEEEE00B6A2E6 /* date_test.c */; };
 		84DE4E550ED287D40023DFE2 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
@@ -152,48 +156,6 @@
 			remoteInfo = make_target_paths;
 		};
 		841BE84B0F395DC5001F2A66 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715;
-			remoteInfo = CFLite;
-		};
-		841BE9270F395FC9001F2A66 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715;
-			remoteInfo = CFLite;
-		};
-		844949B60ED2844500EEB9C0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715;
-			remoteInfo = CFLite;
-		};
-		844949B90ED2845100EEB9C0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715;
-			remoteInfo = CFLite;
-		};
-		844F5D5C0F3FB24900239823 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715 /* CFLite */;
-			remoteInfo = CFLite;
-		};
-		8481BA4F0F3EA6A400BD5189 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8448EF660ED2796500716715;
-			remoteInfo = CFLite;
-		};
-		84DA17200EDDF45200B6A2E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
@@ -351,6 +313,11 @@
 		848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigDebug.xcconfig; path = ../XCode_Configs/ConfigDebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigRelease.xcconfig; path = ../XCode_Configs/ConfigRelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B5B0D0ED1548A003D696F /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		84915D4D0F4B5CE600A3C0DD /* CFRunLoopTimerExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CFRunLoopTimerExample; sourceTree = BUILT_PRODUCTS_DIR; };
+		84915D530F4B5D0500A3C0DD /* CFRunLoopTimerExample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFRunLoopTimerExample.c; path = ../examples/CFRunLoopTimerExample/CFRunLoopTimerExample.c; sourceTree = SOURCE_ROOT; };
+		84915FB70F4B893300A3C0DD /* CFLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = CFLite; path = build/Debug/CFLite.framework/Versions/A/CFLite; sourceTree = "<group>"; };
+		84CD60D00F4A030E0049B4EC /* SimpleWebServer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SimpleWebServer.c; path = ../examples/SimpleWebServer/SimpleWebServer.c; sourceTree = SOURCE_ROOT; };
+		84CD60DB0F4A03310049B4EC /* SimpleWebServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SimpleWebServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DA170D0EDDEEEE00B6A2E6 /* date_test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = date_test.c; path = ../tests/date_test.c; sourceTree = SOURCE_ROOT; };
 		84DA171C0EDDF44500B6A2E6 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -415,6 +382,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84915D4B0F4B5CE600A3C0DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84915D510F4B5CEA00A3C0DD /* CFLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84CD60D90F4A03310049B4EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				849160410F4B958900A3C0DD /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84DA171A0EDDF44500B6A2E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -429,6 +412,7 @@
 		08FB7794FE84155DC02AAC07 /* CFLite */ = {
 			isa = PBXGroup;
 			children = (
+				84915FB70F4B893300A3C0DD /* CFLite */,
 				848B56470ECFB00B003D696F /* Xcode_configs */,
 				848B55C20ECFAE55003D696F /* Headers */,
 				08FB7795FE84155DC02AAC07 /* Source */,
@@ -527,6 +511,8 @@
 				841BE91F0F395F8E001F2A66 /* AllocatorExample */,
 				8481BA4B0F3EA69C00BD5189 /* DisplayURL */,
 				844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */,
+				84CD60DB0F4A03310049B4EC /* SimpleWebServer */,
+				84915D4D0F4B5CE600A3C0DD /* CFRunLoopTimerExample */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -640,6 +626,8 @@
 		84DA17160EDDEFB100B6A2E6 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				84915D530F4B5D0500A3C0DD /* CFRunLoopTimerExample.c */,
+				84CD60D00F4A030E0049B4EC /* SimpleWebServer.c */,
 				844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */,
 				8481BA460F3EA68A00BD5189 /* DisplayURL.c */,
 				841BE91A0F395F65001F2A66 /* AllocatorExample.c */,
@@ -735,7 +723,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				841BE9280F395FC9001F2A66 /* PBXTargetDependency */,
 			);
 			name = AllocatorExample;
 			productName = AllocatorExample;
@@ -771,7 +758,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				844949B70ED2844500EEB9C0 /* PBXTargetDependency */,
 			);
 			name = WritePListExample;
 			productName = WritePListExample;
@@ -788,7 +774,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				844949BA0ED2845100EEB9C0 /* PBXTargetDependency */,
 			);
 			name = ReadPListExample;
 			productName = ReadPListExample;
@@ -805,7 +790,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				844F5D5D0F3FB24900239823 /* PBXTargetDependency */,
 			);
 			name = DNSMetaServiceQuery;
 			productName = DNSMetaServiceQuery;
@@ -822,11 +806,42 @@
 			buildRules = (
 			);
 			dependencies = (
-				8481BA500F3EA6A400BD5189 /* PBXTargetDependency */,
 			);
 			name = DisplayURL;
 			productName = DisplayURL;
 			productReference = 8481BA4B0F3EA69C00BD5189 /* DisplayURL */;
+			productType = "com.apple.product-type.tool";
+		};
+		84915D4C0F4B5CE600A3C0DD /* CFRunLoopTimerExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84915D550F4B5D0500A3C0DD /* Build configuration list for PBXNativeTarget "CFRunLoopTimerExample" */;
+			buildPhases = (
+				84915D4A0F4B5CE600A3C0DD /* Sources */,
+				84915D4B0F4B5CE600A3C0DD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CFRunLoopTimerExample;
+			productName = CFRunLoopTimerExample;
+			productReference = 84915D4D0F4B5CE600A3C0DD /* CFRunLoopTimerExample */;
+			productType = "com.apple.product-type.tool";
+		};
+		84CD60DA0F4A03310049B4EC /* SimpleWebServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84CD60E00F4A037A0049B4EC /* Build configuration list for PBXNativeTarget "SimpleWebServer" */;
+			buildPhases = (
+				84CD60D80F4A03310049B4EC /* Sources */,
+				84CD60D90F4A03310049B4EC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleWebServer;
+			productName = SimpleWebServer;
+			productReference = 84CD60DB0F4A03310049B4EC /* SimpleWebServer */;
 			productType = "com.apple.product-type.tool";
 		};
 		84DA171B0EDDF44500B6A2E6 /* Test */ = {
@@ -839,7 +854,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				84DA17210EDDF45200B6A2E6 /* PBXTargetDependency */,
 			);
 			name = Test;
 			productName = Test;
@@ -867,6 +881,8 @@
 				84129FDA0F3A4E5400A64427 /* make_target_paths */,
 				8481BA4A0F3EA69C00BD5189 /* DisplayURL */,
 				844F5D530F3FB1F600239823 /* DNSMetaServiceQuery */,
+				84CD60DA0F4A03310049B4EC /* SimpleWebServer */,
+				84915D4C0F4B5CE600A3C0DD /* CFRunLoopTimerExample */,
 			);
 		};
 /* End PBXProject section */
@@ -1018,6 +1034,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84915D4A0F4B5CE600A3C0DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84915D540F4B5D0500A3C0DD /* CFRunLoopTimerExample.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84CD60D80F4A03310049B4EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84CD60F50F4A04530049B4EC /* SimpleWebServer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84DA17190EDDF44500B6A2E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1038,36 +1070,6 @@
 			isa = PBXTargetDependency;
 			target = 8448EF660ED2796500716715 /* CFLite */;
 			targetProxy = 841BE84B0F395DC5001F2A66 /* PBXContainerItemProxy */;
-		};
-		841BE9280F395FC9001F2A66 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 841BE9270F395FC9001F2A66 /* PBXContainerItemProxy */;
-		};
-		844949B70ED2844500EEB9C0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 844949B60ED2844500EEB9C0 /* PBXContainerItemProxy */;
-		};
-		844949BA0ED2845100EEB9C0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 844949B90ED2845100EEB9C0 /* PBXContainerItemProxy */;
-		};
-		844F5D5D0F3FB24900239823 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 844F5D5C0F3FB24900239823 /* PBXContainerItemProxy */;
-		};
-		8481BA500F3EA6A400BD5189 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 8481BA4F0F3EA6A400BD5189 /* PBXContainerItemProxy */;
-		};
-		84DA17210EDDF45200B6A2E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8448EF660ED2796500716715 /* CFLite */;
-			targetProxy = 84DA17200EDDF45200B6A2E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1429,6 +1431,78 @@
 			};
 			name = Release;
 		};
+		84915D4F0F4B5CE600A3C0DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = CFRunLoopTimerExample;
+			};
+			name = Debug;
+		};
+		84915D500F4B5CE600A3C0DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = CFRunLoopTimerExample;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		84CD60DD0F4A03320049B4EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Debug/CFLite.framework/Versions/A\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = SimpleWebServer;
+			};
+			name = Debug;
+		};
+		84CD60DE0F4A03320049B4EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Debug/CFLite.framework/Versions/A\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = SimpleWebServer;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		84DA171E0EDDF44600B6A2E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */;
@@ -1541,6 +1615,24 @@
 			buildConfigurations = (
 				8481BA4D0F3EA69E00BD5189 /* Debug */,
 				8481BA4E0F3EA69E00BD5189 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84915D550F4B5D0500A3C0DD /* Build configuration list for PBXNativeTarget "CFRunLoopTimerExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84915D4F0F4B5CE600A3C0DD /* Debug */,
+				84915D500F4B5CE600A3C0DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84CD60E00F4A037A0049B4EC /* Build configuration list for PBXNativeTarget "SimpleWebServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84CD60DD0F4A03320049B4EC /* Debug */,
+				84CD60DE0F4A03320049B4EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

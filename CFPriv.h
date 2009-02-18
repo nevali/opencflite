@@ -62,7 +62,7 @@
 #include <CoreFoundation/CFMachPort.h>
 #endif
 
-#if defined(COCOTRON) || (defined(__GNUC__) && HAVE_OBJC_OBJC_H) || DEPLOYMENT_TARGET_MACOSX
+#if defined(COCOTRON) || (defined(__GNUC__) && HAVE_OBJC_OBJC_H) || (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
 #import <objc/objc.h>
 #endif
 

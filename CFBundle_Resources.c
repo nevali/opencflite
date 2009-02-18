@@ -67,17 +67,17 @@
 
 // All new-style bundles will have these extensions.
 CF_INLINE CFStringRef _CFGetPlatformName(void) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if defined(__APPLE__)
     return _CFBundleMacOSXPlatformName;
-#elif DEPLOYMENT_TARGET_SOLARIS
+#elif defined(__solaris__)
     return _CFBundleSolarisPlatformName;
-#elif DEPLOYMENT_TARGET_HPUX
+#elif defined(__hpux__)
     return _CFBundleHPUXPlatformName;
-#elif DEPLOYMENT_TARGET_LINUX
+#elif defined(__linux__)
     return _CFBundleLinuxPlatformName;
-#elif DEPLOYMENT_TARGET_FREEBSD
+#elif defined(__bsd__)
     return _CFBundleFreeBSDPlatformName;
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif defined(__WIN32__)
     return _CFBundleWindowsPlatformName;
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
@@ -85,7 +85,7 @@ CF_INLINE CFStringRef _CFGetPlatformName(void) {
 }
 
 CF_INLINE CFStringRef _CFGetAlternatePlatformName(void) {
-#if DEPLOYMENT_TARGET_MACOSX
+#if defined(__APPLE__)
     return _CFBundleAlternateMacOSXPlatformName;
 #else
     return CFSTR("");

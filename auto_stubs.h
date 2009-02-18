@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__)
 #include <malloc/malloc.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 /* Stubs for functions in libauto. */
 
-#if !DEPLOYMENT_TARGET_MACOSX
+#if !(DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
 typedef unsigned long malloc_zone_t;
 typedef unsigned char boolean_t;
 #endif

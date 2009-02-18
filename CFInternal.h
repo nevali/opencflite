@@ -55,10 +55,10 @@
 #include <CoreFoundation/CFStorage.h>
 #include "CFLogUtilities.h"
 #include "CFRuntime.h"
-#if DEPLOYMENT_TARGET_MACOSX
+#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
 #include <xlocale.h>
 #include <mach/mach_time.h>
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif (DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__))
 #include <windows.h>
 #include <malloc.h>
 #endif
@@ -352,7 +352,7 @@ extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, un
 
 
 #ifdef __CONSTANT_CFSTRINGS__
-#define CONST_STRING_DECL(S, V) const CFStringRef S = (const CFStringRef)__builtin___CFStringMakeConstantString(V);
+#define CONST_STRING_DECL(S, V) const CFStringRef S = (const CFStringRef)__builtin___CFStringMakeConstantString("" V "");
 #else
 
 struct CF_CONST_STRING {

@@ -49,7 +49,7 @@ typedef struct _TimerData {
 static void
 TimerCallback(CFRunLoopTimerRef timer, void *info)
 {
-	TimerData *theData = info;
+	TimerData *theData = (TimerData*)info;
     CFTimeZoneRef tz = NULL;
     CFGregorianDate theDate;
 
