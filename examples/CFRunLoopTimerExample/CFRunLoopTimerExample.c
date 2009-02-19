@@ -92,7 +92,7 @@ main(int argc, const char * const argv[])
 	timerInterval = strtod(argv[1], &end);
 	verify(errno != ERANGE);
 
-	if (errno != 0 || timerInterval <= 0) {
+	if (errno == ERANGE || timerInterval <= 0) {
 		fprintf(stderr, "Timer interval must be greater than zero.\n");
 		goto done;
 	}
@@ -100,7 +100,7 @@ main(int argc, const char * const argv[])
 	timerLimit = strtod(argv[2], &end);
 	verify(errno != ERANGE);
 
-	if (errno != 0 || timerLimit <= 0) {
+	if (errno == ERANGE || timerLimit <= 0) {
 		fprintf(stderr, "Timer limit must be greater than zero.\n");
 		goto done;
 	}
