@@ -376,7 +376,7 @@ main(int argc, const char * const argv[])
 
 		if (!result) {
 			fprintf(stderr,
-					"Timer %lu only fired %d of the expected %d times.\n",
+					"Timer %lu fired %d of the expected %d times.\n",
 					theTimer->mIndex,
 					theTimer->mIterations.mDid,
 					theTimer->mIterations.mShould);
