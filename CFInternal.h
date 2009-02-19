@@ -346,7 +346,7 @@ extern Boolean __CFStringScanHex(CFStringInlineBuffer *buf, SInt32 *indexPtr, un
 
 #elif DEPLOYMENT_TARGET_WINDOWS && _MSC_VER
 
-#define STACK_BUFFER_DECL(T, N, C) T* N = (T*)_alloca(C * sizeof(T));
+#define STACK_BUFFER_DECL(T, N, C) T* N = (T*)_alloca((C + 1) * sizeof(T));
 
 #endif
 
