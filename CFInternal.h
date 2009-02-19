@@ -55,10 +55,10 @@
 #include <CoreFoundation/CFStorage.h>
 #include "CFLogUtilities.h"
 #include "CFRuntime.h"
-#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
+#if defined(__MACH__)
 #include <xlocale.h>
 #include <mach/mach_time.h>
-#elif (DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__))
+#elif DEPLOYMENT_TARGET_WINDOWS
 #include <windows.h>
 #include <malloc.h>
 #endif
@@ -364,7 +364,7 @@ struct CF_CONST_STRING {
 extern int __CFConstantStringClassReference[];
 
 /* CFNetwork also has a copy of the CONST_STRING_DECL macro (for use on platforms without constant string support in cc); please warn cfnetwork-core@group.apple.com of any necessary changes to this macro. -- REW, 1/28/2002 */
-#if DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
 #define ___WindowsConstantStringClassReference (uintptr_t)&__CFConstantStringClassReference
 #else
 #define ___WindowsConstantStringClassReference NULL
@@ -378,7 +378,7 @@ const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #define CONST_STRING_DECL(S, V)			\
 	static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
-#elif DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
+#elif DEPLOYMENT_TARGET_WINDOWS
 #define CONST_STRING_DECL(S, V)			\
 static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
 CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
@@ -402,7 +402,7 @@ CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #undef ___WindowsConstantStringClassReference
 
 /* Buffer size for file pathname */
-#if DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
     #define CFMaxPathSize ((CFIndex)262)
     #define CFMaxPathLength ((CFIndex)260)
 #else
@@ -638,7 +638,7 @@ extern void* __CFISAForTypeID(CFTypeID typeid);
 #define CF_OBJC_CALL1(rettype, retvar, obj, sel, a1)
 #define CF_OBJC_CALL2(rettype, retvar, obj, sel, a1, a2)
 
-#if defined (__WIN32__)
+#if defined DEPLOYMENT_TARGET_WINDOWS
 #define CF_OBJC_FUNCDISPATCH0(typeID, rettype, obj, sel) ((void)0)
 #define CF_OBJC_FUNCDISPATCH1(typeID, rettype, obj, sel, a1) ((void)0)
 #define CF_OBJC_FUNCDISPATCH2(typeID, rettype, obj, sel, a1, a2) ((void)0)
@@ -652,7 +652,7 @@ extern void* __CFISAForTypeID(CFTypeID typeid);
 #define CF_OBJC_FUNCDISPATCH3(typeID, rettype, obj, sel, a1, a2, a3)
 #define CF_OBJC_FUNCDISPATCH4(typeID, rettype, obj, sel, a1, a2, a3, a4)
 #define CF_OBJC_FUNCDISPATCH5(typeID, rettype, obj, sel, a1, a2, a3, a4, a5)
-#endif //__WIN32__
+#endif
 
 #define __CFISAForTypeID(x) (0)
 

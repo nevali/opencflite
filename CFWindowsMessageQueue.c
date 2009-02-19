@@ -203,7 +203,7 @@ static void __CFWindowsMessageQueueCancel(void *info, CFRunLoopRef rl, CFStringR
 #warning CF: should fix up run loop modes mask here, if not done
 #warning CF: previously by the invalidation, where it should also
 #warning CF: be done
-#endif //__WIN32__
+#endif //DEPLOYMENT_TARGET_WINDOWS
     if (NULL != wmq->_runLoops) {
 	SInt32 idx = CFArrayGetFirstIndexOfValue(wmq->_runLoops, CFRangeMake(0, CFArrayGetCount(wmq->_runLoops)), rl);
 	if (0 <= idx) CFArrayRemoveValueAtIndex(wmq->_runLoops, idx);

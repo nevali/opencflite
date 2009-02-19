@@ -146,7 +146,7 @@ static Boolean __CFSocketWinSockInitialized = false;
 
 
 CF_INLINE int __CFSocketLastError(void) {
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
     return WSAGetLastError();
 #else
     return thread_errno();
@@ -154,7 +154,7 @@ CF_INLINE int __CFSocketLastError(void) {
 }
 
 CF_INLINE CFIndex __CFSocketFdGetSize(CFDataRef fdSet) {
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
     fd_set* set = (fd_set*)CFDataGetBytePtr(fdSet);
     return set ? set->fd_count : 0;
 #else
@@ -166,7 +166,7 @@ CF_INLINE Boolean __CFSocketFdSet(CFSocketNativeHandle sock, CFMutableDataRef fd
     /* returns true if a change occurred, false otherwise */
     Boolean retval = false;
     if (INVALID_SOCKET != sock && 0 <= sock) {
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
         fd_set* set = (fd_set*)CFDataGetMutableBytePtr(fdSet);
         if ((set->fd_count * sizeof(SOCKET) + sizeof(u_int)) >= CFDataGetLength(fdSet)) {
             CFDataIncreaseLength(fdSet, sizeof(SOCKET));
@@ -372,7 +372,7 @@ CF_INLINE Boolean __CFSocketFdClr(CFSocketNativeHandle sock, CFMutableDataRef fd
     /* returns true if a change occurred, false otherwise */
     Boolean retval = false;
     if (INVALID_SOCKET != sock && 0 <= sock) {
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
         fd_set* set = (fd_set*)CFDataGetMutableBytePtr(fdSet);
         if (FD_ISSET(sock, set)) {
             retval = true;

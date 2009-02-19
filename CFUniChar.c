@@ -123,9 +123,9 @@ extern const char* _CFDLLPath(void);
 // Memory map the file
 
 CF_INLINE void __CFUniCharCharacterSetPath(char *cpath) {
-#if defined(__APPLE__)
+#if DEPLOYMENT_TARGET_MACOSX
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);
-#elif defined(__WIN32__)
+#elif DEPLOYMENT_TARGET_WINDOWS
     strlcpy(cpath, _CFDLLPath(), MAXPATHLEN);
 #else
     strlcpy(cpath, __kCFCharacterSetDir, MAXPATHLEN);
@@ -182,7 +182,7 @@ void __AddBitmapStateForName(char *bitmapName) {
     strcpy(mappedBitmapState[__nNumStateEntries], bitmapName);
     LeaveCriticalSection(&__bitmapStateLock);
 }
-#endif //__WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
 
 static bool __CFUniCharLoadBytesFromFile(const char *fileName, const void **bytes) {
 #if DEPLOYMENT_TARGET_WINDOWS || 0
@@ -1271,7 +1271,7 @@ void __CFUniCharCleanup(void)
     
     __CFSpinUnlock(&__CFUniCharPropTableLock);
 }
-#endif	// __WIN32__
+#endif	// DEPLOYMENT_TARGET_WINDOWS
 
 #undef USE_MACHO_SEGMENT
 

@@ -50,7 +50,7 @@ CF_EXPORT CFRunLoopSourceRef	CFWindowsMessageQueueCreateRunLoopSource(CFAllocato
 
 CF_EXTERN_C_END
 
-#endif /* __WIN32__ */
+#endif /* DEPLOYMENT_TARGET_WINDOWS */
 
 #endif /* ! __COREFOUNDATION_CFWINDOWSMESSAGEQUEUE__ */
 

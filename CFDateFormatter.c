@@ -48,7 +48,7 @@
 extern UCalendar *__CFCalendarCreateUCalendar(CFStringRef calendarID, CFStringRef localeID, CFTimeZoneRef tz);
 #ifdef DEPLOYMENT_TARGET_WINDOWS
 extern CFAbsoluteTime __CFDateWindowsSystemTimeToAbsoluteTime(SYSTEMTIME *time);
-#endif // __WIN32__
+#endif
 static void __CFDateFormatterCustomize(CFDateFormatterRef formatter);
 
 CF_EXPORT const CFStringRef kCFDateFormatterCalendarIdentifier;
@@ -165,7 +165,7 @@ CFDateFormatterRef CFDateFormatterCreate(CFAllocatorRef allocator, CFLocaleRef l
     UChar ubuffer[BUFFER_SIZE];
     memset(ubuffer, 0x00, sizeof(UChar) * BUFFER_SIZE);
     memory->_tz = CFTimeZoneCopyDefault();
-#ifdef __WIN32__
+#ifdef DEPLOYMENT_TARGET_WINDOWS
     // ICU doesn't know about Windows Time Zone names.  It'll understand the abbreviation for the non-daylight saving time, though
     TIME_ZONE_INFORMATION *tzi = (TIME_ZONE_INFORMATION *)CFDataGetBytePtr(CFTimeZoneGetData(memory->_tz));
     CFAbsoluteTime at = __CFDateWindowsSystemTimeToAbsoluteTime(&tzi->DaylightDate);

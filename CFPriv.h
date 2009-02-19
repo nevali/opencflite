@@ -53,16 +53,12 @@
 #include <CoreFoundation/CFMachPort.h>
 #endif
 
-#if defined(__MACH__) || defined(__WIN32__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS
 #include <CoreFoundation/CFRunLoop.h>
 #include <CoreFoundation/CFSocket.h>
 #endif
 
-#if defined(__MACH__)
-#include <CoreFoundation/CFMachPort.h>
-#endif
-
-#if defined(COCOTRON) || (defined(__GNUC__) && HAVE_OBJC_OBJC_H) || (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
+#if defined(COCOTRON) || (defined(__GNUC__) && HAVE_OBJC_OBJC_H) || DEPLOYMENT_TARGET_MACOSX
 #import <objc/objc.h>
 #endif
 

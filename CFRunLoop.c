@@ -1060,9 +1060,9 @@ static const CFRuntimeClass __CFRunLoopClass = {
 };
 
 CF_INLINE NativeThread _CFThreadSelf(void) {
-#if defined(__APPLE__) || defined(__bsd__) || defined(__linux__)
+#if DEPLOYMENT_TARGET_MACOS || DEPLOYMENT_TARGET_FREEBSD || DEPLOYMENT_TARGET_LINUX
 	return pthread_self();
-#elif defined(__WIN32__)
+#elif DEPLOYMENT_TARGET_WINDOWS
 	return GetCurrentThread();
 #else
 	HALT;
@@ -1072,11 +1072,11 @@ CF_INLINE NativeThread _CFThreadSelf(void) {
 
 CF_INLINE Boolean _CFThreadIsMain(void) {
 	Boolean result = false;
-#if defined(__APPLE__) || defined(__bsd__)
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_FREEBSD
 	result = pthread_main_np();
-#elif defined(__linux__)
+#elif DEPLOYMENT_TARGET_LINUX
 	result = (__kCFMainThread == _CFThreadSelf());
-#elif defined(__WIN32__)
+#elif DEPLOYMENT_TARGET_WINDOWS
 	result = (__kCFMainThread == GetCurrentThreadId());
 #else
 	HALT;
@@ -1086,9 +1086,9 @@ CF_INLINE Boolean _CFThreadIsMain(void) {
 
 CF_INLINE Boolean _CFThreadsAreEqual(NativeThread a, NativeThread b) {
 	Boolean result = false;
-#if defined(__APPLE__) || defined(__bsd__) || defined(__linux__)
+#if DEPLOYMENT_TARGET_MACOS || DEPLOYMENT_TARGET_FREEBSD || DEPLOYMENT_TARGET_LINUX
 	result = pthread_equal(a, b);
-#elif defined(__WIN32__)
+#elif DEPLOYMENT_TARGET_WINDOWS
 	result = (pthreadPointer(a) == pthreadPointer(b));
 #else
 	HALT;
@@ -2022,7 +2022,7 @@ try_receive:
         }
 #endif
 
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
         if (NULL != timersToCall) {
             int i;
             for (i = CFArrayGetCount(timersToCall)-1; i >= 0; i--)

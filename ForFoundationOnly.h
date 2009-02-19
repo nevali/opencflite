@@ -70,7 +70,7 @@ CF_EXTERN_C_END
 
 CF_EXTERN_C_BEGIN
 
-#if defined(__WIN32__)
+#if defined(DEPLOYMENT_TARGET_WINDOWS)
 void __CFStringCleanup(void);
 void __CFUniCharCleanup(void);
 void __CFBaseCleanup(void);
@@ -101,7 +101,7 @@ CF_EXPORT CFErrorRef _CFBundleCreateError(CFAllocatorRef allocator, CFBundleRef 
 CF_EXTERN_C_END
 
 
-#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__)) || (DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__))  || (DEPLOYMENT_TARGET_LINUX || defined(__linux__))
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 // ---- CFPreferences material ----------------------------------------
 
 #define DEBUG_PREFERENCES_MEMORY 0
@@ -487,12 +487,12 @@ CF_EXPORT Boolean _CFRunLoopFinished(CFRunLoopRef rl, CFStringRef mode);
 
 CF_EXPORT CFIndex _CFStreamInstanceSize(void);
 
-#if (DEPLOYMENT_TARGET_MACOSX || defined(__APPLE__))
+#if DEPLOYMENT_TARGET_MACOSX
     #if !defined(__CFReadTSR)
     #include <mach/mach_time.h>
     #define __CFReadTSR() mach_absolute_time()
     #endif
-#elif (DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__))
+#elif DEPLOYMENT_TARGET_WINDOWS
 CF_INLINE UInt64 __CFReadTSR(void) {
     LARGE_INTEGER freq;
     QueryPerformanceCounter(&freq);

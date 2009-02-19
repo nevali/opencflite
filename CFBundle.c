@@ -1455,7 +1455,7 @@ static CFURLRef _CFBundleCopyExecutableURLRaw(CFAllocatorRef alloc, CFURLRef url
             executableURL = NULL;
         }
     }
-#if defined(__WIN32__)
+#if defined(DEPLOYMENT_TARGET_WINDOWS)
     if (executableURL == NULL) {
         if (!CFStringHasSuffix(exeName, CFSTR(".dll"))) {
             CFStringRef newExeName = CFStringCreateWithFormat(alloc, NULL, CFSTR("%@%@"), exeName, CFSTR(".dll"));
@@ -1620,7 +1620,7 @@ static CFURLRef _CFBundleCopyExecutableURLInDirectoryWithAllocator(CFAllocatorRe
                 CFRelease(exeSubdirURL);
             }
 
-#if defined(__WIN32__)
+#if defined(DEPLOYMENT_TARGET_WINDOWS)
             // Windows only: If we still haven't found the exe, look in the Executables folder.
             // But only for the main bundle exe
             if (lookupMainExe && (executableURL == NULL)) {

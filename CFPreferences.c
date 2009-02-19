@@ -37,7 +37,7 @@
 
 #include <CoreFoundation/CFPreferences.h>
 #include <CoreFoundation/CFURLAccess.h>
-#ifndef __WIN32__
+#ifndef DEPLOYMENT_TARGET_WINDOWS
 #include <CoreFoundation/CFUserNotification.h>
 #endif
 #include <CoreFoundation/CFPropertyList.h>

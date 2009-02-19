@@ -223,7 +223,7 @@ __private_extern__ CFArrayRef CFLocaleWindowsGetInstalledLocales(void)
     WindowsLocales = CFArrayCreate(kCFAllocatorSystemDefault, (const void**)s_WindowsInstalledLocales, s_num_installed_localesI, &kCFTypeArrayCallBacks);
     return (WindowsLocales);
 }
-#endif //__WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
 
 static Boolean __CFLocaleEqual(CFTypeRef cf1, CFTypeRef cf2) {
     CFLocaleRef locale1 = (CFLocaleRef)cf1;
@@ -335,7 +335,7 @@ CFLocaleRef CFLocaleCopyCurrent(void) {
 
 #ifdef DEPLOYMENT_TARGET_WINDOWS
     identifier = __CFLocaleWindowsLCIDToISOLocaleName(LOCALE_USER_DEFAULT);
-#endif //__WIN32__ 
+#endif 
 
     struct __CFLocale *locale;
     uint32_t size = sizeof(struct __CFLocale) - sizeof(CFRuntimeBase);

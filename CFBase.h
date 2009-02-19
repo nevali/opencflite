@@ -80,9 +80,9 @@
 
 #include <AvailabilityMacros.h>
 
-    #if defined(__MACH__)
-        #include <libkern/OSTypes.h>
-    #endif
+#if defined(__MACH__)
+    #include <libkern/OSTypes.h>
+#endif
 
 #if !defined(__MACTYPES__)
 #if !defined(_OS_OSTYPES_H)
@@ -112,6 +112,15 @@
     typedef UInt32                  UTF32Char;
     typedef UInt16                  UTF16Char;
     typedef UInt8                   UTF8Char;
+#endif
+
+// Select correct deployment type
+#if defined(__APPLE__) && !defined(DEPLOYMENT_TARGET_MACOSX)
+#define DEPLOYMENT_TARGET_MACOSX 1
+#elif (defined (_WIN32) || defined(__WIN32__)) && defined(_MSC_VER) && !defined(DEPLOYMENT_TARGET_WINDOWS)
+#define DEPLOYMENT_TARGET_WINDOWS 1
+#elif (defined(linux) || defined(__linux) || defined (__linux__)) && !defined(DEPLOYMENT_TARGET_LINUX)
+#define DEPLOYMENT_TARGET_LINUX 1
 #endif
 
 #if !defined(CF_EXTERN_C_BEGIN)

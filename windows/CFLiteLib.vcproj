@@ -1457,6 +1457,14 @@
 				Name="compat"
 				>
 				<File
+					RelativePath="..\compat\dirent.c"
+					>
+				</File>
+				<File
+					RelativePath="..\compat\dirent.h"
+					>
+				</File>
+				<File
 					RelativePath="..\compat\flsl.c"
 					>
 					<FileConfiguration

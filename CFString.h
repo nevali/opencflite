@@ -398,12 +398,12 @@ locale == NULL indicates canonical locale (the return value from CFLocaleGetSyst
 kCFCompareNumerically, added in 10.2, does not work if kCFCompareLocalized is specified on systems before 10.3
 kCFCompareBackwards and kCFCompareAnchored are not applicable.
 */
-#if !defined (__WIN32__)
+#if !DEPLOYMENT_TARGET_WINDOWS
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 CF_EXPORT
 CFComparisonResult CFStringCompareWithOptionsAndLocale(CFStringRef theString1, CFStringRef theString2, CFRange rangeToCompare, CFOptionFlags compareOptions, CFLocaleRef locale) AVAILABLE_MAC_OS_X_VERSION_10_5_AND_LATER;
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 */
-#endif //__WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
 
 /* Comparison convenience. Uses the current user locale (the return value from CFLocaleCopyCurrent()) if kCFCompareLocalized.
 */
@@ -422,12 +422,12 @@ CFComparisonResult CFStringCompare(CFStringRef theString1, CFStringRef theString
  If stringToFind is the empty string (zero length), nothing is found.
  Ignores the kCFCompareNumerically option.
 */
-#if !defined (__WIN32__)
+#if !defined (DEPLOYMENT_TARGET_WINDOWS)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 CF_EXPORT
 Boolean CFStringFindWithOptionsAndLocale(CFStringRef theString, CFStringRef stringToFind, CFRange rangeToSearch, CFOptionFlags searchOptions, CFLocaleRef locale, CFRange *result) AVAILABLE_MAC_OS_X_VERSION_10_5_AND_LATER;
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 */
-#endif //__WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
 
 /* Find convenience. Uses the current user locale (the return value from CFLocaleCopyCurrent()) if kCFCompareLocalized.
 */

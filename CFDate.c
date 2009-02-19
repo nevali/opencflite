@@ -107,7 +107,7 @@ __private_extern__ CFAbsoluteTime __CFDateWindowsSystemTimeToAbsoluteTime(SYSTEM
 
    return((double)(also_also_the_time.QuadPart - also_also_epoch.QuadPart) / 10000000.0);
 }
-#endif // __WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
 
 CFAbsoluteTime CFAbsoluteTimeGetCurrent(void) {
     CFAbsoluteTime ret;

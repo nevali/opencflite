@@ -467,7 +467,7 @@ __private_extern__ void __CFAllocatorInitialize(void) {
     __kCFAllocatorSystemDefault._context.allocate = __CFAllocatorSystemAllocate;
     __kCFAllocatorSystemDefault._context.reallocate = __CFAllocatorSystemReallocate;
     __kCFAllocatorSystemDefault._context.deallocate = __CFAllocatorSystemDeallocate;
-#endif // __WIN32__
+#endif // DEPLOYMENT_TARGET_WINDOWS
    
     _CFRuntimeSetInstanceTypeID(&__kCFAllocatorMalloc, __kCFAllocatorTypeID);
     __kCFAllocatorMalloc._base._cfisa = __CFISAForTypeID(__kCFAllocatorTypeID);
