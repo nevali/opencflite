@@ -23,6 +23,8 @@ test: CFRunLoopTimerExample
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  2.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00 10.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.33  1.00
+	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  0.33 4.00
+	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  1.00 2.00 8.00
 
 gdb: CFRunLoopTimerExample
 	${LIBTOOL} --mode execute ${@} ./CFRunLoopTimerExample
