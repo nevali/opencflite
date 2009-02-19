@@ -89,9 +89,6 @@ First checked in.
 
 #define NI_NUMERICHOST 0x02
 #define NI_NUMERICSERV 0x08
-
-typedef int socklen_t;
-typedef long ssize_t;
 #else
 #include <assert.h>
 #include <unistd.h>

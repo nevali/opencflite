@@ -100,10 +100,6 @@ typedef uint16_t mode_t;
 #include "Protocol.h"
 #include "Common.h"
 
-#if !defined(_APPLE_)
-typedef long ssize_t;
-#endif
-
 /////////////////////////////////////////////////////////////////
 #pragma mark ***** Client State Management
 

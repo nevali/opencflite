@@ -91,7 +91,10 @@ struct sockaddr_un
 #define SUN_LEN(su) \
    (sizeof(*(su)) - sizeof((su)->sun_path) + strlen((su)->sun_path))
 
-#endif
+typedef int socklen_t
+typedef long ssize_t;
+#endif /* defined(_WIN32) */
+
 /////////////////////////////////////////////////////////////////
 
 extern int MoreUNIXErrno(int result);
