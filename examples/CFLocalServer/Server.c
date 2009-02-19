@@ -68,6 +68,24 @@ First checked in.
 #include <stdlib.h>
 #include <assert.h>
 #include <signal.h>
+
+#if defined(WIN32)
+#include <errno.h>
+#define ECANCELED 15
+
+#include <stdio.h>
+#define snprintf _snprintf
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <winsock2.h>
+
+#define PRId32 "d"
+#define PRIu32 "u"
+
+typedef uint16_t mode_t;
+
+#else
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/socket.h>
@@ -75,11 +93,16 @@ First checked in.
 #include <sys/stat.h>
 #include <sys/param.h>
 #include <sys/signal.h>
+#endif
 
 // Project interfaces
 
 #include "Protocol.h"
 #include "Common.h"
+
+#if !defined(_APPLE_)
+typedef long ssize_t;
+#endif
 
 /////////////////////////////////////////////////////////////////
 #pragma mark ***** Client State Management
@@ -1085,6 +1108,7 @@ static void ListeningSocketAcceptCallback(
 	// on failure.
 }
 
+#if !defined(_WIN32)
 static void SignalRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
     // This routine is called in response to a signal (SIGINT 
 	// or SIGUSR1).  It is not, however, a signal handler.  Rather, 
@@ -1120,6 +1144,7 @@ static void SignalRunLoopCallback(const siginfo_t *sigInfo, void *refCon)
             break;
     }
 }
+#endif
 
 static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
 	// This routine is called to safely bind the UNIX domain socket 
@@ -1159,8 +1184,10 @@ static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
     char *              lastSlash;
     struct stat         sb;
     struct sockaddr_un  bindReq;
+#if !defined(_WIN32)
     static const mode_t kRequiredParentMode = S_IRWXU | (S_IRGRP | S_IXGRP) | (S_IROTH | S_IXOTH); // rwxr-xr-x
-    
+#endif
+
     parentPath      = NULL;
     grandParentPath = NULL;
     
@@ -1221,6 +1248,7 @@ static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
         err = stat(grandParentPath, &sb);
         err = MoreUNIXErrno(err);
     }
+#if !defined(_WIN32)
     if ( (err == 0) && ( ! (sb.st_mode & S_ISVTX) || (sb.st_uid != 0) ) ) {
         fprintf(stderr, "SafeBindUnixDomainSocket: Grandparent directory (%s) is not a sticky root-owned directory.\n", grandParentPath);
         err = EINVAL;
@@ -1237,6 +1265,7 @@ static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
             err = 0;
         }
     }
+#endif
     
     // Check that the parent directory is a directory, is owned by us, and 
     // has the right mode.  This ensures that no one except us can be monkeying 
@@ -1247,6 +1276,7 @@ static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
         err = stat(parentPath, &sb);
         err = MoreUNIXErrno(err);
     }
+#if !defined(_WIN32)
     if ( (err == 0) && (sb.st_uid != geteuid()) ) {
         fprintf(stderr, "SafeBindUnixDomainSocket: Parent (%s) is not owned by us.\n", parentPath);
         err = EINVAL;
@@ -1259,6 +1289,7 @@ static int SafeBindUnixDomainSocket(int sockFD, const char *socketPath)
         fprintf(stderr, "SafeBindUnixDomainSocket: Parent (%s) has wrong permissions.\n", parentPath);
         err = EINVAL;
     }
+#endif
     
     // If all is well, let's bind our socket.  This involves deleting any existing 
     // socket and recreating our own.  We know we can do this without worrying 
@@ -1316,9 +1347,16 @@ int main (int argc, const char * argv[])
     int         err;
     int         junk;
     int         listenerFD;
+    int         sockType;
     CFSocketRef listenerCF;
     Boolean     didBind;
-    
+
+#if !defined(_WIN32)
+    sockType = AF_UNIX;
+#else
+    sockType = AF_INET;
+#endif
+
     didBind    = false;
     listenerFD = -1;
     listenerCF = NULL;
@@ -1331,6 +1369,7 @@ int main (int argc, const char * argv[])
         err = ECANCELED;
     }
 	
+#if !defined(_WIN32)
 	// Ignore SIGPIPE because it's a deeply annoying concept.  If you don't ignore 
 	// SIGPIPE when writing to a UNIX domain socket whose far side has been closed 
 	// will trigger a SIGPIPE, whose default action is to terminate the program.
@@ -1360,6 +1399,17 @@ int main (int argc, const char * argv[])
             NULL
         );
     }
+#else
+    {
+       WORD versionRequested = MAKEWORD(2, 0);
+       WSADATA wsaData;
+       err = WSAStartup(versionRequested, &wsaData);
+       if (err != 0 || LOBYTE(wsaData.wVersion) != LOBYTE(versionRequested) || HIBYTE(wsaData.wVersion) != HIBYTE(versionRequested)) {
+           WSACleanup();
+           CFLog(0, CFSTR("*** Could not initialize WinSock subsystem!!!"));
+       }
+    }
+#endif
 
 	// Create the initial client set.
 	
@@ -1370,7 +1420,7 @@ int main (int argc, const char * argv[])
 	// Create our listening socket, bind it, and then wrap it in a CFSocket.
 	
     if (err == 0) {
-        listenerFD = socket(AF_UNIX, SOCK_STREAM, 0);
+        listenerFD = socket(sockType, SOCK_STREAM, 0);
         err = MoreUNIXErrno(listenerFD);
     }
     if (err == 0) {
@@ -1434,7 +1484,11 @@ int main (int argc, const char * argv[])
     // don't close it if we did the invalidate above.
 
     if ( (listenerFD != -1) && (listenerCF == NULL) ) {
+#if !defined(_WIN32)
         junk = close(listenerFD);
+#else
+        junk = closesocket(listenerFD);
+#endif
         assert(junk == 0);
     }
     if (didBind) {

@@ -52,9 +52,6 @@
 #include <sys/types.h>
 #endif
 
-#if DEPLOYMENT_TARGET_MACOSX
-static CFArrayRef HFSPathToURLComponents(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
-#endif
 static CFArrayRef WindowsPathToURLComponents(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
 static CFStringRef WindowsPathToURLPath(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
 static CFStringRef POSIXPathToURLPath(CFStringRef path, CFAllocatorRef alloc, Boolean isDirectory);
@@ -62,6 +59,7 @@ CFStringRef CFURLCreateStringWithFileSystemPath(CFAllocatorRef allocator, CFURLR
 extern CFURLRef _CFURLCreateCurrentDirectoryURL(CFAllocatorRef allocator);
 
 #if DEPLOYMENT_TARGET_MACOSX
+static CFArrayRef HFSPathToURLComponents(CFStringRef path, CFAllocatorRef alloc, Boolean isDir);
 
 DEFINE_WEAK_CARBONCORE_FUNC(void, DisposeHandle, (Handle A), (A))
 DEFINE_WEAK_CARBONCORE_FUNC(OSErr, FSNewAlias, (const FSRef *A, const FSRef *B, AliasHandle *C), (A, B, C), -3296)
@@ -3534,7 +3532,7 @@ CFURLRef _CFURLCreateCurrentDirectoryURL(CFAllocatorRef allocator) {
     CFURLRef url = NULL;
     uint8_t buf[CFMaxPathSize + 1];
     if (_CFGetCurrentDirectory((char *)buf, CFMaxPathLength)) {
-        url = CFURLCreateFromFileSystemRepresentation(allocator, buf, strlen((char *)buf), true);
+        url = CFURLCreateFromFileSystemRepresentation(allocator, buf, (CFIndex)strlen((char *)buf), true);
     }
     return url;
 }
@@ -3817,7 +3815,7 @@ CF_EXPORT CFURLRef CFURLCreateFromFileSystemRepresentationRelativeToBase(CFAlloc
     CFURLRef newURL;
     if (!path) return NULL;
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
-   newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLPOSIXPathStyle, isDirectory, baseURL);
+    newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLPOSIXPathStyle, isDirectory, baseURL);
 #elif DEPLOYMENT_TARGET_WINDOWS
     newURL = CFURLCreateWithFileSystemPathRelativeToBase(allocator, path, kCFURLWindowsPathStyle, isDirectory, baseURL);
 #endif

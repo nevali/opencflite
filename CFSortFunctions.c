@@ -787,7 +787,7 @@ bsd_mergesort_wb(void *base, size_t nmemb, size_t size, Comparison_Func cmp, voi
         if (!iflag)
             return -1;      // only set up for "integer" swaps, e.g. long integer
             
-	if ((list2 = (u_char*)CFAllocatorAllocate(NULL, (nmemb * size + PSIZE), __kCFAllocatorGCScannedMemory)) == NULL)
+	if ((list2 = (u_char*)CFAllocatorAllocate(NULL, (CFIndex)(nmemb * size + PSIZE), __kCFAllocatorGCScannedMemory)) == NULL)
 		return (-1);
 
 	list1 = (u_char*)base;

@@ -128,7 +128,6 @@ static void DisplayURLComponent(CFURLRef url, UInt8 *buffer, CFURLComponentType 
 int main (int argc, char * const argv[])
 {
 	int err;
-	int ch;
 	char dot[] = ".";
 #if defined(__APPLE__)
 	FSRef ref;

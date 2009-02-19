@@ -373,7 +373,7 @@ CF_INLINE uintptr_t __CFSetScrambleHash(uintptr_t k) {
 
 static CFIndex __CFSetFindBuckets1a(CFHashRef hc, any_t key) {
     CFHashCode keyHash = (CFHashCode)key;
-    keyHash = __CFSetScrambleHash(keyHash);
+    keyHash = (CFHashCode)__CFSetScrambleHash(keyHash);
     any_t *keys = hc->_keys;
     any_t marker = hc->_marker;
     CFIndex probe = keyHash & (hc->_bucketsNum - 1);
@@ -404,7 +404,7 @@ static CFIndex __CFSetFindBuckets1a(CFHashRef hc, any_t key) {
 static CFIndex __CFSetFindBuckets1b(CFHashRef hc, any_t key) {
     const CFSetKeyCallBacks *cb = __CFSetGetKeyCallBacks(hc);
     CFHashCode keyHash = cb->hash ? (CFHashCode)INVOKE_CALLBACK2(((CFHashCode (*)(any_t, any_pointer_t))cb->hash), key, hc->_context) : (CFHashCode)key;
-    keyHash = __CFSetScrambleHash(keyHash);
+    keyHash = (CFHashCode)__CFSetScrambleHash(keyHash);
     any_t *keys = hc->_keys;
     any_t marker = hc->_marker;
     CFIndex probe = keyHash & (hc->_bucketsNum - 1);
@@ -442,7 +442,7 @@ CF_INLINE CFIndex __CFSetFindBuckets1(CFHashRef hc, any_t key) {
 static void __CFSetFindBuckets2(CFHashRef hc, any_t key, CFIndex *match, CFIndex *nomatch) {
     const CFSetKeyCallBacks *cb = __CFSetGetKeyCallBacks(hc);
     CFHashCode keyHash = cb->hash ? (CFHashCode)INVOKE_CALLBACK2(((CFHashCode (*)(any_t, any_pointer_t))cb->hash), key, hc->_context) : (CFHashCode)key;
-    keyHash = __CFSetScrambleHash(keyHash);
+    keyHash = (CFHashCode)__CFSetScrambleHash(keyHash);
     any_t *keys = hc->_keys;
     any_t marker = hc->_marker;
     CFIndex probe = keyHash & (hc->_bucketsNum - 1);

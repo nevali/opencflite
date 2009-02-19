@@ -647,7 +647,7 @@ extern void __CFBagInitialize(void);
 extern void __CFBooleanInitialize(void);
 extern void __CFCharacterSetInitialize(void);
 extern void __CFLocaleInitialize(void);
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 extern CFStringRef __CFLocaleWindowsLCIDToISOLocaleNameUsingHyphen(LCID id);
 #endif
 extern void __CFDataInitialize(void);

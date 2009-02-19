@@ -51,7 +51,7 @@ extern CFAbsoluteTime __CFDateWindowsSystemTimeToAbsoluteTime(SYSTEMTIME *time);
 #endif // __WIN32__
 static void __CFDateFormatterCustomize(CFDateFormatterRef formatter);
 
-extern const CFStringRef kCFDateFormatterCalendarIdentifier;
+CF_EXPORT const CFStringRef kCFDateFormatterCalendarIdentifier;
 
 #define BUFFER_SIZE 768
 
@@ -165,7 +165,16 @@ CFDateFormatterRef CFDateFormatterCreate(CFAllocatorRef allocator, CFLocaleRef l
     UChar ubuffer[BUFFER_SIZE];
     memset(ubuffer, 0x00, sizeof(UChar) * BUFFER_SIZE);
     memory->_tz = CFTimeZoneCopyDefault();
+#ifdef __WIN32__
+    // ICU doesn't know about Windows Time Zone names.  It'll understand the abbreviation for the non-daylight saving time, though
+    TIME_ZONE_INFORMATION *tzi = (TIME_ZONE_INFORMATION *)CFDataGetBytePtr(CFTimeZoneGetData(memory->_tz));
+    CFAbsoluteTime at = __CFDateWindowsSystemTimeToAbsoluteTime(&tzi->DaylightDate);
+    // subtract a day to get us off the time change boundary
+    at -= (60 * 60 * 24);
+    CFStringRef tznam = CFTimeZoneCopyAbbreviation(memory->_tz, at);
+#else
     CFStringRef tznam = CFTimeZoneGetName(memory->_tz);
+#endif
     CFIndex cnt = CFStringGetLength(tznam);
     if (BUFFER_SIZE < cnt) cnt = BUFFER_SIZE;
     CFStringGetCharacters(tznam, CFRangeMake(0, cnt), (UniChar *)ubuffer);

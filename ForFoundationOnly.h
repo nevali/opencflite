@@ -70,6 +70,13 @@ CF_EXTERN_C_END
 
 CF_EXTERN_C_BEGIN
 
+#if defined(__WIN32__)
+void __CFStringCleanup(void);
+void __CFUniCharCleanup(void);
+void __CFBaseCleanup(void);
+void __CFPreferencesDomainInitialize(void);
+#endif
+
 CF_EXPORT const CFStringRef _kCFBundleExecutablePathKey;
 CF_EXPORT const CFStringRef _kCFBundleInfoPlistURLKey;
 CF_EXPORT const CFStringRef _kCFBundleRawInfoPlistURLKey;

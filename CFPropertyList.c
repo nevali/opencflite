@@ -257,7 +257,7 @@ static CFTypeRef parseOldStylePropertyListOrStringsFile(_CFXMLPlistParseInfo *pI
 // Null-terminated, ASCII or UTF8 string
 //
 static void _plistAppendUTF8CString(CFMutableDataRef mData, const char *cString) {
-    CFDataAppendBytes (mData, (const UInt8 *)cString, strlen(cString));
+    CFDataAppendBytes (mData, (const UInt8 *)cString, (CFIndex)strlen(cString));
 }
 
 // UniChars

@@ -231,7 +231,7 @@ static void __substituteFormatStringFromPrefsNF(CFNumberFormatterRef formatter) 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 			    STACK_BUFFER_DECL(UChar, new_buffer, new_len);
 #else
-             UChar new_buffer[BUFFER_SIZE];
+                UChar new_buffer[BUFFER_SIZE];
 #endif
 			    const UChar *new_ustr = (const UChar *)CFStringGetCharactersPtr(formatString);
 			    if (NULL == new_ustr) {
@@ -260,7 +260,7 @@ static void __CFNumberFormatterApplySymbolPrefs(const void *key, const void *val
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 	STACK_BUFFER_DECL(UChar, item_buffer, item_cnt);
 #else
-   UChar item_buffer[BUFFER_SIZE];
+    UChar item_buffer[BUFFER_SIZE];
 #endif
 	UChar *item_ustr = (UChar *)CFStringGetCharactersPtr(item);
 	if (NULL == item_ustr) {
@@ -322,7 +322,7 @@ void CFNumberFormatterSetFormat(CFNumberFormatterRef formatter, CFStringRef form
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 	STACK_BUFFER_DECL(UChar, ubuffer, cnt);
 #else
-   UChar ubuffer[BUFFER_SIZE];
+    UChar ubuffer[BUFFER_SIZE];
 #endif
 	const UChar *ustr = (const UChar *)CFStringGetCharactersPtr(formatString);
 	if (NULL == ustr) {
@@ -443,7 +443,7 @@ Boolean CFNumberFormatterGetValueFromString(CFNumberFormatterRef formatter, CFSt
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(UChar, ubuffer, (NULL == ustr) ? range.length : 1);
 #else
-   UChar ubuffer[1024];
+    UChar ubuffer[1024];
 #endif
     if (NULL == ustr) {
         CFStringGetCharacters(string, range, (UniChar *)ubuffer);

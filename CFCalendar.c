@@ -972,7 +972,7 @@ Boolean CFCalendarComposeAbsoluteTime(CFCalendarRef calendar, /* out */ CFAbsolu
     va_start(args, componentDesc);
     CF_OBJC_FUNCDISPATCH3(CFCalendarGetTypeID(), Boolean, calendar, "_composeAbsoluteTime:::", atp, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
-    int idx, cnt = strlen((char *)componentDesc);
+    int idx, cnt = (int)strlen((char *)componentDesc);
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int, vector, cnt);
 #else
@@ -991,8 +991,7 @@ Boolean CFCalendarDecomposeAbsoluteTime(CFCalendarRef calendar, CFAbsoluteTime a
     va_start(args, componentDesc);
     CF_OBJC_FUNCDISPATCH3(CFCalendarGetTypeID(), Boolean, calendar, "_decomposeAbsoluteTime:::", at, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
-    int idx, cnt = strlen((char *)componentDesc);
-
+    int idx, cnt = (int)strlen((char *)componentDesc);
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int *, vector, cnt);
 #else
@@ -1011,7 +1010,7 @@ Boolean CFCalendarAddComponents(CFCalendarRef calendar, /* inout */ CFAbsoluteTi
     va_start(args, componentDesc);
     CF_OBJC_FUNCDISPATCH4(CFCalendarGetTypeID(), Boolean, calendar, "_addComponents::::", atp, options, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
-    int idx, cnt = strlen((char *)componentDesc);
+    int idx, cnt = (int)strlen((char *)componentDesc);
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int, vector, cnt);
 #else
@@ -1030,7 +1029,7 @@ Boolean CFCalendarGetComponentDifference(CFCalendarRef calendar, CFAbsoluteTime 
     va_start(args, componentDesc);
     CF_OBJC_FUNCDISPATCH5(CFCalendarGetTypeID(), Boolean, calendar, "_diffComponents:::::", startingAT, resultAT, options, componentDesc, args);
     __CFGenericValidateType(calendar, CFCalendarGetTypeID());
-    int idx, cnt = strlen((char *)componentDesc);
+    int idx, cnt = (int)strlen((char *)componentDesc);
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     STACK_BUFFER_DECL(int *, vector, cnt);
 #else

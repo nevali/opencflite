@@ -862,7 +862,7 @@ CFBundleRef _CFBundleGetExistingBundleWithBundleURL(CFURLRef bundleURL) {
     
     if (!CFURLGetFileSystemRepresentation(bundleURL, true, (uint8_t *)buff, CFMaxPathSize)) return NULL;
     
-    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)buff, strlen(buff), true);
+    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)buff, (CFIndex)strlen(buff), true);
     if (!newURL) newURL = (CFURLRef)CFRetain(bundleURL);
     bundle = _CFBundleFindByURL(newURL, false);
     CFRelease(newURL);
@@ -880,7 +880,7 @@ static CFBundleRef _CFBundleCreate(CFAllocatorRef allocator, CFURLRef bundleURL,
     
     if (!CFURLGetFileSystemRepresentation(bundleURL, true, (uint8_t *)buff, CFMaxPathSize)) return NULL;
 
-    newURL = CFURLCreateFromFileSystemRepresentation(allocator, (uint8_t *)buff, strlen(buff), true);
+    newURL = CFURLCreateFromFileSystemRepresentation(allocator, (uint8_t *)buff, (CFIndex)strlen(buff), true);
     if (!newURL) newURL = (CFURLRef)CFRetain(bundleURL);
     bundle = _CFBundleFindByURL(newURL, alreadyLocked);
     if (bundle) {
@@ -1562,7 +1562,9 @@ static CFURLRef _CFBundleCopyExecutableURLInDirectoryWithAllocator(CFAllocatorRe
         if (executablePath) {
 #if DEPLOYMENT_TARGET_MACOSX
             executableURL = CFURLCreateWithFileSystemPath(alloc, executablePath, kCFURLPOSIXPathStyle, false);
-#endif 
+#else
+            executableURL = CFURLCreateWithFileSystemPath(alloc, executablePath, kCFURLWindowsPathStyle, false);
+#endif
             if (executableURL) foundIt = true;
             if (!foundIt) {
                 executablePath = NULL;
@@ -3146,7 +3148,7 @@ __private_extern__ Boolean _CFBundleCouldBeBundle(CFURLRef url) {
 
 __private_extern__ CFURLRef _CFBundleCopyFrameworkURLForExecutablePath(CFAllocatorRef alloc, CFStringRef executablePath) {
     // MF:!!! Implement me.  We need to be able to find the bundle from the exe, dealing with old vs. new as well as the Executables dir business on Windows.
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
     UniChar executablesToFrameworksPathBuff[] = {'.', '.', '\\', 'F', 'r', 'a', 'm', 'e', 'w', 'o', 'r', 'k', 's'};  // length 16
     UniChar executablesToPrivateFrameworksPathBuff[] = {'.', '.', '\\', 'P', 'r', 'i', 'v', 'a', 't', 'e', 'F', 'r', 'a', 'm', 'e', 'w', 'o', 'r', 'k', 's'};  // length 23
     UniChar frameworksExtension[] = {'f', 'r', 'a', 'm', 'e', 'w', 'o', 'r', 'k'};  // length 9
@@ -3172,7 +3174,7 @@ __private_extern__ CFURLRef _CFBundleCopyFrameworkURLForExecutablePath(CFAllocat
     length = _CFLengthAfterDeletingLastPathComponent(pathBuff, length);
     savedLength = length;
 
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
     // * (Windows-only) First check the "Executables" directory parallel to the "Frameworks" directory case.
     if (_CFAppendPathComponent(pathBuff, &length, CFMaxPathSize, executablesToFrameworksPathBuff, 16) && _CFAppendPathComponent(pathBuff, &length, CFMaxPathSize, nameBuff, nameLength) && _CFAppendPathExtension(pathBuff, &length, CFMaxPathSize, frameworksExtension, 9)) {
         CFStringSetExternalCharactersNoCopy(cheapStr, pathBuff, length, CFMaxPathSize);

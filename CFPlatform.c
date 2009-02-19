@@ -214,7 +214,7 @@ const char *_CFProcessPath(void) {
 #endif
         thePath = getenv("CFProcessPath");
         if (thePath) {
-	         int len = strlen(thePath);
+	         int len = (int)strlen(thePath);
             __CFProcessPath = (const char *)CFAllocatorAllocate(kCFAllocatorSystemDefault, len+1, 0);
             if (__CFOASafe) __CFSetLastAllocationEventName((void *)__CFProcessPath, "CFUtilities (process-path)");
             memmove((char *)__CFProcessPath, thePath, len + 1);
@@ -306,7 +306,7 @@ const char *_CFProcessPath(void) {
 #endif
 
         if (thePath) {
-            int len = strlen(thePath);
+            int len = (int)strlen(thePath);
             __CFProcessPath = (const char *)CFAllocatorAllocate(kCFAllocatorSystemDefault, len + 1, 0);
             if (__CFOASafe) __CFSetLastAllocationEventName((void *)__CFProcessPath, "CFUtilities (process-path)");
             memmove((char *)__CFProcessPath, thePath, len + 1);

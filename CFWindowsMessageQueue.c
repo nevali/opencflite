@@ -25,7 +25,7 @@
 	Responsibility: Christopher Kane
 */
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 
 #include "CFWindowsMessageQueue.h"
 #include "CFInternal.h"
@@ -195,7 +195,7 @@ static void __CFWindowsMessageQueueSchedule(void *info, CFRunLoopRef rl, CFStrin
 static void __CFWindowsMessageQueueCancel(void *info, CFRunLoopRef rl, CFStringRef mode) {
     CFWindowsMessageQueueRef wmq = (CFWindowsMessageQueueRef)info;
     __CFWindowsMessageQueueLock(wmq);
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 //#warning CF: should fix up run loop modes mask here, if not done
 //#warning CF: previously by the invalidation, where it should also
 //#warning CF: be done

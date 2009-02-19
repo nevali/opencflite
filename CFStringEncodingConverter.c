@@ -331,10 +331,10 @@ static CFIndex __CFToBytesStandardEightBitWrapper(const void *converter, uint32_
 
 static CFIndex __CFToUnicodeStandardEightBitWrapper(const void *converter, uint32_t flags, const uint8_t *bytes, CFIndex numBytes, UniChar *characters, CFIndex maxCharLen, CFIndex *usedCharLen) {
     CFIndex processedByteLen = 0;
-#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
-    UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+    STACK_BUFFER_DECL(UniChar, charBuffer, ((const _CFEncodingConverter*)converter)->maxLen);
 #else
-    UniChar charBuffer[((const _CFEncodingConverter*)converter)->maxLen];
+    UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
 #endif
     CFIndex usedLen;
 
@@ -361,10 +361,10 @@ static CFIndex __CFToUnicodeStandardEightBitWrapper(const void *converter, uint3
 
 static CFIndex __CFToCanonicalUnicodeStandardEightBitWrapper(const void *converter, uint32_t flags, const uint8_t *bytes, CFIndex numBytes, UniChar *characters, CFIndex maxCharLen, CFIndex *usedCharLen) {
     CFIndex processedByteLen = 0;
-#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
-    UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+    STACK_BUFFER_DECL(UniChar, charBuffer, ((const _CFEncodingConverter*)converter)->maxLen);
 #else
-    UniChar charBuffer[((const _CFEncodingConverter*)converter)->maxLen];
+    UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
 #endif
     UTF32Char decompBuffer[MAX_DECOMPOSED_LENGTH];
     CFIndex usedLen;
@@ -410,10 +410,10 @@ static CFIndex __CFToCanonicalUnicodeStandardEightBitWrapper(const void *convert
 
 static CFIndex __CFToBytesCheapMultiByteWrapper(const void *converter, uint32_t flags, const UniChar *characters, CFIndex numChars, uint8_t *bytes, CFIndex maxByteLen, CFIndex *usedByteLen) {
     CFIndex processedCharLen = 0;
-#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
-    uint8_t byteBuffer[20]; // Dynamic stack allocation is GNU specific
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+    STACK_BUFFER_DECL(uint8_t, byteBuffer, ((const _CFEncodingConverter*)converter)->maxLen);
 #else
-    uint8_t byteBuffer[((const _CFEncodingConverter*)converter)->maxLen];
+    UniChar charBuffer[20]; // Dynamic stack allocation is GNU specific
 #endif
     CFIndex usedLen;
 

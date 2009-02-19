@@ -403,7 +403,7 @@ static SInt32 __CFSocketCreateWakeupSocketPair(void) {
     struct sockaddr_in address[2];
     int namelen = sizeof(struct sockaddr_in);
     for (i = 0; i < 2; i++) {
-        __CFWakeupSocketPair[i] = socket(PF_INET, SOCK_DGRAM, 0);
+        __CFWakeupSocketPair[i] = (CFSocketNativeHandle)socket(PF_INET, SOCK_DGRAM, 0);
         memset(&(address[i]), 0, sizeof(struct sockaddr_in));
         address[i].sin_family = AF_INET;
         address[i].sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -687,7 +687,7 @@ static void __CFSocketHandleRead(CFSocketRef s, Boolean causedByTimeout)
     } else if (__CFSocketReadCallBackType(s) == kCFSocketAcceptCallBack) {
         uint8_t name[MAX_SOCKADDR_LEN];
         int namelen = sizeof(name);
-        sock = accept(s->_socket, (struct sockaddr *)name, (socklen_t *)&namelen);
+        sock = (CFSocketNativeHandle)accept(s->_socket, (struct sockaddr *)name, (socklen_t *)&namelen);
         if (INVALID_SOCKET == sock) {
             //??? should return error
             return;
@@ -2161,7 +2161,7 @@ CFSocketRef CFSocketCreate(CFAllocatorRef allocator, SInt32 protocolFamily, SInt
 #else
     __CFSocketInitializeWinSock();
 #endif
-    sock = socket(protocolFamily, socketType, protocol);
+    sock = (CFSocketNativeHandle)socket(protocolFamily, socketType, protocol);
     if (INVALID_SOCKET != sock) {
         s = _CFSocketCreateWithNative(allocator, sock, callBackTypes, callout, context, FALSE);
     }
@@ -2329,7 +2329,7 @@ CFSocketError CFSocketRegisterSocketSignature(const CFSocketSignature *nameServe
             bytes[0] = validatedSignature.protocolFamily;
             bytes[1] = validatedSignature.socketType;
             bytes[2] = validatedSignature.protocol;
-            bytes[3] = length;
+            bytes[3] = (uint8_t)length;
             CFDataAppendBytes(data, bytes, sizeof(bytes));
             CFDataAppendBytes(data, CFDataGetBytePtr(validatedSignature.address), length);
             retval = CFSocketRegisterValue(nameServerSignature, timeout, name, data);

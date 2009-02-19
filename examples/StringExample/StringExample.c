@@ -75,7 +75,11 @@ void simpleStringExample(void) {
     show(CFSTR("------------------Simple Strings---------------"));
 
     // Create a simple immutable string from a Pascal string and convert it to Unicode
+#if defined(__APPLE__)
     str = CFStringCreateWithPascalString(NULL, "\pFoo Bar", kCFStringEncodingASCII);
+#else
+    str = CFStringCreateWithCString(NULL, "Hello World", kCFStringEncodingASCII);
+#endif
 
     // Create the Unicode representation of the string
     // "0", lossByte, indicates that if there's a conversion error, fail (and return NULL)
@@ -103,12 +107,13 @@ void simpleStringExample(void) {
     str = CFStringCreateWithCStringNoCopy(NULL, bytes, kCFStringEncodingASCII, NULL);
     CFRelease(str);
 
+#if defined(__APPLE__)
     // Now create a string with a Pascal string which is not copied, and not freed when the string is
     // This is an advanced usage; obviously you need to guarantee that the string bytes do not go away
     // before the CFString does. 
-
     str = CFStringCreateWithPascalStringNoCopy(NULL, "\pFoo Bar", kCFStringEncodingASCII, kCFAllocatorNull);
     CFRelease(str);
+#endif
 }
 
 
@@ -243,7 +248,11 @@ void stringWithExternalContentsExample(void) {
     mutStr = CFStringCreateMutableWithExternalCharactersNoCopy(NULL, myBuffer, 0, BufferSize, kCFAllocatorNull);
     CFStringAppend(mutStr, CFSTR("Appended string... "));
     CFStringAppend(mutStr, CFSTR("More stuff... "));
+#if defined(__APPLE__)
     CFStringAppendPascalString(mutStr, "\pA pascal string. ", kCFStringEncodingASCII);
+#else
+    CFStringAppendCString(mutStr, "A C string. ", kCFStringEncodingASCII);
+#endif
     CFStringAppendFormat(mutStr, NULL, CFSTR("%d %4.2f %@..."), 42, -3.14, CFSTR("Hello"));
     
     show(CFSTR("String: %@"), mutStr);
@@ -367,13 +376,13 @@ void stringManipulation(void) {
 
 void stringHandling(void) {
    
-   show(CFSTR("------------------Number Magic---------------"));
-
    CFStringRef number;
    CFNumberRef val, compare;
    CFNumberFormatterRef fmt;
    CFLocaleRef curLocale;
    int theValue = 89;
+
+   show(CFSTR("------------------Number Magic---------------"));
 
    number = CFStringCreateWithCString(NULL, "eighty", kCFStringEncodingASCII);
    compare = CFNumberCreate(0, kCFNumberIntType, &theValue);

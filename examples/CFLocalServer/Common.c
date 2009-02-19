@@ -115,7 +115,11 @@ extern int MoreUNIXErrno(int result)
     
     err = 0;
     if (result < 0) {
+#if !defined(_WIN32)
         err = errno;
+#else
+        err = WSAGetLastError ();
+#endif
         assert(err != 0);
     }
     return err;

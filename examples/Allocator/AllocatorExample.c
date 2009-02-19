@@ -272,8 +272,10 @@ void countingAllocatorExample(void) {
     show(CFSTR("At start, number of allocations: %d"), NumOutstandingAllocations(countingAllocator));
 
     str1 = CFStringCreateWithCString(countingAllocator, "Hello World", kCFStringEncodingASCII);
-#if !defined(__WIN32__)
+#if defined(__APPLE__)
     str2 = CFStringCreateWithPascalString(countingAllocator, "\pHello World", kCFStringEncodingASCII);
+#else
+    str2 = CFStringCreateWithCString(countingAllocator, "Hello World", kCFStringEncodingASCII);
 #endif
     mStr = CFStringCreateMutableCopy(countingAllocator, 0, str1);
     str3 = CFStringCreateCopy(countingAllocator, mStr);
@@ -287,9 +289,7 @@ void countingAllocatorExample(void) {
     show(CFSTR("After mutations, number of allocations: %d"), NumOutstandingAllocations(countingAllocator));
 
     CFRelease(str1);
-#if !defined(__WIN32__)
     CFRelease(str2);
-#endif
     CFRelease(mStr);
     CFRelease(str3);
 
@@ -317,6 +317,8 @@ void reducedMallocAllocatorExample(void) {
     str1 = CFStringCreateWithCString(reducedMallocAllocator, "Hello World", kCFStringEncodingASCII);
 #if defined(__APPLE__)
     str2 = CFStringCreateWithPascalString(reducedMallocAllocator, "\pHello World", kCFStringEncodingASCII);
+#else
+    str2 = CFStringCreateWithCString(reducedMallocAllocator, "Hello World", kCFStringEncodingASCII);
 #endif
     mStr = CFStringCreateMutableCopy(reducedMallocAllocator, 0, str1);
     str3 = CFStringCreateCopy(reducedMallocAllocator, mStr);
@@ -330,9 +332,7 @@ void reducedMallocAllocatorExample(void) {
     show(CFSTR("After mutations, number of addt'l allocations: %d"), NumAdditionalAllocations(reducedMallocAllocator));
 
     CFRelease(str1);
-#if defined(__APPLE__)
     CFRelease(str2);
-#endif
     CFRelease(mStr);
     CFRelease(str3);
 

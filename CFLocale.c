@@ -206,13 +206,13 @@ __private_extern__ CFStringRef __CFLocaleWindowsLCIDToISOLocaleNameUsingHyphen(L
     return(CFStringCreateWithCString(kCFAllocatorSystemDefault, iso_localename, kCFStringEncodingASCII));
 }
 
-CFStringRef WindowsInstalledLocales[255];
-int num_installed_locales = 0;
+CFStringRef		s_WindowsInstalledLocales[255];
+int				s_num_installed_localesI = 0;
 
 static BOOL CALLBACK WindowsLocaleEnumProc(char *localeName)
 {
-    WindowsInstalledLocales[num_installed_locales] = CFStringCreateWithCString(kCFAllocatorDefault, localeName, kCFStringEncodingASCII);
-    num_installed_locales++;
+	s_WindowsInstalledLocales[s_num_installed_localesI] = CFStringCreateWithCString(kCFAllocatorDefault, localeName, kCFStringEncodingASCII);
+	s_num_installed_localesI++;
     return (TRUE);
 }
 
@@ -220,7 +220,7 @@ __private_extern__ CFArrayRef CFLocaleWindowsGetInstalledLocales(void)
 {
     CFArrayRef WindowsLocales;
     EnumSystemLocales((LOCALE_ENUMPROC)WindowsLocaleEnumProc, LCID_INSTALLED);
-    WindowsLocales = CFArrayCreate(kCFAllocatorSystemDefault, (const void**)WindowsInstalledLocales, num_installed_locales, &kCFTypeArrayCallBacks);
+    WindowsLocales = CFArrayCreate(kCFAllocatorSystemDefault, (const void**)s_WindowsInstalledLocales, s_num_installed_localesI, &kCFTypeArrayCallBacks);
     return (WindowsLocales);
 }
 #endif //__WIN32__
@@ -618,13 +618,13 @@ CFArrayRef CFLocaleCopyCommonISOCurrencyCodes(void) {
 
 CFArrayRef CFLocaleCopyPreferredLanguages(void) {
     CFMutableArrayRef newArray = CFArrayCreateMutable(kCFAllocatorSystemDefault, 0, &kCFTypeArrayCallBacks);
-    CFArrayRef languagesArray = NULL;
    
 #if DEPLOYMENT_TARGET_WINDOWS
     LANGID langId = GetUserDefaultUILanguage();
     CFStringRef lang_name = __CFLocaleWindowsLCIDToISOLocaleName(langId);
     CFArrayAppendValue(newArray, lang_name);
 #else
+    CFArrayRef languagesArray = NULL;
     languagesArray = (CFArrayRef)CFPreferencesCopyAppValue(CFSTR("AppleLanguages"), kCFPreferencesCurrentApplication);
     if (languagesArray && (CFArrayGetTypeID() == CFGetTypeID(languagesArray))) {
         for (CFIndex idx = 0, cnt = CFArrayGetCount(languagesArray); idx < cnt; idx++) {
@@ -866,11 +866,9 @@ static bool __CFLocaleCopyNumberFormat(CFLocaleRef locale, bool user, CFTypeRef 
 // so we have to have another routine here which creates a Currency number formatter.
 static bool __CFLocaleCopyNumberFormat2(CFLocaleRef locale, bool user, CFTypeRef *cf, CFStringRef context) {
     CFStringRef str = NULL;
-#if DEPLOYMENT_TARGET_MACOSX
     CFNumberFormatterRef nf = CFNumberFormatterCreate(kCFAllocatorSystemDefault, locale, kCFNumberFormatterCurrencyStyle);
     str = nf ? (CFStringRef)CFNumberFormatterCopyProperty(nf, context) : NULL;
     if (nf) CFRelease(nf);
-#endif
     if (str) {
 	*cf = str;
 	return true;
@@ -911,14 +909,14 @@ static bool __CFLocaleICUKeywordValueName(const char *locale, const char *value,
 }
 
 static bool __CFLocaleICUCurrencyName(const char *locale, const char *value, UCurrNameStyle style, CFStringRef *out) {
-    int valLen = strlen(value);
+    size_t valLen = strlen(value);
     if (valLen != 3) // not a valid ISO code
         return false;
     UChar curr[4];
     UBool isChoice = FALSE;
     int32_t size = 0;
     UErrorCode icuStatus = U_ZERO_ERROR;
-    u_charsToUChars(value, curr, valLen);
+    u_charsToUChars(value, curr, (int32_t)valLen);
     curr[valLen] = '\0';
     const UChar *name;
     name = ucurr_getName(curr, locale, style, &isChoice, &size, &icuStatus);
@@ -973,7 +971,7 @@ static bool __CFLocaleFullName(const char *locale, const char *value, CFStringRe
 }
 
 static bool __CFLocaleLanguageName(const char *locale, const char *value, CFStringRef *out) {
-    int len = strlen(value);
+    size_t len = strlen(value);
     if (len >= 2 && len <= 3)
         return __CFLocaleICUName(locale, value, out, uloc_getDisplayLanguage);
     return false;

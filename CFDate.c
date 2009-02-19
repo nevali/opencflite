@@ -60,7 +60,7 @@ const CFTimeInterval kCFAbsoluteTimeIntervalSince1904 = 3061152000.0L;
 __private_extern__ double __CFTSRRate = 0.0;
 static double __CF1_TSRRate = 0.0;
 
-#if defined(__WIN32__)
+#if DEPLOYMENT_TARGET_WINDOWS
 // We should export this as SPI or API to clients - 3514284
 CFAbsoluteTime _CFAbsoluteTimeFromFileTime(const FILETIME *ft) {
     CFAbsoluteTime ret = (CFTimeInterval)ft->dwHighDateTime * 429.49672960;
@@ -137,7 +137,7 @@ __private_extern__ void __CFDateInitialize(void) {
     if (!QueryPerformanceFrequency(&freq)) {
         HALT;
     }
-    __CFTSRRate = freq.QuadPart;
+    __CFTSRRate = (double)freq.QuadPart;
     __CF1_TSRRate = 1.0 / __CFTSRRate;
 #endif
     CFDateGetTypeID(); // cause side-effects

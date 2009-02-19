@@ -79,10 +79,16 @@ First checked in.
 #if defined(WIN32)
 #include <errno.h>
 #define ECANCELED 15
+
 #include <stdio.h>
+#define snprintf _snprintf
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
+
+#define PRId32 "d"
+#define PRIu32 "u"
 
 #else
 #include <unistd.h>
@@ -162,6 +168,11 @@ static int ConnectionOpen(ConnectionRef *connPtr)
     int                 err;
     ConnectionRef       conn;
     Boolean             sayGoodbye;
+#if !defined(_WIN32)
+    int sockType = AF_UNIX;
+#else
+    int sockType = AF_INET;
+#endif
     
     assert( connPtr != NULL);
     assert(*connPtr == NULL);
@@ -189,7 +200,7 @@ static int ConnectionOpen(ConnectionRef *connPtr)
     // Create a UNIX domain socket and connect to the server. 
     
     if (err == 0) {
-        conn->fSockFD = socket(AF_UNIX, SOCK_STREAM, 0);
+        conn->fSockFD = socket(sockType, SOCK_STREAM, 0);
         err = MoreUNIXErrno(conn->fSockFD);
     }
     if (err == 0) {
@@ -198,7 +209,7 @@ static int ConnectionOpen(ConnectionRef *connPtr)
         connReq.sun_family = AF_UNIX;
         strcpy(connReq.sun_path, kServerSocketPath);
 
-        err = connect(conn->fSockFD, (struct sockaddr *) &connReq, SUN_LEN(&connReq));
+        err = connect(conn->fSockFD, (struct sockaddr*) &connReq, SUN_LEN(&connReq));
         err = MoreUNIXErrno(err);
         
         sayGoodbye = (err == 0);
@@ -605,7 +616,11 @@ static void ConnectionShutdown(ConnectionRef conn)
     }
 
     if ( (conn->fSockFD != -1) && ! hadSockCF ) {
+#if !defined(_WIN32)
         junk = close(conn->fSockFD);
+#else
+        junk = closesocket(conn->fSockFD);
+#endif
         assert(junk == 0);
     }
     // We always set fSockFD to -1 because either we've closed it or 
@@ -925,6 +940,16 @@ int main (int argc, const char * argv[])
             SIGINTRunLoopCallback,
             NULL
         );
+    }
+#else
+    {
+       WORD versionRequested = MAKEWORD(2, 0);
+       WSADATA wsaData;
+       err = WSAStartup(versionRequested, &wsaData);
+       if (err != 0 || LOBYTE(wsaData.wVersion) != LOBYTE(versionRequested) || HIBYTE(wsaData.wVersion) != HIBYTE(versionRequested)) {
+           WSACleanup();
+           CFLog(0, CFSTR("*** Could not initialize WinSock subsystem!!!"));
+       }
     }
 #endif
     

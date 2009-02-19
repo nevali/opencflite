@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 David M. Cotter <me@davevcotter.com>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -62,6 +63,33 @@
 #if READ_DIRECTORIES
 #include <dirent.h>
 #endif /* READ_DIRECTORIES */
+
+#if DEPLOYMENT_TARGET_WINDOWS && !defined(__GNUC__)
+#include <direct.h>
+#include <io.h>
+
+/* POSIX dirent interface */
+struct dirent {
+        char*                   d_name;
+        uint8_t                 d_type;
+        long                    d_fileno;
+};
+
+typedef struct DIR {
+        long                    handle;
+        struct _finddata_t      info;
+        struct dirent           result;
+        char*                   name;
+} DIR;
+
+static DIR* opendir (const char* name);
+static struct dirent* readdir (DIR* dir);
+static int closedir (DIR* dir);
+
+#define	DT_UNKNOWN	     0
+#define	DT_DIR		     4
+#define  READ_DIRECTORIES 1
+#endif
 
 
 
@@ -195,7 +223,7 @@ static CFArrayRef _CFBundleCopyDirectoryContentsAtPath(CFStringRef path, _CFBund
         cpathBuff[0] = '\0';
         if (CFStringGetFileSystemRepresentation(path, cpathBuff, CFMaxPathSize)) {
             tryToOpen = true;
-            cpathLen = strlen(cpathBuff);
+            cpathLen = (CFIndex)strlen(cpathBuff);
             
             // First see whether we already know that the directory doesn't exist
             for (idx = cpathLen; lastSlashIdx == 0 && idx-- > 0;) {
@@ -230,7 +258,7 @@ static CFArrayRef _CFBundleCopyDirectoryContentsAtPath(CFStringRef path, _CFBund
         }
         if (tryToOpen && stat(cpathBuff, &statBuf) == 0 && (statBuf.st_mode & S_IFMT) == S_IFDIR && (dirp = opendir(cpathBuff))) {
             while ((dent = readdir(dirp))) {
-                CFIndex nameLen = strlen(dent->d_name);
+                CFIndex nameLen = (CFIndex)strlen(dent->d_name);
                 if (0 == nameLen || 0 == dent->d_fileno || ('.' == dent->d_name[0] && (1 == nameLen || (2 == nameLen && '.' == dent->d_name[1]) || '_' == dent->d_name[1]))) continue;
                 name = CFStringCreateWithFileSystemRepresentation(kCFAllocatorSystemDefault, dent->d_name);
                 if (name) {
@@ -522,7 +550,7 @@ static void _CFFindBundleResourcesInRawDir(CFAllocatorRef alloc, UniChar *workin
 
         CFStringSetExternalCharactersNoCopy(tmpString, workingUniChars, workingLen, workingLen);
         if (!CFStringGetFileSystemRepresentation(tmpString, cpathBuff, CFMaxPathSize)) return;
-        cpathLen = strlen(cpathBuff);
+        cpathLen = (CFIndex)strlen(cpathBuff);
 
         if (!resTypes) {
             // ??? should this use _CFBundleCopyDirectoryContentsAtPath?
@@ -818,7 +846,7 @@ CF_EXPORT CFURLRef CFBundleCopyResourceURLInDirectory(CFURLRef bundleURL, CFStri
 
     if (!CFURLGetFileSystemRepresentation(bundleURL, true, buff, CFMaxPathSize)) return NULL;
 
-    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, buff, strlen((char *)buff), true);
+    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, buff, (CFIndex)strlen((char *)buff), true);
     if (!newURL) newURL = (CFURLRef)CFRetain(bundleURL);
     if (_CFBundleCouldBeBundle(newURL)) {
         uint8_t version = 0;
@@ -846,7 +874,7 @@ CF_EXPORT CFArrayRef CFBundleCopyResourceURLsOfTypeInDirectory(CFURLRef bundleUR
 
     if (!CFURLGetFileSystemRepresentation(bundleURL, true, buff, CFMaxPathSize)) return NULL;
 
-    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, buff, strlen((char *)buff), true);
+    newURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, buff, (CFIndex)strlen((char *)buff), true);
     if (!newURL) newURL = (CFURLRef)CFRetain(bundleURL);
     if (_CFBundleCouldBeBundle(newURL)) {
         uint8_t version = 0;
@@ -1190,7 +1218,7 @@ __private_extern__ CFArrayRef _CFBundleCopyUserLanguages(Boolean useBackstops) {
     if (!didit) {
         if (__CFAppleLanguages) {
             CFDataRef data;
-            CFIndex length = strlen((const char *)__CFAppleLanguages);
+            CFIndex length = (CFIndex)strlen((const char *)__CFAppleLanguages);
             if (length > 0) {
                 data = CFDataCreateWithBytesNoCopy(kCFAllocatorSystemDefault, (const UInt8 *)__CFAppleLanguages, length, kCFAllocatorNull);
                 if (data) {
@@ -1725,7 +1753,7 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectory(CFAllo
     uint8_t localVersion = 0;
     
     if (CFURLGetFileSystemRepresentation(url, true, buff, CFMaxPathSize)) {
-        CFURLRef newURL = CFURLCreateFromFileSystemRepresentation(alloc, buff, strlen((char *)buff), true);
+        CFURLRef newURL = CFURLCreateFromFileSystemRepresentation(alloc, buff, (CFIndex)strlen((char *)buff), true);
         if (!newURL) newURL = (CFURLRef)CFRetain(url);
 
         // version 3 is for flattened pseudo-bundles with no Contents, Support Files, or Resources directories
@@ -1795,7 +1823,7 @@ __private_extern__ CFDictionaryRef _CFBundleCopyInfoDictionaryInDirectoryWithVer
             if (windowsPath) {
                 if (!(CFStringHasSuffix(windowsPath, _CFBundleSupportFilesDirectoryName1) || CFStringHasSuffix(windowsPath, _CFBundleSupportFilesDirectoryName2) || CFStringHasSuffix(windowsPath, _CFBundleResourcesDirectoryName))) {
 #if READ_DIRECTORIES
-                    directoryURL = CFRetain(url);
+                    directoryURL = (CFURLRef)CFRetain(url);
 #endif /* READ_DIRECTORIES */    
                     infoURLFromBaseNoExtension = _CFBundleInfoURLFromBaseNoExtension3;
                     infoURLFromBase = _CFBundleInfoURLFromBase3;
@@ -2205,3 +2233,104 @@ CFArrayRef CFBundleCopyLocalizationsForURL(CFURLRef url) {
     return result;
 }
 
+#if DEPLOYMENT_TARGET_WINDOWS
+/*
+ * The Windows directory handling logic is courtesy of the FreeBSD shttpd sources.
+ */
+/*
+ * Copyright (c) 2004-2005 Sergey Lyubka <valenok@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
+
+DIR* opendir (const char *name)
+{
+   DIR* dir = NULL;
+   size_t          base_length;
+   const char* all;
+
+   if (name && name[0]) {
+      base_length = strlen(name);
+      all = strchr("/\\", name[base_length - 1]) ? "*" : "/*";
+
+      if ((dir = (DIR*)malloc(sizeof *dir)) != NULL &&
+          (dir->name = (char*)malloc(base_length + strlen(all) + 1)) != 0) {
+         (void) strcat(strcpy(dir->name, name), all);
+
+         if ((dir->handle = (long) _findfirst(dir->name, &dir->info)) != -1) {
+            dir->result.d_name = 0;
+         } else {
+            free(dir->name);
+            free(dir);
+            dir = 0;
+         }
+      } else {
+         free(dir);
+         dir = NULL;
+         errno = ENOMEM;
+      }
+   } else {
+      errno = EINVAL;
+   }
+
+   return (dir);
+}
+
+int closedir (DIR* dir)
+{
+   int result = -1;
+
+   if (dir) {
+      if(dir->handle != -1)
+         result = _findclose(dir->handle);
+
+      free(dir->name);
+      free(dir);
+   }
+
+   if (result == -1)
+      errno = EBADF;
+
+   return (result);
+}
+
+struct dirent* readdir (DIR *dir)
+{
+   struct dirent* result = 0;
+
+   if (dir && dir->handle != -1) {
+      if (!dir->result.d_name ||
+         _findnext(dir->handle, &dir->info) != -1) {
+         result = &dir->result;
+         result->d_name = dir->info.name;
+         result->d_fileno = 1;   // Not real!
+
+         if (dir->info.attrib & FILE_ATTRIBUTE_DIRECTORY)
+            result->d_type = DT_DIR;
+         else
+            result->d_type = DT_UNKNOWN;
+      }
+   } else {
+      errno = EBADF;
+   }
+
+   return (result);
+}
+
+#endif

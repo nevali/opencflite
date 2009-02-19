@@ -78,13 +78,13 @@ CFSearchPathEnumerationState __CFGetNextSearchPathEnumeration(CFSearchPathEnumer
 
 #elif DEPLOYMENT_TARGET_WINDOWS
 CFSearchPathEnumerationState __CFStartSearchPathEnumeration(CFSearchPathDirectory dir, CFSearchPathDomainMask domainMask) {
-    CFSearchPathEnumerationState result;
+    CFSearchPathEnumerationState result = 0;
     //return (NSSearchPathEnumerationState)NSStartSearchPathEnumeration((NSSearchPathDirectory)dir, (NSSearchPathDomainMask)domainMask);
     return result;
 }
 
 CFSearchPathEnumerationState __CFGetNextSearchPathEnumeration(CFSearchPathEnumerationState state, uint8_t *path, CFIndex pathSize) {
-    CFSearchPathEnumerationState result;
+    CFSearchPathEnumerationState result = 0;
     /*
     // NSGetNextSearchPathEnumeration requires a MAX_PATH size
     if (pathSize < PATH_MAX) {
@@ -126,17 +126,17 @@ CFArrayRef CFCopySearchPathForDirectoriesInDomains(CFSearchPathDirectory directo
                 CFURLRef homeURL = CFCopyHomeDirectoryURLForUser(NULL);
                 if (homeURL) {
                     CFURLGetFileSystemRepresentation(homeURL, true, (uint8_t *)home, CFMaxPathSize);
-                    homeLen = strlen(home);
+                    homeLen = (CFIndex)strlen(home);
                     CFRelease(homeURL);
                 }
             }
             if (homeLen + strlen(cPath) < CFMaxPathSize) {
                 home[homeLen] = '\0';
                 strlcat(home, &cPath[1], sizeof(home));
-                url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)home, strlen(home), true);
+                url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)home, (CFIndex)strlen(home), true);
             }
         } else {
-            url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)cPath, strlen(cPath), true);
+            url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorSystemDefault, (uint8_t *)cPath, (CFIndex)strlen(cPath), true);
         }
         if (url) {
             CFArrayAppendValue(array, url);

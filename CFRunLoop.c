@@ -80,7 +80,7 @@ DWORD GetInternalThreadId(HANDLE t);
 
 static HANDLE kNilThreadT = 0;
 static DWORD __kCFMainThread = 0;
-#define pthreadPointer(a) (void*)GetInternalThreadId(a)
+#define pthreadPointer(a) ((void*)GetInternalThreadId(a))
 // Note: Windows RTL_CRITICAL_SECTION LockCount is initialized to -1
 // indicating no lock.  So add one so lock count shows a valid 'count'.
 #define lockCount(a) (a.LockCount + 1)
@@ -1926,7 +1926,7 @@ try_receive:
                     if (timeoutCF > MAXDWORD)
                         timeout = INFINITE;
                     else
-                        timeout = timeoutCF;
+                        timeout = (DWORD)timeoutCF;
                 }
             }
             if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- about to wait for %d objects, wakeupport is %p"), CFRunLoopGetCurrent(), *_CFGetProgname(), handleCount, rl->_wakeUpPort); }

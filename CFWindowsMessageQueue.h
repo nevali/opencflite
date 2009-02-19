@@ -27,7 +27,7 @@
 #if !defined(__COREFOUNDATION_CFWINDOWSMESSAGEQUEUE__)
 #define __COREFOUNDATION_CFWINDOWSMESSAGEQUEUE__ 1
 
-#if DEPLOYMENT_TARGET_WIN32
+#if DEPLOYMENT_TARGET_WINDOWS
 
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFRunLoop.h>

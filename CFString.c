@@ -71,8 +71,12 @@ extern size_t strlcat(char *dst, const char *src, size_t siz);
 #define INSTRUMENT_SHARED_STRINGS 0
 #endif
 
-
-__private_extern__ CFStringRef __kCFLocaleCollatorID;
+#if DEPLOYMENT_TARGET_MACOSX
+__private_extern__
+#else
+CF_EXPORT const
+#endif
+CFStringRef __kCFLocaleCollatorID;
 
 #if INSTRUMENT_SHARED_STRINGS
 #include <sys/stat.h> /* for umask() */
@@ -1477,7 +1481,7 @@ CFStringRef  CFStringCreateWithPascalString(CFAllocatorRef alloc, ConstStringPtr
 
 
 CFStringRef  CFStringCreateWithCString(CFAllocatorRef alloc, const char *cStr, CFStringEncoding encoding) {
-    CFIndex len = strlen(cStr);
+    CFIndex len = (CFIndex)strlen(cStr);
     return __CFStringCreateImmutableFunnel3(alloc, cStr, len, encoding, false, false, false, true, false, ALLOCATORSFREEFUNC, 0);
 }
 
@@ -1488,7 +1492,7 @@ CFStringRef  CFStringCreateWithPascalStringNoCopy(CFAllocatorRef alloc, ConstStr
 
 
 CFStringRef  CFStringCreateWithCStringNoCopy(CFAllocatorRef alloc, const char *cStr, CFStringEncoding encoding, CFAllocatorRef contentsDeallocator) {
-    CFIndex len = strlen(cStr);
+    CFIndex len = (CFIndex)strlen(cStr);
     return __CFStringCreateImmutableFunnel3(alloc, cStr, len, encoding, false, false, false, true, true, contentsDeallocator, 0);
 }
 
@@ -1598,7 +1602,7 @@ static Boolean __cStrEqual(const void *ptr1, const void *ptr2) {
 static CFHashCode __cStrHash(const void *ptr) {
     // It doesn't quite matter if we convert to Unicode correctly, as long as we do it consistently    
     const char *cStr = (const char *)ptr;
-    CFIndex len = strlen(cStr);
+    CFIndex len = (CFIndex)strlen(cStr);
     CFHashCode result = 0;
     if (len <= 4) {	// All chars
         unsigned cnt = len;
@@ -1669,7 +1673,7 @@ CFStringRef __CFStringMakeConstantString(const char *cStr) {
 	if (__CFStrIsEightBit(result)) {	
 	    key = (char *)__CFStrContents(result) + __CFStrSkipAnyLengthByte(result);
 	} else {	// For some reason the string is not 8-bit!
-	    key = (char *)CFAllocatorAllocate(kCFAllocatorSystemDefault, strlen(cStr) + 1, 0);
+	    key = (char *)CFAllocatorAllocate(kCFAllocatorSystemDefault, (CFIndex)strlen(cStr) + 1, 0);
 	    if (__CFOASafe) __CFSetLastAllocationEventName((void *)key, "CFString (CFSTR key)");
 	    strlcpy(key, cStr, strlen(cStr) + 1);	// !!! We will leak this, if the string is removed from the table (or table is freed)
 	}
@@ -4123,7 +4127,7 @@ void CFStringAppendPascalString(CFMutableStringRef str, ConstStringPtr pStr, CFS
 }
 
 void CFStringAppendCString(CFMutableStringRef str, const char *cStr, CFStringEncoding encoding) {
-    __CFStringAppendBytes(str, cStr, strlen(cStr), encoding);
+    __CFStringAppendBytes(str, cStr, (CFIndex)strlen(cStr), encoding);
 }
 
 
@@ -5689,7 +5693,7 @@ void _CFStringAppendFormatAndArgumentsAux(CFMutableStringRef outputString, CFStr
                     if (hasPrecision && precision < len) len = precision;
                 } else {	// C-string case
                     if (!hasPrecision) {	// No precision, so rely on the terminating null character
-                        len = strlen(str);
+                        len = (CFIndex)strlen(str);
                     } else {	// Don't blindly call strlen() if there is a precision; the string might not have a terminating null (3131988)
                         const char *terminatingNull = (const char *)memchr(str, 0, precision);	// Basically strlen() on only the first precision characters of str
                         if (terminatingNull) {	// There was a null in the first precision characters

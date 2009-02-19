@@ -153,7 +153,7 @@ static CFUUIDRef __CFUUIDCreateWithBytesPrimitive(CFAllocatorRef allocator, CFUU
     if (uuid == NULL) {
         size_t size;
         size = sizeof(struct __CFUUID) - sizeof(CFRuntimeBase);
-        uuid = (struct __CFUUID *)_CFRuntimeCreateInstance(allocator, __kCFUUIDTypeID, size, NULL);
+        uuid = (struct __CFUUID *)_CFRuntimeCreateInstance(allocator, __kCFUUIDTypeID, (CFIndex)size, NULL);
 
         if (NULL == uuid) return NULL;
 

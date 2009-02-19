@@ -364,7 +364,7 @@ struct CF_CONST_STRING {
 extern int __CFConstantStringClassReference[];
 
 /* CFNetwork also has a copy of the CONST_STRING_DECL macro (for use on platforms without constant string support in cc); please warn cfnetwork-core@group.apple.com of any necessary changes to this macro. -- REW, 1/28/2002 */
-#if DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
 #define ___WindowsConstantStringClassReference (uintptr_t)&__CFConstantStringClassReference
 #else
 #define ___WindowsConstantStringClassReference NULL
@@ -378,10 +378,10 @@ const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #define CONST_STRING_DECL(S, V)			\
 	static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
 const CFStringRef S = (CFStringRef) & __ ## S ## __;
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
 #define CONST_STRING_DECL(S, V)			\
-static struct CF_CONST_STRING __ ## S ## __ = {{___WindowsConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
-const CFStringRef S = (CFStringRef) & __ ## S ## __;
+static struct CF_CONST_STRING __ ## S ## __ = {{(uintptr_t)&__CFConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}},(uint8_t *) V, sizeof(V) - 1}; \
+CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 
 #define CONST_STRING_DECL_EXPORT(S, V)			\
 struct CF_CONST_STRING __ ## S ## __ = {{___WindowsConstantStringClassReference, {0xc8, 0x07, 0x00, 0x00}}, (uint8_t *)V, sizeof(V) - 1}; \
@@ -402,7 +402,7 @@ CF_EXPORT const CFStringRef S = (CFStringRef) & __ ## S ## __;
 #undef ___WindowsConstantStringClassReference
 
 /* Buffer size for file pathname */
-#if DEPLOYMENT_TARGET_WINDOWS || 0
+#if DEPLOYMENT_TARGET_WINDOWS || defined(__WIN32__)
     #define CFMaxPathSize ((CFIndex)262)
     #define CFMaxPathLength ((CFIndex)260)
 #else

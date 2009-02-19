@@ -497,7 +497,7 @@ __private_extern__ SInt32 _CFGetFileProperties(CFAllocatorRef alloc, CFURLRef pa
     if (modTime != NULL) {
         if (fileExists) {
 #if DEPLOYMENT_TARGET_WINDOWS
-            CFAbsoluteTime theTime = (CFAbsoluteTime)statBuf.st_mtime - kCFAbsoluteTimeIntervalSince1970;
+            CFAbsoluteTime theTime = (CFAbsoluteTime)statBuf.st_mtime;
 #elif DEPLOYMENT_TARGET_LINUX
 #if defined _BSD_SOURCE || defined _SVID_SOURCE
             CFAbsoluteTime theTime = (CFAbsoluteTime)statBuf.st_mtim.tv_sec - kCFAbsoluteTimeIntervalSince1970;

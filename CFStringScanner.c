@@ -243,7 +243,7 @@ __private_extern__ Boolean __CFStringScanDouble(CFStringInlineBuffer *buf, CFTyp
             return true;
         }
     }
-#endif /* 0 */
+#endif
     do {
 	if (ch >= 128 || (__CFNumberSet[ch >> 3] & (1 << (ch & 7))) == 0) {
             // Not in __CFNumberSet

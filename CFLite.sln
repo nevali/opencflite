@@ -73,6 +73,33 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFRunLoopTimerExample", "ex
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLocalServer_client", "examples\CFLocalServer\CFLocalServer_client.vcproj", "{8125E4CD-7A63-4A14-BACF-F9528977CB22}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLocalServer_server", "examples\CFLocalServer\CFLocalServer_server.vcproj", "{64ECD88E-6608-4A98-A634-F7BAD9E3D897}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleWebServer", "examples\SimpleWebServer\SimpleWebServer.vcproj", "{823767B2-997F-4ABD-9B16-096C251C670D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -111,6 +138,18 @@ Global
 		{6EC2C74D-B79D-4B8D-B14B-94ED3F08EB28}.Debug|Win32.Build.0 = Debug|Win32
 		{6EC2C74D-B79D-4B8D-B14B-94ED3F08EB28}.Release|Win32.ActiveCfg = Release|Win32
 		{6EC2C74D-B79D-4B8D-B14B-94ED3F08EB28}.Release|Win32.Build.0 = Release|Win32
+		{8125E4CD-7A63-4A14-BACF-F9528977CB22}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8125E4CD-7A63-4A14-BACF-F9528977CB22}.Debug|Win32.Build.0 = Debug|Win32
+		{8125E4CD-7A63-4A14-BACF-F9528977CB22}.Release|Win32.ActiveCfg = Release|Win32
+		{8125E4CD-7A63-4A14-BACF-F9528977CB22}.Release|Win32.Build.0 = Release|Win32
+		{64ECD88E-6608-4A98-A634-F7BAD9E3D897}.Debug|Win32.ActiveCfg = Debug|Win32
+		{64ECD88E-6608-4A98-A634-F7BAD9E3D897}.Debug|Win32.Build.0 = Debug|Win32
+		{64ECD88E-6608-4A98-A634-F7BAD9E3D897}.Release|Win32.ActiveCfg = Release|Win32
+		{64ECD88E-6608-4A98-A634-F7BAD9E3D897}.Release|Win32.Build.0 = Release|Win32
+		{823767B2-997F-4ABD-9B16-096C251C670D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{823767B2-997F-4ABD-9B16-096C251C670D}.Debug|Win32.Build.0 = Debug|Win32
+		{823767B2-997F-4ABD-9B16-096C251C670D}.Release|Win32.ActiveCfg = Release|Win32
+		{823767B2-997F-4ABD-9B16-096C251C670D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,5 +162,8 @@ Global
 		{B5F7F4D9-DCA9-4CCD-8776-D2EAF45E4BE9} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
 		{AD525151-D756-44E6-AEA7-12052F4F43E2} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
 		{6EC2C74D-B79D-4B8D-B14B-94ED3F08EB28} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
+		{8125E4CD-7A63-4A14-BACF-F9528977CB22} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
+		{64ECD88E-6608-4A98-A634-F7BAD9E3D897} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
+		{823767B2-997F-4ABD-9B16-096C251C670D} = {60C062B2-DAC0-4361-9D92-9654183AFD72}
 	EndGlobalSection
 EndGlobal

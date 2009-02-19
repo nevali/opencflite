@@ -15,6 +15,21 @@ cc -g -Wall -o webserve webserve.c
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#define SOCK_CONST_DATA const void*
+#else
+#include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
+#define SOCK_CONST_DATA const char*
+#include <windows.h>
+#include <winsock2.h>
+#include <Iprtrmib.h>
+#include <Iphlpapi.h>
+#include <io.h>
+#define sleep Sleep
+static DWORD getpid() {
+   return GetCurrentProcessId();
+}
+char *strsep(char **stringp, const char *delim);
 #endif
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -51,12 +66,14 @@ void returnBuffer (int httpResult, const char *content,
     static const CFStringRef contentType = CFSTR("Content-Type: text/html\r\n");
     static const CFStringRef contentLenFmt = CFSTR("Content-Length: %d\r\n");
     static const CFStringRef endHeader = CFSTR("\r\n");
-   
-    CFStringRef header = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, headerFmt, httpResult);
+
+    CFStringRef header = 0, contentLengthStr = 0;
+
+    header = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, headerFmt, httpResult);
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(header,CFStringGetFastestEncoding(header)),CFStringGetLength(header));
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(contentType,CFStringGetFastestEncoding(contentType)),CFStringGetLength(contentType));
 
-    CFStringRef contentLengthStr = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, contentLenFmt, contentLength);
+    contentLengthStr = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, contentLenFmt, contentLength);
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(contentLengthStr,CFStringGetFastestEncoding(contentLengthStr)),CFStringGetLength(contentLengthStr));
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(endHeader,CFStringGetFastestEncoding(endHeader)),CFStringGetLength(endHeader));
    
@@ -79,13 +96,15 @@ void returnNumbers (int number, CFWriteStreamRef commChannel)
     int min = MIN (number, 1);
     int max = MAX (number, 1);
 
-    CFStringRef header = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, headerFmt, HTTP_OK);
+    CFStringRef header = 0, dataHeader = 0;
+
+    header = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, headerFmt, HTTP_OK);
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(header,CFStringGetFastestEncoding(header)),CFStringGetLength(header));
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(contentType,CFStringGetFastestEncoding(contentType)),CFStringGetLength(contentType));
     // no content length, dynamic
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(endHeader,CFStringGetFastestEncoding(endHeader)),CFStringGetLength(endHeader));
 
-    CFStringRef dataHeader = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, dataHeaderFmt, min, max);
+    dataHeader = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, dataHeaderFmt, min, max);
     CFWriteStreamWrite(commChannel,(const UInt8*)CFStringGetCStringPtr(dataHeader,CFStringGetFastestEncoding(dataHeader)),CFStringGetLength(dataHeader));
 
     for (int i = min; i <= max; i++) {
@@ -317,6 +336,8 @@ CFSocketRef startListening ()
 {
     int result = 0;
     int yes = 1;
+
+    CFDataRef address4 = 0;
    
     CFSocketContext socketContext = {0, 0, NULL, NULL, NULL};
     CFSocketRef listenOn = CFSocketCreate (kCFAllocatorDefault, PF_INET, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, (CFSocketCallBack)&acceptRequest, &socketContext);   
@@ -326,7 +347,7 @@ CFSocketRef startListening ()
         return 0;
     }
 
-    result = setsockopt (CFSocketGetNative (listenOn), SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+    result = setsockopt (CFSocketGetNative (listenOn), SOL_SOCKET, SO_REUSEADDR, (SOCK_CONST_DATA)&yes, sizeof(yes));
     if (result == -1) {
         fprintf (stderr, 
                  "could not setsockopt to reuse address. %d / %s\n",
@@ -338,13 +359,15 @@ CFSocketRef startListening ()
 
     // bind to an address and port
     struct sockaddr_in address;
+#if !defined(__WIN32__)
     address.sin_len = sizeof (struct sockaddr_in);
+#endif
     address.sin_family = AF_INET;
     address.sin_port = htons (PORT_NUMBER);
     address.sin_addr.s_addr = htonl (INADDR_ANY);
     memset (address.sin_zero, 0, sizeof(address.sin_zero));
    
-    CFDataRef address4 = CFDataCreateWithBytesNoCopy (kCFAllocatorDefault, (const UInt8*)&address, sizeof(address), kCFAllocatorDefault);
+    address4 = CFDataCreateWithBytesNoCopy (kCFAllocatorDefault, (const UInt8*)&address, sizeof(address), kCFAllocatorDefault);
    
     if (kCFSocketSuccess != CFSocketSetAddress (listenOn, address4)) {
         fprintf (stderr, "could not bind socket.  error: %d / %s\n",
@@ -377,4 +400,27 @@ int main (int argc, char *argv[])
     return (EXIT_SUCCESS);
 }
 
+#if defined(__WIN32__)
+/*
+ * From the BSD sources.  Why isn't this in MSVCRTL?
+ */
+char *strsep(char **stringp, const char *delim) {
+        char *origin, *p;
+        const char *pp;
 
+        if (stringp || !*stringp || !delim || !*delim) {
+                return NULL;
+        }
+
+        for(origin = p = *stringp; *p; p++) {
+                for(pp = delim; *pp; pp++) {
+                        if (*pp == *p) {
+                                *p = 0;
+                                *stringp = *++p ? p : NULL;
+                        }
+                }
+        }
+
+        return origin;
+}
+#endif

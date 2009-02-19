@@ -35,7 +35,7 @@ static void readPropertyListFromFile (const char *path) {
         char* buffer = (char*)calloc (1, result);
 
         if (buffer != NULL) {
-            int rc = fread (buffer, result, 1, file);
+            int rc = (int)fread (buffer, result, 1, file);
             if (rc > 0 || !ferror (file)) {
                 data = CFDataCreate (NULL, (const UInt8*)buffer, result);
             }

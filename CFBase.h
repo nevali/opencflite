@@ -181,7 +181,8 @@ CF_EXTERN_C_BEGIN
 #endif
 
 
-CF_EXPORT double kCFCoreFoundationVersionNumber;
+CF_EXPORT double                kCFCoreFoundationVersionNumber;
+CF_EXPORT const unsigned char   kCFCoreFoundationVersionString[];
 
 #define kCFCoreFoundationVersionNumber10_0	196.40
 #define kCFCoreFoundationVersionNumber10_0_3	196.50

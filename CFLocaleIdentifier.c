@@ -1239,7 +1239,7 @@ static Boolean _CheckForTag(const char *localeStringPtr, const char *tagPtr, int
 // _ReplacePrefix
 // Move this code from _UpdateFullLocaleString into separate function                       // <1.10>
 static void _ReplacePrefix(char locString[], int locStringMaxLen, int oldPrefixLen, const char *newPrefix) {
-    int newPrefixLen = strlen(newPrefix);
+    int newPrefixLen = (int)strlen(newPrefix);
     int lengthDelta = newPrefixLen - oldPrefixLen;
     
     if (lengthDelta < 0) {
@@ -1247,7 +1247,7 @@ static void _ReplacePrefix(char locString[], int locStringMaxLen, int oldPrefixL
         _DeleteCharsAtPointer(locString + newPrefixLen, -lengthDelta);
     } else if (lengthDelta > 0) {
         // replacement is longer...
-        int stringLen = strlen(locString);
+        int stringLen = (int)strlen(locString);
         
         if (stringLen + lengthDelta < locStringMaxLen) {
             // make room by shifting tail of string
@@ -1298,7 +1298,7 @@ static void _UpdateFullLocaleString(char inLocaleString[], int locStringMaxLen,
                                                     sizeof(KeyStringToResultString), _CompareLowerTestEntryPrefixToTableEntryKey );
     if (foundEntry) {
         // replace key (at beginning of string) with result
-        _ReplacePrefix(inLocaleString, locStringMaxLen, strlen(foundEntry->key), foundEntry->result);   // <1.10>
+        _ReplacePrefix(inLocaleString, locStringMaxLen, (int)strlen(foundEntry->key), foundEntry->result);   // <1.10>
     }
     
     // 2. Walk through input string, normalizing case & marking use of ISO 3166 codes
@@ -1836,8 +1836,8 @@ CFDictionaryRef CFLocaleCreateComponentsFromLocaleIdentifier(CFAllocatorRef allo
         if (uloc_getKeywordValue(cLocaleID, locKey, locValue, sizeof(locValue)/sizeof(char), &icuStatus) > 0
             && U_SUCCESS(icuStatus))
         {
-            CFStringRef key = CFStringCreateWithBytes(allocator, (UInt8 *)locKey, strlen(locKey), kCFStringEncodingASCII, true);
-            CFStringRef value = CFStringCreateWithBytes(allocator, (UInt8 *)locValue, strlen(locValue), kCFStringEncodingASCII, true);
+            CFStringRef key = CFStringCreateWithBytes(allocator, (UInt8 *)locKey, (CFIndex)strlen(locKey), kCFStringEncodingASCII, true);
+            CFStringRef value = CFStringCreateWithBytes(allocator, (UInt8 *)locValue, (CFIndex)strlen(locValue), kCFStringEncodingASCII, true);
             if (key && value)
                 CFDictionaryAddValue(working, key, value);
             if (key)
