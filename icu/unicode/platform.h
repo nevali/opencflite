@@ -98,7 +98,7 @@
 
 #ifndef U_HAVE_INT64_T
 #ifdef DEPLOYMENT_TARGET_MACOSX
-#define U_HAVE_INT64_T 0
+#define U_HAVE_INT64_T 1
 #else
 #define U_HAVE_INT64_T 0
 #endif
@@ -239,9 +239,11 @@ typedef unsigned int uint32_t;
 #define U_ENABLE_TRACING 1
 #endif
 
+#if DEPLOYMENT_TARGET_WINDOWS
 /* Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT 1
+#endif
 #endif
 
 /* Define the library suffix in a C syntax. */
@@ -262,30 +264,47 @@ typedef unsigned int uint32_t;
 /*===========================================================================*/
 
 #define U_HAVE_WCHAR_H      1
+#if DEPLOYMENT_TARGET_MACOSX
+#define U_SIZEOF_WCHAR_T    4
+
+#define U_HAVE_WCSCPY       1
+#else
 #define U_SIZEOF_WCHAR_T    2
 
 #define U_HAVE_WCSCPY       0
+#endif
 
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
+#if DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_NL_LANGINFO          1
+#define U_HAVE_NL_LANGINFO_CODESET  1
+#define U_NL_LANGINFO_CODESET       CODESET
+#else
 #define U_HAVE_NL_LANGINFO          0
 #define U_HAVE_NL_LANGINFO_CODESET  0
 #define U_NL_LANGINFO_CODESET       -1
+#endif
 
 #if 1
 #define U_TZSET         tzset
 #endif
-#if 1
+#if DEPLOYMENT_TARGET_WINDOWS
 #define U_TIMEZONE      timezone
 #endif
-#if 0
-#define U_TZNAME        
+#if DEPLOYMENT_TARGET_MACOSX
+#define U_TZNAME        tzname
 #endif
 
+#if DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_MMAP     1
+#define U_HAVE_POPEN    1
+#else
 #define U_HAVE_MMAP     0
 #define U_HAVE_POPEN    0
+#endif
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
