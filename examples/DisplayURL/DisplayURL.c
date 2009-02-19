@@ -134,7 +134,10 @@ int main (int argc, char * const argv[])
 	OSStatus result;
 	FSCatalogInfo catalogInfo;
 #elif defined(WIN32)
-   const char* optarg = 0;
+	const char* optarg = 0;
+#endif
+#if !defined(WIN32)
+	int ch;
 #endif
 	CFURLRef url;
 	UInt8 buffer[kBufferLength];
