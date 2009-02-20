@@ -210,7 +210,11 @@
  * @stable ICU 3.2
  */
 #ifndef UCONFIG_NO_SERVICE
+#if DEPLOYMENT_TARGET_MACOSX 
+#   define UCONFIG_NO_SERVICE 0
+#else
 #   define UCONFIG_NO_SERVICE 1
+#endif
 #endif
 
 #endif
