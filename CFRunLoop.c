@@ -1888,19 +1888,19 @@ try_receive:
         }
 #elif DEPLOYMENT_TARGET_WINDOWS
         DWORD waitResult = WAIT_TIMEOUT;
-        HANDLE handleBuf[MAX_PORTS];
-        HANDLE *handles;
-        uint32_t handleCount;
-        Boolean freeHandles;
+        __CFPort portBuf[MAX_PORTS];
+        __CFPort *ports;
+        CFIndex portCount;
+        Boolean freePorts;
         if (destroyWaitSet) {
             // wait set is a local, no one else could modify it, no need to copy handles
-            handles = waitSet->ports;
-            handleCount = waitSet->used;
-            freeHandles = FALSE;
+            ports = waitSet->ports;
+            portCount = waitSet->used;
+            freePorts = false;
         } else {
-            // copy out the handles to be safe from other threads at work
-            handles = __CFPortSetGetPorts(waitSet, handleBuf, MAX_PORTS, &handleCount);
-            freeHandles = (handles != handleBuf);
+            // copy out the ports to be safe from other threads at work
+            ports = __CFPortSetGetPorts(waitSet, portBuf, MAX_PORTS, &portCount);
+            freePorts = (ports != portBuf);
         }
         // should msgQMask be an OR'ing of this and all submodes' masks?
         if (0 == GetQueueStatus(rlm->_msgQMask)) {
@@ -1926,9 +1926,9 @@ try_receive:
                         timeout = (DWORD)timeoutCF;
                 }
             }
-            if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- about to wait for %d objects, wakeupport is %p"), CFRunLoopGetCurrent(), *_CFGetProgname(), handleCount, rl->_wakeUpPort); }
+            if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- about to wait for %d objects, wakeupport is %p"), CFRunLoopGetCurrent(), *_CFGetProgname(), portCount, rl->_wakeUpPort); }
             if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("All RLM sources = %@"), rlm->_sources); }
-            waitResult = MsgWaitForMultipleObjects(__CFMin(handleCount, MAX_PORTS), handles, false, timeout, rlm->_msgQMask);
+            waitResult = MsgWaitForMultipleObjects(__CFMin(portCount, MAX_PORTS), ports, false, timeout, rlm->_msgQMask);
             if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- waitResult was %d"), CFRunLoopGetCurrent(), *_CFGetProgname(), waitResult); }
         }
         ResetEvent(rl->_wakeUpPort);
@@ -1958,21 +1958,21 @@ try_receive:
         CFAssert2(waitResult != WAIT_FAILED, __kCFLogAssertion, "%s(): error %d from MsgWaitForMultipleObjects", __PRETTY_FUNCTION__, GetLastError());
         if (waitResult == WAIT_TIMEOUT) {
             // do nothing, just return to caller
-        } else if (waitResult >= WAIT_OBJECT_0 && waitResult < WAIT_OBJECT_0+handleCount) {
-            // a handle was signalled
-            livePort = handles[waitResult-WAIT_OBJECT_0];
+        } else if (waitResult >= WAIT_OBJECT_0 && waitResult < WAIT_OBJECT_0+portCount) {
+            // a port was signalled
+            livePort = ports[waitResult-WAIT_OBJECT_0];
             if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- Resetting event %p"), CFRunLoopGetCurrent(), *_CFGetProgname(), livePort); }
-        } else if (waitResult == WAIT_OBJECT_0+handleCount) {
+        } else if (waitResult == WAIT_OBJECT_0+portCount) {
             // windows message received - the CFWindowsMessageQueue will pick this up when
             // the v0 RunLoopSources get their chance
-        } else if (waitResult >= WAIT_ABANDONED_0 && waitResult < WAIT_ABANDONED_0+handleCount) {
+        } else if (waitResult >= WAIT_ABANDONED_0 && waitResult < WAIT_ABANDONED_0+portCount) {
             // an "abandoned mutex object"
-            livePort = handles[waitResult-WAIT_ABANDONED_0];
+            livePort = ports[waitResult-WAIT_ABANDONED_0];
         } else {
             CFAssert2(waitResult == WAIT_FAILED, __kCFLogAssertion, "%s(): unexpected result from MsgWaitForMultipleObjects: %d", __PRETTY_FUNCTION__, waitResult);
         }
-        if (freeHandles)
-            CFAllocatorDeallocate(kCFAllocatorSystemDefault, handles);
+        if (freePorts)
+            CFAllocatorDeallocate(kCFAllocatorSystemDefault, ports);
         timersToCall = __CFRunLoopTimersToFire(rl, rlm);
 #endif
 
