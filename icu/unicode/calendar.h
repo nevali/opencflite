@@ -172,7 +172,6 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarDateFields defined in ucal.h
      */
     enum EDateFields {
-#ifndef U_HIDE_DEPRECATED_API || DEPLOYMENT_TARGET_WIN32
         ERA,                  // Example: 0..1
         YEAR,                 // Example: 1..big number
         MONTH,                // Example: 0..11
@@ -199,7 +198,6 @@ public:
 		IS_LEAP_MONTH,
 #endif
         FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
-#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -209,7 +207,6 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarDaysOfWeek defined in ucal.h
      */
     enum EDaysOfWeek {
-#ifndef U_HIDE_DEPRECATED_API || DEPLOYMENT_TARGET_WIN32
         SUNDAY = 1,
         MONDAY,
         TUESDAY,
@@ -217,7 +214,6 @@ public:
         THURSDAY,
         FRIDAY,
         SATURDAY
-#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -225,7 +221,6 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarMonths defined in ucal.h
      */
     enum EMonths {
-#ifndef U_HIDE_DEPRECATED_API || DEPLOYMENT_TARGET_WIN32
         JANUARY,
         FEBRUARY,
         MARCH,
@@ -239,7 +234,6 @@ public:
         NOVEMBER,
         DECEMBER,
         UNDECIMBER
-#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -247,10 +241,8 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarAMPMs defined in ucal.h
      */
     enum EAmpm {
-#ifndef U_HIDE_DEPRECATED_API || DEPLOYMENT_TARGET_WIN32
         AM,
         PM
-#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**

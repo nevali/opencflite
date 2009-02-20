@@ -69,7 +69,11 @@
 #endif
 
 #ifndef U_HAVE_UINT8_T
+#ifdef DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_UINT8_T 1
+#else
 #define U_HAVE_UINT8_T 0
+#endif
 #endif
 
 #ifndef U_HAVE_INT16_T
@@ -81,7 +85,11 @@
 #endif
 
 #ifndef U_HAVE_UINT16_T
+#ifdef DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_UINT16_T 1
+#else
 #define U_HAVE_UINT16_T 0
+#endif
 #endif
 
 #ifndef U_HAVE_INT32_T
@@ -93,7 +101,11 @@
 #endif
 
 #ifndef U_HAVE_UINT32_T
+#ifdef DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_UINT32_T 1
+#else
 #define U_HAVE_UINT32_T 0
+#endif
 #endif
 
 #ifndef U_HAVE_INT64_T
@@ -105,7 +117,11 @@
 #endif
 
 #ifndef U_HAVE_UINT64_T
+#ifdef DEPLOYMENT_TARGET_MACOSX
+#define U_HAVE_UINT64_T 1
+#else
 #define U_HAVE_UINT64_T 0
+#endif
 #endif
 
 /*===========================================================================*/
@@ -189,11 +205,7 @@ typedef unsigned int uint32_t;
 #if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
 #define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
 #else
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_IS_BIG_ENDIAN 1
-#else
 #define U_IS_BIG_ENDIAN 0
-#endif
 #endif
 
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
@@ -239,11 +251,9 @@ typedef unsigned int uint32_t;
 #define U_ENABLE_TRACING 1
 #endif
 
-#if DEPLOYMENT_TARGET_WINDOWS
 /* Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT 1
-#endif
 #endif
 
 /* Define the library suffix in a C syntax. */
@@ -291,7 +301,7 @@ typedef unsigned int uint32_t;
 #if 1
 #define U_TZSET         tzset
 #endif
-#if DEPLOYMENT_TARGET_WINDOWS
+#if 1
 #define U_TIMEZONE      timezone
 #endif
 #if DEPLOYMENT_TARGET_MACOSX

@@ -67,11 +67,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_ICU_VERSION_MINOR_NUM 2
-#else
 #define U_ICU_VERSION_MINOR_NUM 6
-#endif
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
@@ -91,32 +87,20 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_ICU_VERSION_SUFFIX _3_2
-#else
 #define U_ICU_VERSION_SUFFIX _3_6
-#endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_ICU_VERSION "3.2"
-#else
 #define U_ICU_VERSION "3.6"
-#endif
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_ICU_VERSION_SHORT "32"
-#else
 #define U_ICU_VERSION_SHORT "36"
-#endif
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4
@@ -139,18 +123,14 @@
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#   if U_DISABLE_RENAMING
+#  if U_DISABLE_RENAMING
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
-#   else
-#if DEPLOYMENT_TARGET_MACOSX
-#define U_ICU_NAMESPACE icu_3_2
-#else
+#  else
 #define U_ICU_NAMESPACE icu_3_6
-#endif
         namespace U_ICU_NAMESPACE { }
         namespace icu = U_ICU_NAMESPACE;
-#   endif
+#  endif
 
 #   ifndef U_USING_ICU_NAMESPACE
 #       define U_USING_ICU_NAMESPACE 1
@@ -225,11 +205,7 @@ u_getVersion(UVersionInfo versionArray);
  * This value may change in the subsequent releases of ICU
  * @stable ICU 2.4
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define UCOL_RUNTIME_VERSION 5
-#else
 #define UCOL_RUNTIME_VERSION 6
-#endif
 
 /** Builder code version. When this is different, same tailoring might result
  * in assigning different collation elements to code points                  
@@ -243,11 +219,7 @@ u_getVersion(UVersionInfo versionArray);
  * This value may change in the subsequent releases of ICU
  * @stable ICU 2.4
  */
-#if DEPLOYMENT_TARGET_MACOSX
-#define UCOL_BUILDER_VERSION 6
-#else
 #define UCOL_BUILDER_VERSION 7
-#endif
 
 /** *** Removed *** Instead we use the data we read from FractionalUCA.txt
  * This is the version of FractionalUCA.txt tailoring rules

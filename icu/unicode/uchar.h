@@ -417,11 +417,7 @@ typedef enum UProperty {
     UCHAR_POSIX_XDIGIT=48,
 #endif /* U_HIDE_DRAFT_API */
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
-#if DEPLOYMENT_TARGET_MACOSX
-    UCHAR_BINARY_LIMIT=42,
-#else
     UCHAR_BINARY_LIMIT=49,
-#endif
 
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @stable ICU 2.2 */
@@ -506,11 +502,7 @@ typedef enum UProperty {
     UCHAR_WORD_BREAK=0x1014,
 #endif /*U_HIDE_DRAFT_API*/
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
-#if DEPLOYMENT_TARGET_MACOSX
-    UCHAR_INT_LIMIT=0x1012,
-#else
     UCHAR_INT_LIMIT=0x1015,
-#endif
 
     /** Bitmask property General_Category_Mask.
         This is the General_Category property returned as a bit mask.
@@ -1270,11 +1262,7 @@ enum UBlockCode {
 #endif /*U_HIDE_DRAFT_API*/
 
     /** @stable ICU 2.0 */
-#if DEPLOYMENT_TARGET_MACOSX
-    UBLOCK_COUNT = 126,
-#else
     UBLOCK_COUNT = 155,
-#endif
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1

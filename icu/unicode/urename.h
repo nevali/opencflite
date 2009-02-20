@@ -815,6 +815,7 @@
 #define uloc_getKeywordValue uloc_getKeywordValue_3_6
 #define uloc_getLCID uloc_getLCID_3_6
 #define uloc_getLanguage uloc_getLanguage_3_6
+#define uloc_getLocaleForLCID uloc_getLocaleForLCID_3_6
 #define uloc_getName uloc_getName_3_6
 #define uloc_getParent uloc_getParent_3_6
 #define uloc_getScript uloc_getScript_3_6
