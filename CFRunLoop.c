@@ -1932,6 +1932,8 @@ try_receive:
             if (_LogCFRunLoop) { CFLog(kCFLogLevelDebug, CFSTR("%p (%s)- waitResult was %d"), CFRunLoopGetCurrent(), *_CFGetProgname(), waitResult); }
         }
         ResetEvent(rl->_wakeUpPort);
+#elif DEPLOYMENT_TARGET_LINUX
+		// XXX - More to fill in here.
 #endif
         if (destroyWaitSet) {
             __CFPortSetFree(waitSet);
@@ -1973,6 +1975,9 @@ try_receive:
         }
         if (freePorts)
             CFAllocatorDeallocate(kCFAllocatorSystemDefault, ports);
+        timersToCall = __CFRunLoopTimersToFire(rl, rlm);
+#elif DEPLOYMENT_TARGET_LINUX
+		// XXX - More to fill in here.
         timersToCall = __CFRunLoopTimersToFire(rl, rlm);
 #endif
 
