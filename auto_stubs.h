@@ -79,13 +79,13 @@ CF_INLINE auto_memory_type_t auto_zone_get_layout_type(auto_zone_t *zone, void *
 
 #if defined(__OBJC__)
 CF_INLINE void objc_collect_if_needed(unsigned long options) {}
-CF_INLINE BOOL objc_collecting_enabled(void) { return 0; }
+CF_INLINE Boolean objc_collecting_enabled(void) { return 0; }
 CF_INLINE id objc_allocate_object(Class cls, int extra) { return 0; }
 CF_INLINE id objc_assign_strongCast(id val, id *dest) { return (*dest = val); }
 CF_INLINE id objc_assign_global(id val, id *dest) { return (*dest = val); }
 CF_INLINE id objc_assign_ivar(id val, id dest, unsigned int offset) { id *d = (id *)((char *)dest + offset); return (*d = val); }
 CF_INLINE void *objc_memmove_collectable(void *dst, const void *src, size_t size) { return memmove(dst, src, size); }
-CF_INLINE BOOL objc_is_finalized(void *ptr) { return 0; }
+CF_INLINE Boolean objc_is_finalized(void *ptr) { return 0; }
 #endif
 
 #endif /* ! AUTO_STUBS_H */

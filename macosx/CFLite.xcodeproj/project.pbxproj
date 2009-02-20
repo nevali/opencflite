@@ -125,22 +125,19 @@
 		8448EFA70ED2798800716715 /* CFXMLParser.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55820ECFAE4D003D696F /* CFXMLParser.c */; };
 		8448EFA80ED2798800716715 /* CFXMLPreferencesDomain.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55830ECFAE4D003D696F /* CFXMLPreferencesDomain.c */; };
 		8448EFA90ED2798800716715 /* CFXMLTree.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55840ECFAE4D003D696F /* CFXMLTree.c */; };
-		8448EFAA0ED2799300716715 /* libSystem.B.dylib in Sources */ = {isa = PBXBuildFile; fileRef = 840CBF450ED24A9B00931057 /* libSystem.B.dylib */; };
-		8448EFAB0ED2799300716715 /* libicucore.dylib in Sources */ = {isa = PBXBuildFile; fileRef = 848B5B0D0ED1548A003D696F /* libicucore.dylib */; };
-		8448EFAD0ED279BC00716715 /* libSystem.B.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CBF450ED24A9B00931057 /* libSystem.B.dylib */; };
-		8448EFAE0ED279BC00716715 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 848B5B0D0ED1548A003D696F /* libicucore.dylib */; };
 		844949890ED27EDF00EEB9C0 /* WritePListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 840CBF6C0ED24F4500931057 /* WritePListExample.cpp */; };
 		844949A20ED27F3100EEB9C0 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		844949A40ED27F8500EEB9C0 /* ReadPListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */; };
 		844F5D5A0F3FB23100239823 /* DNSServiceMetaQuery.c in Sources */ = {isa = PBXBuildFile; fileRef = 844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */; };
 		844F5D5E0F3FB24E00239823 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		845EDB370ED3374D0033E001 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 845EDB360ED3374D0033E001 /* Info.plist */; };
+		8466FDA90F4F42DF009FA7BA /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8466FDA80F4F42DF009FA7BA /* libobjc.dylib */; };
+		8466FDAC0F4F42F7009FA7BA /* libicucore.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8466FDAB0F4F42F7009FA7BA /* libicucore.A.dylib */; };
 		8481BA510F3EA6AB00BD5189 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		8481BA540F3EA6C800BD5189 /* DisplayURL.c in Sources */ = {isa = PBXBuildFile; fileRef = 8481BA460F3EA68A00BD5189 /* DisplayURL.c */; };
 		8481BA810F3EB2D300BD5189 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8481BA800F3EB2D300BD5189 /* CoreServices.framework */; };
 		84915D510F4B5CEA00A3C0DD /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		84915D540F4B5D0500A3C0DD /* CFRunLoopTimerExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 84915D530F4B5D0500A3C0DD /* CFRunLoopTimerExample.c */; };
-		849160410F4B958900A3C0DD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */; };
 		84CD60F50F4A04530049B4EC /* SimpleWebServer.c in Sources */ = {isa = PBXBuildFile; fileRef = 84CD60D00F4A030E0049B4EC /* SimpleWebServer.c */; };
 		84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DA170D0EDDEEEE00B6A2E6 /* date_test.c */; };
@@ -158,7 +155,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		840CBF450ED24A9B00931057 /* libSystem.B.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.B.dylib; path = /usr/lib/libSystem.B.dylib; sourceTree = "<absolute>"; };
 		840CBF6C0ED24F4500931057 /* WritePListExample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WritePListExample.cpp; path = ../examples/WritePListExample/WritePListExample.cpp; sourceTree = SOURCE_ROOT; };
 		84129F440F38C0BD00A64427 /* vproc_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vproc_priv.h; path = ../include/mach_support/vproc_priv.h; sourceTree = SOURCE_ROOT; };
 		84129F460F38C0CF00A64427 /* bootstrap_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bootstrap_priv.h; path = ../include/mach_support/bootstrap_priv.h; sourceTree = SOURCE_ROOT; };
@@ -173,6 +169,8 @@
 		844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DNSMetaServiceQuery; sourceTree = BUILT_PRODUCTS_DIR; };
 		844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DNSServiceMetaQuery.c; path = ../examples/DNSServiceMetaQuery/DNSServiceMetaQuery.c; sourceTree = SOURCE_ROOT; };
 		845EDB360ED3374D0033E001 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = SOURCE_ROOT; };
+		8466FDA80F4F42DF009FA7BA /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = /usr/lib/libobjc.dylib; sourceTree = "<absolute>"; };
+		8466FDAB0F4F42F7009FA7BA /* libicucore.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.A.dylib; path = /usr/lib/libicucore.A.dylib; sourceTree = "<absolute>"; };
 		8481BA460F3EA68A00BD5189 /* DisplayURL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DisplayURL.c; path = ../examples/DisplayURL/DisplayURL.c; sourceTree = SOURCE_ROOT; };
 		8481BA4B0F3EA69C00BD5189 /* DisplayURL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DisplayURL; sourceTree = BUILT_PRODUCTS_DIR; };
 		8481BA800F3EB2D300BD5189 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
@@ -305,7 +303,6 @@
 		848B56480ECFB02B003D696F /* Config_Master.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Config_Master.xcconfig; path = ../XCode_Configs/Config_Master.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B56490ECFB02B003D696F /* ConfigDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigDebug.xcconfig; path = ../XCode_Configs/ConfigDebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		848B564A0ECFB02B003D696F /* ConfigRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ConfigRelease.xcconfig; path = ../XCode_Configs/ConfigRelease.xcconfig; sourceTree = SOURCE_ROOT; };
-		848B5B0D0ED1548A003D696F /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		84915D4D0F4B5CE600A3C0DD /* CFRunLoopTimerExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CFRunLoopTimerExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		84915D530F4B5D0500A3C0DD /* CFRunLoopTimerExample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFRunLoopTimerExample.c; path = ../examples/CFRunLoopTimerExample/CFRunLoopTimerExample.c; sourceTree = SOURCE_ROOT; };
 		84915FB70F4B893300A3C0DD /* CFLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = CFLite; path = build/Debug/CFLite.framework/Versions/A/CFLite; sourceTree = "<group>"; };
@@ -313,7 +310,6 @@
 		84CD60DB0F4A03310049B4EC /* SimpleWebServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SimpleWebServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DA170D0EDDEEEE00B6A2E6 /* date_test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = date_test.c; path = ../tests/date_test.c; sourceTree = SOURCE_ROOT; };
 		84DA171C0EDDF44500B6A2E6 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
-		84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,8 +333,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8448EFAD0ED279BC00716715 /* libSystem.B.dylib in Frameworks */,
-				8448EFAE0ED279BC00716715 /* libicucore.dylib in Frameworks */,
+				8466FDA90F4F42DF009FA7BA /* libobjc.dylib in Frameworks */,
+				8466FDAC0F4F42F7009FA7BA /* libicucore.A.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +383,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				849160410F4B958900A3C0DD /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +400,8 @@
 		08FB7794FE84155DC02AAC07 /* CFLite */ = {
 			isa = PBXGroup;
 			children = (
+				8466FDA80F4F42DF009FA7BA /* libobjc.dylib */,
+				8466FDAB0F4F42F7009FA7BA /* libicucore.A.dylib */,
 				84915FB70F4B893300A3C0DD /* CFLite */,
 				848B56470ECFB00B003D696F /* Xcode_configs */,
 				848B55C20ECFAE55003D696F /* Headers */,
@@ -412,9 +409,6 @@
 				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				845EDB360ED3374D0033E001 /* Info.plist */,
-				840CBF450ED24A9B00931057 /* libSystem.B.dylib */,
-				848B5B0D0ED1548A003D696F /* libicucore.dylib */,
-				84DE4E1D0ED287A00023DFE2 /* CoreFoundation.framework */,
 			);
 			comments = "This XCode project attempts to replicate the steps performed in the BuildCFLite shell script.  For real production use, you should always use the script as it is maintained by the Apple team, and always does the right thing.  This XCode project is mainly for exploration and debugging purposes, and is sometimes out of sync with the BuildCFLite script.\n\nIf something is not working right, be sure to compare the settings in BuildCFLite and this project!";
 			name = CFLite;
@@ -989,8 +983,6 @@
 				8448EFA70ED2798800716715 /* CFXMLParser.c in Sources */,
 				8448EFA80ED2798800716715 /* CFXMLPreferencesDomain.c in Sources */,
 				8448EFA90ED2798800716715 /* CFXMLTree.c in Sources */,
-				8448EFAA0ED2799300716715 /* libSystem.B.dylib in Sources */,
-				8448EFAB0ED2799300716715 /* libicucore.dylib in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1192,11 +1184,16 @@
 				DYLIB_COMPATIBILITY_VERSION = 150;
 				DYLIB_CURRENT_VERSION = 476;
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_INPUT_FILETYPE = sourcecode.c.c;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = c;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../icu,
 					../include,
@@ -1208,10 +1205,13 @@
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				OTHER_CFLAGS = (
 					"-fconstant-cfstrings",
-					"-DU_SHOW_DRAFT_API=1",
 					"-DVERSION=476.17",
+					"-DDEPLOYMENT_TARGET_MACOSX=1",
+					"-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_5",
+					"-DU_SHOW_DRAFT_API=1",
 				);
 				OTHER_LDFLAGS = (
+					"-twolevel_namespace",
 					"-sectcreate",
 					__UNICODE,
 					__csbitmaps,
@@ -1244,10 +1244,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 150;
 				DYLIB_CURRENT_VERSION = 476;
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_INPUT_FILETYPE = sourcecode.c.c;
 				GCC_MODEL_TUNING = G5;
+				GCC_PFE_FILE_C_DIALECTS = c;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../icu,
 					../include,
@@ -1259,10 +1264,13 @@
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				OTHER_CFLAGS = (
 					"-fconstant-cfstrings",
-					"-DU_SHOW_DRAFT_API=1",
 					"-DVERSION=476.17",
+					"-DDEPLOYMENT_TARGET_MACOSX=1",
+					"-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_5",
+					"-DU_SHOW_DRAFT_API=1",
 				);
 				OTHER_LDFLAGS = (
+					"-twolevel_namespace",
 					"-sectcreate",
 					__UNICODE,
 					__csbitmaps,
