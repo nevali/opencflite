@@ -833,8 +833,7 @@ static void __CFRunLoopTimerRescheduleWithAllModes(CFRunLoopTimerRef rlt, CFRunL
 #endif
 }
 
-#if DEPLOYMENT_TARGET_WINDOWS
-
+#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 typedef struct _collectTimersContext {
     CFMutableArrayRef results;
     int64_t cutoffTSR;
@@ -877,7 +876,7 @@ static CFArrayRef __CFRunLoopTimersToFire(CFRunLoopRef rl, CFRunLoopModeRef rlm)
     __CFRunLoopTimersToFireRecursive(rl, rlm, &ctxt);
     return ctxt.results;
 }
-#endif
+#endif // DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 
 /* CFRunLoop */
 
@@ -1556,7 +1555,6 @@ static Boolean __CFRunLoopDoSource1(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRun
     return sourceHandled;
 }
 
-#if !DEPLOYMENT_TARGET_LINUX
 static Boolean __CFRunLoopDoTimer(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRunLoopTimerRef rlt) {	/* DOES CALLOUT */
     Boolean timerHandled = false;
     int64_t oldFireTSR = 0;
@@ -1624,7 +1622,6 @@ static Boolean __CFRunLoopDoTimer(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFRunLo
     __CFRunLoopModeLock(rlm);
     return timerHandled;
 }
-#endif
 
 CF_EXPORT Boolean _CFRunLoopFinished(CFRunLoopRef rl, CFStringRef modeName) {
     CHECK_FOR_FORK();
@@ -1819,7 +1816,7 @@ static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInter
         mach_msg_header_t *msg;
         kern_return_t ret;
         uint8_t buffer[1024 + 80] = {0};	// large enough for 1k of inline payload; must be zeroed for GC
-#elif DEPLOYMENT_TARGET_WINDOWS
+#elif DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
         CFArrayRef timersToCall = NULL;
 #endif
         int32_t returnValue = 0;
@@ -2022,14 +2019,18 @@ try_receive:
         }
 #endif
 
-#if DEPLOYMENT_TARGET_WINDOWS
-        if (NULL != timersToCall) {
-            int i;
-            for (i = CFArrayGetCount(timersToCall)-1; i >= 0; i--)
-                __CFRunLoopDoTimer(rl, rlm, (CFRunLoopTimerRef)CFArrayGetValueAtIndex(timersToCall, i));
+#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+	if (NULL != timersToCall) {
+		CFIndex i;
+		for (i = CFArrayGetCount(timersToCall) - 1; i >= 0; i--) {
+			CFRunLoopTimerRef rlt = (CFRunLoopTimerRef)CFArrayGetValueAtIndex(timersToCall, i);			
+			if (NULL != rlt) {
+				__CFRunLoopDoTimer(rl, rlm, rlt);
+			}
+		}
             CFRelease(timersToCall);
         }
-#endif
+#endif // DEPLOYMENT_TARGER_WINDOWS || DEPLOYMENT_TARGET_LINUX
 
         __CFRunLoopModeUnlock(rlm);	// locks must be taken in order
         __CFRunLoopLock(rl);
