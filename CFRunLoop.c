@@ -1687,7 +1687,7 @@ static void __CFRunLoopModeAddPortsToPortSet(CFRunLoopRef rl, CFRunLoopModeRef r
     }
 }
 
-static __CFPortSet _LastMainWaitSet = 0;
+static __CFPortSet _LastMainWaitSet = CFPORTSET_NULL;
 
 // return NO if we're the main runloop and there are no messages waiting on the port set
 int _CFRunLoopInputsReady(void) {
@@ -1698,12 +1698,12 @@ int _CFRunLoopInputsReady(void) {
     // by calling pthread_main_np().
     // CFRunLoopRef current = CFRunLoopGetMain()
     // if (current != CFRunLoopGetMain()) return true;
-#if DEPLOYMENT_TARGET_MACOSX
     if (!_CFThreadIsMain()) return true;
 
     // XXX_PCB:  can't be any messages waiting if the wait set is NULL.
-    if (_LastMainWaitSet == MACH_PORT_NULL) return false;
- 
+    if (_LastMainWaitSet == CFPORTSET_NULL) return false;
+
+#if DEPLOYMENT_TARGET_MACOSX 
     // prepare a message header with no space for any data, nor a trailer
     mach_msg_header_t msg;
     msg.msgh_size = sizeof(msg);    // just the header, ma'am
@@ -1938,7 +1938,7 @@ try_receive:
 #endif
         if (destroyWaitSet) {
             __CFPortSetFree(waitSet);
-            if (rl == _CFRunLoop0(kNilThreadT)) _LastMainWaitSet = 0;
+            if (rl == _CFRunLoop0(kNilThreadT)) _LastMainWaitSet = CFPORTSET_NULL;
         }
         __CFRunLoopLock(rl);
         __CFRunLoopModeLock(rlm);
