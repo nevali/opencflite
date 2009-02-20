@@ -498,6 +498,21 @@ CF_INLINE UInt64 __CFReadTSR(void) {
     QueryPerformanceCounter(&freq);
     return freq.QuadPart;
 }
+#elif (DEPLOYMENT_TARGET_LINUX)
+// On Linux, __CFReadTSR (see ForFoundation.h) is implemented on the
+// POSIX RT clock_gettime API using the monotonic clock source. Using
+// the alernative "default" processor timebase solution below has
+// problems in that A) it may not work correctly in a multi-processor
+// case and B) there is no standard API on Linux to get the timebase
+// scalar and no arbitrary way to get it in a fashion consistent across
+// Linux architectures (e.g. /proc/cpuinfo is different on i386 vs.
+// powerpc). See CFDate.c for companion initialization code.
+#include <time.h>
+CF_INLINE UInt64 __CFReadTSR(void) {
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	return (((UInt64)now.tv_sec * 1000000000) + now.tv_nsec);
+}
 #else
 CF_INLINE UInt64 __CFReadTSR(void) {
     union {

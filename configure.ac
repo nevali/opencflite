@@ -4,7 +4,7 @@
 #
 # Declare autoconf version requirements
 #
-AC_PREREQ(2.59)
+AC_PREREQ(2.61)
 
 #
 # Initialize autoconf for the package
@@ -497,6 +497,12 @@ LDFLAGS="${PTHREAD_LDFLAGS} ${LDFLAGS}"
 LIBS="${PTHREAD_LIBS} ${LIBS}"
 
 #
+# Check for where clock_gettime and friends are located.
+#
+
+AC_CHECK_LIB(rt, clock_gettime)
+
+#
 # Check for DLFCN support.
 #
 AC_CHECK_LIB(dl, dlopen)
@@ -581,6 +587,7 @@ AC_CHECK_HEADERS([malloc/malloc.h])
 AC_CHECK_HEADERS([netinet/in.h])
 AC_CHECK_HEADERS([objc/objc.h])
 AC_CHECK_HEADERS([objc/runtime.h])
+AC_CHECK_HEADERS([poll.h])
 AC_CHECK_HEADERS([pwd.h])
 AC_CHECK_HEADERS([semaphore.h])
 AC_CHECK_HEADERS([setjmp.h])

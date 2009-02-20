@@ -43,6 +43,9 @@
 #include <CoreFoundation/CFNumber.h>
 #include "CFInternal.h"
 #include <math.h>
+#if DEPLOYMENT_TARGET_LINUX
+#include <time.h>
+#endif
 #if DEPLOYMENT_TARGET_MACOSX
 #include <sys/time.h>
 #endif
@@ -131,15 +134,22 @@ __private_extern__ void __CFDateInitialize(void) {
     struct mach_timebase_info info;
     mach_timebase_info(&info);
     __CFTSRRate = (1.0E9 / (double)info.numer) * (double)info.denom;
-    __CF1_TSRRate = 1.0 / __CFTSRRate;
 #elif DEPLOYMENT_TARGET_WINDOWS
     LARGE_INTEGER freq;
     if (!QueryPerformanceFrequency(&freq)) {
         HALT;
     }
     __CFTSRRate = (double)freq.QuadPart;
-    __CF1_TSRRate = 1.0 / __CFTSRRate;
+#elif DEPLOYMENT_TARGET_LINUX
+	// On Linux, __CFReadTSR (see ForFoundation.h) is implemented on
+	// the POSIX RT clock_* APIs which work at nanosecond granularity
+	// (though not necessarily nanosecond resolution). Simply set the
+	// TSRRate to 1 ns.
+	__CFTSRRate = 1.0E9;
+#else
+#warning "__CFTSRRate not initialized for this platform!"
 #endif
+	__CF1_TSRRate = 1.0 / __CFTSRRate;
     CFDateGetTypeID(); // cause side-effects
 }
 
