@@ -3001,10 +3001,8 @@ CFRunLoopTimerRef CFRunLoopTimerCreate(CFAllocatorRef allocator, CFAbsoluteTime 
     memory->_order = order;
 #if DEPLOYMENT_TARGET_MACOSX
     memory->_port = MACH_PORT_NULL;
-    int64_t now2 = (int64_t)mach_absolute_time();
-#else
-    int64_t now2 = (int64_t)0; // FIXMFIXMFIXME
 #endif
+    int64_t now2 = __CFReadTSR();
     CFAbsoluteTime now1 = CFAbsoluteTimeGetCurrent();
     if (3.1556952e+9 < fireDate) fireDate = 3.1556952e+9;
     if (fireDate < now1) {
@@ -3054,11 +3052,7 @@ CFAbsoluteTime CFRunLoopTimerGetNextFireDate(CFRunLoopTimerRef rlt) {
 	result = fireTime;
     }
     __CFRunLoopTimerUnlock(rlt);
-#if DEPLOYMENT_TARGET_MACOSX
-    int64_t now2 = (int64_t)mach_absolute_time();
-#else
-    int64_t now2 = (int64_t)0 ;// FIXMEFIXMEFIXME
-#endif
+    int64_t now2 = __CFReadTSR();
     CFAbsoluteTime now1 = CFAbsoluteTimeGetCurrent();
     return (0 == result) ? 0.0 : now1 + __CFTSRToTimeInterval(result - now2);
 }
@@ -3066,11 +3060,7 @@ CFAbsoluteTime CFRunLoopTimerGetNextFireDate(CFRunLoopTimerRef rlt) {
 void CFRunLoopTimerSetNextFireDate(CFRunLoopTimerRef rlt, CFAbsoluteTime fireDate) {
     CHECK_FOR_FORK();
     __CFRunLoopTimerFireTSRLock();
-#if DEPLOYMENT_TARGET_MACOSX
-    int64_t now2 = (int64_t)mach_absolute_time();
-#else
-    int64_t now2 = (int64_t)0;   // FIXMEFIXMEFIXME
-#endif
+    int64_t now2 = __CFReadTSR();
     CFAbsoluteTime now1 = CFAbsoluteTimeGetCurrent();
     if (3.1556952e+9 < fireDate) fireDate = 3.1556952e+9;
     if (fireDate < now1) {
