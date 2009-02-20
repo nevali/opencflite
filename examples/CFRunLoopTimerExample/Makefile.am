@@ -1,13 +1,9 @@
-# This example doesn't work yet on Linux (due to CoreFoundation
-# implementation issues), so the progam is EXTRA_ rather than check_
-# and test is the target goal rather than check.
-
 AM_CFLAGS			= -I${top_srcdir}/include
 
 EXTRA_DIST			= CFRunLoopTimerExample.vcproj
 
 if CF_BUILD_TESTS
-EXTRA_PROGRAMS			= CFRunLoopTimerExample
+check_PROGRAMS			= CFRunLoopTimerExample
 endif
 
 CFRunLoopTimerExample_LDADD	= ${top_builddir}/libCoreFoundation.la
@@ -15,7 +11,7 @@ CFRunLoopTimerExample_LDADD	= ${top_builddir}/libCoreFoundation.la
 CFRunLoopTimerExample_SOURCES	= CFRunLoopTimerExample.c
 
 if CF_BUILD_TESTS
-test: CFRunLoopTimerExample
+check:
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.25  5.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  1.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  0.50
@@ -26,9 +22,9 @@ test: CFRunLoopTimerExample
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  0.33 4.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  1.00 2.00 8.00
 
-gdb: CFRunLoopTimerExample
+ddd gdb:
 	${LIBTOOL} --mode execute ${@} ./CFRunLoopTimerExample
 
-valgrind: CFRunLoopTimerExample
+valgrind:
 	${LIBTOOL} --mode execute ${@} ${VALGRINDFLAGS} ./CFRunLoopTimerExample
 endif

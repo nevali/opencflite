@@ -13,10 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-# This example doesn't work yet on Linux (due to CoreFoundation
-# implementation issues), so the progam is EXTRA_ rather than check_
-# and test is the target goal rather than check.
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -35,7 +31,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@CF_BUILD_TESTS_TRUE@EXTRA_PROGRAMS = CFRunLoopTimerExample$(EXEEXT)
+@CF_BUILD_TESTS_TRUE@check_PROGRAMS = CFRunLoopTimerExample$(EXEEXT)
 subdir = examples/CFRunLoopTimerExample
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -237,6 +233,13 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
 CFRunLoopTimerExample$(EXEEXT): $(CFRunLoopTimerExample_OBJECTS) $(CFRunLoopTimerExample_DEPENDENCIES) 
 	@rm -f CFRunLoopTimerExample$(EXEEXT)
 	$(LINK) $(CFRunLoopTimerExample_OBJECTS) $(CFRunLoopTimerExample_LDADD) $(LIBS)
@@ -350,6 +353,7 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 check: check-am
 all-am: Makefile
 installdirs:
@@ -379,7 +383,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -437,21 +442,22 @@ uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+.PHONY: CTAGS GTAGS all all-am check check-am clean \
+	clean-checkPROGRAMS clean-generic clean-libtool ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am
 
 
-@CF_BUILD_TESTS_TRUE@test: CFRunLoopTimerExample
+@CF_BUILD_TESTS_TRUE@check:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.25  5.00
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  1.00
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  0.50
@@ -462,10 +468,10 @@ uninstall-am:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  0.33 4.00
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.50  1.00 2.00 8.00
 
-@CF_BUILD_TESTS_TRUE@gdb: CFRunLoopTimerExample
+@CF_BUILD_TESTS_TRUE@ddd gdb:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ${@} ./CFRunLoopTimerExample
 
-@CF_BUILD_TESTS_TRUE@valgrind: CFRunLoopTimerExample
+@CF_BUILD_TESTS_TRUE@valgrind:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ${@} ${VALGRINDFLAGS} ./CFRunLoopTimerExample
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
