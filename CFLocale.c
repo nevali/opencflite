@@ -620,12 +620,11 @@ CFArrayRef CFLocaleCopyPreferredLanguages(void) {
     CFMutableArrayRef newArray = CFArrayCreateMutable(kCFAllocatorSystemDefault, 0, &kCFTypeArrayCallBacks);
    
 #if DEPLOYMENT_TARGET_WINDOWS
-    LANGID langId = GetUserDefaultUILanguage();
+    LANGID langId = GetUserDefaultLangID();
     CFStringRef lang_name = __CFLocaleWindowsLCIDToISOLocaleName(langId);
     CFArrayAppendValue(newArray, lang_name);
 #else
-    CFArrayRef languagesArray = NULL;
-    languagesArray = (CFArrayRef)CFPreferencesCopyAppValue(CFSTR("AppleLanguages"), kCFPreferencesCurrentApplication);
+    CFArrayRef languagesArray = (CFArrayRef)CFPreferencesCopyAppValue(CFSTR("AppleLanguages"), kCFPreferencesCurrentApplication);
     if (languagesArray && (CFArrayGetTypeID() == CFGetTypeID(languagesArray))) {
         for (CFIndex idx = 0, cnt = CFArrayGetCount(languagesArray); idx < cnt; idx++) {
             CFStringRef str = (CFStringRef)CFArrayGetValueAtIndex(languagesArray, idx);

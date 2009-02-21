@@ -1190,7 +1190,7 @@ __private_extern__ CFArrayRef _CFBundleCopyUserLanguages(Boolean useBackstops) {
     CFArrayRef result = NULL;
     static CFArrayRef userLanguages = NULL;
     static Boolean didit = false;
-    CFArrayRef preferencesArray = NULL;
+    CFArrayRef preferencesArray = CFLocaleCopyPreferredLanguages();
     // This is a temporary solution, until the argument domain is moved down into CFPreferences
     __CFSpinLock(&CFBundleResourceGlobalDataLock);
     if (!didit) {
