@@ -2702,7 +2702,7 @@ Boolean CFStringFindWithOptionsAndLocale(CFStringRef string, CFStringRef stringT
             if (compareOptions & kCFCompareLocalized) {
                 CFLocaleRef currentLocale = CFLocaleCopyCurrent();
                 langCode = (const uint8_t *)_CFStrGetLanguageIdentifierForLocale(currentLocale);
-		CFRelease(currentLocale);
+                CFRelease(currentLocale);
             }
         } else {
             langCode = (const uint8_t *)_CFStrGetLanguageIdentifierForLocale(locale);

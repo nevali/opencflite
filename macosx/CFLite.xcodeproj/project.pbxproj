@@ -60,7 +60,6 @@
 		84129F9F0F3A4C2600A64427 /* CFXMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CE0ECFAF07003D696F /* CFXMLParser.h */; };
 		84129FA00F3A4C2600A64427 /* CoreFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 848B55CF0ECFAF07003D696F /* CoreFoundation.h */; };
 		841BE8470F395D91001F2A66 /* StringExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 841BE83B0F395D3E001F2A66 /* StringExample.c */; };
-		841BE8490F395DA9001F2A66 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		841BE9230F395FB4001F2A66 /* AllocatorExample.c in Sources */ = {isa = PBXBuildFile; fileRef = 841BE91A0F395F65001F2A66 /* AllocatorExample.c */; };
 		841BE9250F395FBE001F2A66 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		8448EF6C0ED2798800716715 /* CFApplicationPreferences.c in Sources */ = {isa = PBXBuildFile; fileRef = 848B55480ECFAE4D003D696F /* CFApplicationPreferences.c */; };
@@ -142,6 +141,7 @@
 		84DA17230EDDF47100B6A2E6 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		84DA17270EDDF47E00B6A2E6 /* date_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DA170D0EDDEEEE00B6A2E6 /* date_test.c */; };
 		84DE4E550ED287D40023DFE2 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
+		84F19F470F50FAC70092A274 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -310,6 +310,7 @@
 		84CD60DB0F4A03310049B4EC /* SimpleWebServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SimpleWebServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DA170D0EDDEEEE00B6A2E6 /* date_test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = date_test.c; path = ../tests/date_test.c; sourceTree = SOURCE_ROOT; };
 		84DA171C0EDDF44500B6A2E6 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		84F19F070F50F9CE0092A274 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,7 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				841BE8490F395DA9001F2A66 /* CFLite.framework in Frameworks */,
+				84F19F470F50FAC70092A274 /* CFLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +410,7 @@
 				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				845EDB360ED3374D0033E001 /* Info.plist */,
+				84F19F070F50F9CE0092A274 /* CoreFoundation.framework */,
 			);
 			comments = "This XCode project attempts to replicate the steps performed in the BuildCFLite shell script.  For real production use, you should always use the script as it is maintained by the Apple team, and always does the right thing.  This XCode project is mainly for exploration and debugging purposes, and is sometimes out of sync with the BuildCFLite script.\n\nIf something is not working right, be sure to compare the settings in BuildCFLite and this project!";
 			name = CFLite;

@@ -37,9 +37,10 @@
  WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR 
  OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include <CoreFoundation/CoreFoundation.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <CoreFoundation/CoreFoundation.h>
 
 
 // This function will print the provided arguments (printf style varargs) out to the console.
@@ -374,28 +375,151 @@ void stringManipulation(void) {
    CFRelease(strChange);
 }
 
+Boolean equalValues(CFStringRef number, CFNumberRef expected, CFNumberFormatterStyle style, CFNumberFormatterOptionFlags option)
+{
+   CFLocaleRef curLocale = CFLocaleCopyCurrent();
+   CFNumberFormatterRef fmt;
+   CFNumberRef val;
+
+   show(CFSTR("Make a Number from : %@"), number);
+   
+   fmt = CFNumberFormatterCreate (0, curLocale, style);
+   val = CFNumberFormatterCreateNumberFromString(0, fmt, number, 0, option);
+   
+   show(CFSTR("val=%@, should be=%@\n"), val, expected);
+   
+   if (!val)
+      return false;
+   
+   return (0 == CFNumberCompare(val, expected, 0));
+}
+
 void stringHandling(void) {
    
    CFStringRef number;
-   CFNumberRef val, compare;
-   CFNumberFormatterRef fmt;
-   CFLocaleRef curLocale;
-   int theValue = 89;
+   int theValue = 80;
+   double theOtherValue = 123.26;
+   CFNumberRef expected = CFNumberCreate(0, kCFNumberIntType, &theValue);
 
    show(CFSTR("------------------Number Magic---------------"));
+   show(CFSTR("1.  Integer Parsing"));
+   show(CFSTR("   (a) Decimal Style"));
 
-   number = CFStringCreateWithCString(NULL, "eighty", kCFStringEncodingASCII);
-   compare = CFNumberCreate(0, kCFNumberIntType, &theValue);
+   number = CFStringCreateWithCString(NULL, "80.0", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterDecimalStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (b) Currency Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "$80.00", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterCurrencyStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (c) Percent Style (does not work for integers)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "80%", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterPercentStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (d) Scientific Notation Style (does not work for integers)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "8.0E1", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterScientificStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (e) Spell-Out Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "eighty", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterSpellOutStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (f) No Style (decimal)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "80.0", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterNoStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (g) No Style (spell out) (is not expected to work)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "eighty", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterNoStyle, kCFNumberFormatterParseIntegersOnly))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("2.  Decimal Parsing"));
+   show(CFSTR("   (a) Decimal Style"));
 
-   show(CFSTR("Make a Number from : %@"), number);
-
-   curLocale = CFLocaleCopyCurrent ();
-   fmt = CFNumberFormatterCreate (0, curLocale, kCFNumberFormatterSpellOutStyle);
-   val = CFNumberFormatterCreateNumberFromString(0, fmt, number, 0, kCFNumberFormatterParseIntegersOnly);
-      
-   show(CFSTR("val=%@, compare=%@\n"), val, compare);   
-
-   CFRelease(curLocale);
+   CFRelease(expected);
+   expected = CFNumberCreate(0, kCFNumberDoubleType, &theOtherValue);
+   
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "123.26", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterDecimalStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (b) Currency Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "$123.26", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterCurrencyStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (c) Percent Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "123.26%", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterPercentStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (d) Scientific Notation Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "1.2326e2", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterScientificStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (e) Spell-Out Style"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "one hundred twenty-three point two six", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterSpellOutStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (f) No Style (decimal)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "123.26", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterNoStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
+   show(CFSTR("   (g) No Style (spell-out) (not expected to work)"));
+   CFRelease(number);
+   number = CFStringCreateWithCString(NULL, "one hundred twenty three point two six", kCFStringEncodingASCII);   
+   if (equalValues(number, expected, kCFNumberFormatterNoStyle, 0))
+      show(CFSTR("correct."));
+   else
+      show(CFSTR("WRONG!!!"));
+   
    CFRelease(number);
 }
 
