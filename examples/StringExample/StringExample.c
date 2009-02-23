@@ -3,6 +3,8 @@
  Author: Ali Ozer
  4/2/99
 
+ Note: Compile as "gcc -framework CoreFoundation -o stringtest StringExample.c"
+ 
  Copyright (c) 1999-2004, Apple Computer, Inc., all rights reserved.
 */
 /*
@@ -377,7 +379,11 @@ void stringManipulation(void) {
 
 Boolean equalValues(CFStringRef number, CFNumberRef expected, CFNumberFormatterStyle style, CFNumberFormatterOptionFlags option)
 {
+   //CFStringRef enLocaleIdentifier = CFSTR("en_US");
+   //CFLocaleRef curLocale = CFLocaleCreate(NULL, enLocaleIdentifier);
+   
    CFLocaleRef curLocale = CFLocaleCopyCurrent();
+   CFStringRef identifier = CFLocaleGetIdentifier(curLocale);
    CFNumberFormatterRef fmt;
    CFNumberRef val;
 

@@ -1198,7 +1198,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../icu,
-					../include,
+					/usr/local/include,
 					../include/mach_support,
 					../dist/include,
 				);
@@ -1257,7 +1257,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../icu,
-					../include,
+					/usr/local/include,
 					../include/mach_support,
 					../dist/include,
 				);
