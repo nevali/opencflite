@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008-2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009 Stuart Crook <stuart@echus.demon.co.uk>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -46,6 +47,7 @@
 #include <CoreFoundation/CFPropertyList.h>
 #include <CoreFoundation/CFByteOrder.h>
 #include <CoreFoundation/CFRuntime.h>
+#include <CoreFoundation/CFStream.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
@@ -178,7 +180,12 @@ static void writeBytes(__CFBinaryPlistWriteBuffer *buf, const UInt8 *bytes, CFIn
         CFDataAppendBytes((CFMutableDataRef)buf->stream, bytes, length);
         buf->written += length;
     } else {
+        /* SystemConfiguration relies on being able to serialize a plist to a write stream.
+         * There seems no reason why this isn't supported. The old code read:
         CFAssert(false, __kCFLogAssertion, "Streams are not supported on this platform");
+         */
+        CFIndex lengthWritten = CFWriteStreamWrite((CFWriteStreamRef)buf->stream, bytes, length);
+        buf->written += lengthWritten;
     }
 }
 
