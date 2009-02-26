@@ -1899,7 +1899,7 @@ try_receive:
             freePorts = false;
         } else {
             // copy out the ports to be safe from other threads at work
-            ports = __CFPortSetGetPorts(waitSet, portBuf, MAX_PORTS, &portCount);
+            ports = __CFPortSetGetPorts(waitSet, portBuf, MAX_PORTS, (uint32_t*)&portCount);
             freePorts = (ports != portBuf);
         }
         // should msgQMask be an OR'ing of this and all submodes' masks?
