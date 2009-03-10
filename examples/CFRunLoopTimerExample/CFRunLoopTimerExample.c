@@ -7,6 +7,7 @@
  *      fires N timers every T[n] seconds for up to L seconds.
  */
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -232,7 +233,7 @@ TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 
 	/* Compute the expected number of timer iterations. */
 
-	timerIterations = inLimit / timerInterval;
+	timerIterations = lround(inLimit / timerInterval);
 
 	/* Allocate storage for the timer data. */
 
@@ -254,7 +255,7 @@ TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 									&theContext);
 	require(theTimer != NULL, fail);
 
-	printf("Will fire timer %lu every %f seconds for %f seconds, "
+	printf("Will fire timer %lu every %g seconds for %g seconds, "
 		   "up to %lu time%s.\n",
 		   inIndex, timerInterval, inLimit, timerIterations,
 		   timerIterations == 1 ? "" : "s");
@@ -346,7 +347,7 @@ main(int argc, const char * const argv[])
 
 	timerContainer = TimerContainerCreate(timerCount);
 
-	printf("Will fire a total of %d timer%s for %f seconds.\n",
+	printf("Will fire a total of %d timer%s for %g seconds.\n",
 		   timerCount, ((timerCount == 1) ? "" : "s"), timerLimit);
 
 	/* Allocate each timer and add it to the container. */
@@ -373,7 +374,7 @@ main(int argc, const char * const argv[])
 		bool result;
 		theTimer = TimerContainerGet(timerContainer, i);
 
-		result = (theTimer->mIterations.mShould == theTimer->mIterations.mDid);
+		result = (theTimer->mIterations.mShould >= theTimer->mIterations.mDid);
 
 		if (!result) {
 			fprintf(stderr,
