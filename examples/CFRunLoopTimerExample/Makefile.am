@@ -13,6 +13,7 @@ CFRunLoopTimerExample_SOURCES	= CFRunLoopTimerExample.c
 if CF_BUILD_TESTS
 check:
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.25  5.00
+	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.40  2.30
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  1.00
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  0.50
 	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.10  1.00

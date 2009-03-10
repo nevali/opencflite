@@ -459,6 +459,7 @@ uninstall-am:
 
 @CF_BUILD_TESTS_TRUE@check:
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.25  5.00
+@CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.40  2.30
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  1.00
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 1.00  0.50
 @CF_BUILD_TESTS_TRUE@	${LIBTOOL} --mode execute ./CFRunLoopTimerExample 0.10  1.00
