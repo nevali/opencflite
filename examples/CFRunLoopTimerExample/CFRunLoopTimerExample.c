@@ -101,9 +101,10 @@ TimerCallback(CFRunLoopTimerRef timer, void *info)
 static TimerContainerRef
 TimerContainerCreate(CFIndex inElements)
 {
-	return (TimerContainerRef)(CFAllocatorAllocate(kCFAllocatorSystemDefault,
-								inElements * sizeof(TimerData *),
-								0));
+	return ((TimerContainerRef)CFAllocatorAllocate(kCFAllocatorSystemDefault,
+												   inElements *
+												   sizeof(TimerData *),
+												   0));
 }
 
 /*
@@ -236,8 +237,8 @@ TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 	/* Allocate storage for the timer data. */
 
 	theData = (TimerData*)CFAllocatorAllocate(kCFAllocatorSystemDefault,
-								  sizeof (TimerData),
-								  0);
+											  sizeof (TimerData),
+											  0);
 	require(theData != NULL, done);
 
 	theContext.info = theData;
