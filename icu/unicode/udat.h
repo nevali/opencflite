@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and others.
-* All Rights Reserved.
+ * Copyright (C) 1996-2008, International Business Machines
+ * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
 
@@ -151,12 +151,98 @@ typedef enum UDateFormatStyle {
     UDAT_SHORT,
     /** Default style */
     UDAT_DEFAULT = UDAT_MEDIUM,
+
+    /** Bitfield for relative date */
+    UDAT_RELATIVE = (1 << 7),
+    
+    UDAT_FULL_RELATIVE = UDAT_FULL | UDAT_RELATIVE,
+        
+    UDAT_LONG_RELATIVE = UDAT_LONG | UDAT_RELATIVE,
+    
+    UDAT_MEDIUM_RELATIVE = UDAT_MEDIUM | UDAT_RELATIVE,
+    
+    UDAT_SHORT_RELATIVE = UDAT_SHORT | UDAT_RELATIVE,
+    
+    
     /** No style */
     UDAT_NONE = -1,
     /** for internal API use only */
     UDAT_IGNORE = -2
 
 } UDateFormatStyle;
+
+
+/**
+ * Below are a set of pre-defined skeletons.
+ *
+ * <P>
+ * A skeleton 
+ * <ol>
+ * <li>
+ *    only keeps the field pattern letter and ignores all other parts 
+ *    in a pattern, such as space, punctuations, and string literals.
+ * </li>
+ * <li>
+ *    hides the order of fields. 
+ * </li>
+ * <li>
+ *    might hide a field's pattern letter length.
+ *
+ *    For those non-digit calendar fields, the pattern letter length is 
+ *    important, such as MMM, MMMM, and MMMMM; EEE and EEEE, 
+ *    and the field's pattern letter length is honored.
+ *    
+ *    For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy, 
+ *    the field pattern length is ignored and the best match, which is defined 
+ *    in date time patterns, will be returned without honor the field pattern
+ *    letter length in skeleton.
+ * </li>
+ * </ol>
+ *
+ * @draft ICU 4.0
+ */
+
+#define UDAT_MINUTE_SECOND              "ms"
+#define UDAT_HOUR24_MINUTE              "Hm"
+#define UDAT_HOUR24_MINUTE_SECOND       "Hms"      
+#define UDAT_HOUR_MINUTE_SECOND         "hms"
+#define UDAT_STANDALONE_MONTH           "LLLL"
+#define UDAT_ABBR_STANDALONE_MONTH      "LLL"
+#define UDAT_YEAR_QUARTER               "yQQQ"
+#define UDAT_YEAR_ABBR_QUARTER          "yQ"
+/**
+ * Below are a set of pre-defined skeletons that 
+ * have pre-defined interval patterns in resource files.
+ * Users are encouraged to use them in date interval format factory methods.
+ *
+ */
+#define UDAT_HOUR_MINUTE                "hm"
+#define UDAT_YEAR                       "y"
+#define UDAT_DAY                        "d"
+#define UDAT_NUM_MONTH_WEEKDAY_DAY      "MEd"
+#define UDAT_YEAR_NUM_MONTH             "yM"              
+#define UDAT_NUM_MONTH_DAY              "Md"
+#define UDAT_YEAR_NUM_MONTH_WEEKDAY_DAY "yMEd"
+#define UDAT_ABBR_MONTH_WEEKDAY_DAY     "MMMEd"
+#define UDAT_YEAR_MONTH                 "yMMMM"
+#define UDAT_YEAR_ABBR_MONTH            "yMMM"
+#define UDAT_MONTH_DAY                  "MMMMd"
+#define UDAT_ABBR_MONTH_DAY             "MMMd" 
+#define UDAT_MONTH_WEEKDAY_DAY          "MMMMEEEEd"
+#define UDAT_YEAR_ABBR_MONTH_WEEKDAY_DAY "yMMMEd" 
+#define UDAT_YEAR_MONTH_WEEKDAY_DAY     "yMMMMEEEEd"
+#define UDAT_YEAR_MONTH_DAY             "yMMMMd"
+#define UDAT_YEAR_ABBR_MONTH_DAY        "yMMMd"
+#define UDAT_YEAR_NUM_MONTH_DAY         "yMd"
+#define UDAT_NUM_MONTH                  "M"
+#define UDAT_ABBR_MONTH                 "MMM"
+#define UDAT_MONTH                      "MMMM"
+#define UDAT_HOUR_MINUTE_GENERIC_TZ     "hmv"
+#define UDAT_HOUR_MINUTE_TZ             "hmz"
+#define UDAT_HOUR                       "h"
+#define UDAT_HOUR_GENERIC_TZ            "hv"
+#define UDAT_HOUR_TZ                    "hz"
+
 
 /**
  * FieldPosition and UFieldPosition selectors for format fields
@@ -342,49 +428,52 @@ typedef enum UDateFormatField {
      */
     UDAT_TIMEZONE_RFC_FIELD = 23,
 
-#ifndef U_HIDE_DRAFT_API
-
     /**
      * FieldPosition and UFieldPosition selector for 'v' field alignment,
      * corresponding to the UCAL_ZONE_OFFSET field.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
     /**
      * FieldPosition selector for 'c' field alignment,
-     * corresponding to the {@link Calendar#DAY} field. 
+     * corresponding to the {@link #UCAL_DATE} field. 
      * This displays the stand alone day name, if available.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_STANDALONE_DAY_FIELD = 25,
     
     /**
      * FieldPosition selector for 'L' field alignment,
-     * corresponding to the {@link Calendar#MONTH} field.  
+     * corresponding to the {@link #UCAL_MONTH} field.  
      * This displays the stand alone month name, if available.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_STANDALONE_MONTH_FIELD = 26,
 
     /**
      * FieldPosition selector for "Q" field alignment,
      * corresponding to quarters. This is implemented
-     * using the {@link Calendar#MONTH} field. This
+     * using the {@link #UCAL_MONTH} field. This
      * displays the quarter.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UDAT_QUARTER_FIELD = 27,
 
     /**
      * FieldPosition selector for the "q" field alignment,
      * corresponding to stand-alone quarters. This is
-     * implemented using the {@link Calendar#MONTH} field.
+     * implemented using the {@link #UCAL_MONTH} field.
      * This displays the stand-alone quarter.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UDAT_STANDALONE_QUARTER_FIELD = 28,
 
-#endif /*U_HIDE_DRAFT_API*/
+    /**
+     * FieldPosition and UFieldPosition selector for 'V' field alignment,
+     * corresponding to the UCAL_ZONE_OFFSET field.
+     * @stable ICU 3.8
+     */
+    UDAT_TIMEZONE_SPECIAL_FIELD = 29,
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for 
@@ -394,7 +483,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT = 29
+    UDAT_FIELD_COUNT = 30
 
 } UDateFormatField;
 

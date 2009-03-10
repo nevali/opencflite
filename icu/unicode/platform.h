@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -211,6 +211,11 @@ typedef unsigned int uint32_t;
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
+/* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check lock. */
+#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#define UMTX_STRONG_MEMORY_MODEL 1
+#endif
+
 #ifndef U_DEBUG
 #define U_DEBUG 0
 #endif
@@ -282,6 +287,26 @@ typedef unsigned int uint32_t;
 #define U_SIZEOF_WCHAR_T    2
 
 #define U_HAVE_WCSCPY       0
+
+/**
+ * \def U_DECLARE_UTF16
+ * Do not use this macro. Use the UNICODE_STRING or U_STRING_DECL macros
+ * instead.
+ * @internal
+ */
+#if 1 || defined(U_CHECK_UTF16_STRING)
+#if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
+    || (defined(__HP_aCC) && __HP_aCC >= 035000) \
+    || (defined(__HP_cc) && __HP_cc >= 111106)
+#define U_DECLARE_UTF16(string) u ## string
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
+/* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
+/* Sun's C compiler has issues with this notation, and it's unreliable. */
+#define U_DECLARE_UTF16(string) U ## string
+#elif U_SIZEOF_WCHAR_T == 2 \
+    && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#define U_DECLARE_UTF16(string) L ## string
+#endif
 #endif
 
 /*===========================================================================*/
@@ -326,6 +351,11 @@ typedef unsigned int uint32_t;
 
 #ifdef USE_GCC_VISIBILITY_ATTRIBUTE
 #define U_EXPORT __attribute__((visibility("default")))
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
+   || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+#define U_EXPORT __global
+/*#elif defined(__HP_aCC) || defined(__HP_cc)
+#define U_EXPORT __declspec(dllexport)*/
 #else
 #define U_EXPORT
 #endif
