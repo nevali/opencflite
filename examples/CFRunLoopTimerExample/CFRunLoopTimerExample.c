@@ -24,8 +24,8 @@ typedef struct _TimerData {
 	CFIndex				mIndex;
 	double				mInterval;
 	struct {
-		int				mDid;
-		int				mShould;
+		unsigned long	mDid;
+		unsigned long	mShould;
 	} mIterations;
 	CFRunLoopTimerRef	mRef;
 } TimerData;
@@ -69,7 +69,7 @@ TimerCallback(CFRunLoopTimerRef timer, void *info)
 
 	theDate = CFAbsoluteTimeGetGregorianDate(CFAbsoluteTimeGetCurrent(), tz);
 
-	printf("%04ld-%02d-%02d %02d:%02d:%06.3f, timer: %lu, iteration: %d\n",
+	printf("%04d-%02d-%02d %02d:%02d:%06.3f, timer: %lu, iteration: %lu\n",
 		   theDate.year, theDate.month, theDate.day,
 		   theDate.hour, theDate.minute, theDate.second,
 		   theData->mIndex,
@@ -213,7 +213,7 @@ static TimerData *
 TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 {
 	double timerInterval = 0.0;
-	long timerIterations = 0;
+	unsigned long timerIterations = 0;
 	char *end = NULL;
 	TimerData *theData = NULL;
 	CFRunLoopTimerRef theTimer = NULL;
@@ -255,7 +255,7 @@ TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 	require(theTimer != NULL, fail);
 
 	printf("Will fire timer %lu every %f seconds for %f seconds, "
-		   "up to %ld time%s.\n",
+		   "up to %lu time%s.\n",
 		   inIndex, timerInterval, inLimit, timerIterations,
 		   timerIterations == 1 ? "" : "s");
 
@@ -377,7 +377,7 @@ main(int argc, const char * const argv[])
 
 		if (!result) {
 			fprintf(stderr,
-					"Timer %lu fired %d of the expected %d times.\n",
+					"Timer %lu fired %lu of the expected %lu times.\n",
 					theTimer->mIndex,
 					theTimer->mIterations.mDid,
 					theTimer->mIterations.mShould);
