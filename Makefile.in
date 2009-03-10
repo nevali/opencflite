@@ -140,8 +140,7 @@ am__objects_1 = libCoreFoundation_la-CFApplicationPreferences.lo \
 	libCoreFoundation_la-CFXMLNode.lo \
 	libCoreFoundation_la-CFXMLParser.lo \
 	libCoreFoundation_la-CFXMLPreferencesDomain.lo \
-	libCoreFoundation_la-CFXMLTree.lo \
-	libCoreFoundation_la-Cocotron.lo
+	libCoreFoundation_la-CFXMLTree.lo
 am_libCoreFoundation_la_OBJECTS = $(am__objects_1)
 libCoreFoundation_la_OBJECTS = $(am_libCoreFoundation_la_OBJECTS)
 libCoreFoundation_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -168,7 +167,7 @@ am__libCoreFoundation_debug_la_SOURCES_DIST =  \
 	CFUniChar.c CFUnicodeDecomposition.c CFUnicodePrecomposition.c \
 	CFUserNotification.c CFUtilities.c CFVersion.c \
 	CFWindowsMessageQueue.c CFXMLInputStream.c CFXMLNode.c \
-	CFXMLParser.c CFXMLPreferencesDomain.c CFXMLTree.c Cocotron.c
+	CFXMLParser.c CFXMLPreferencesDomain.c CFXMLTree.c
 am__objects_2 =  \
 	libCoreFoundation_debug_la-CFApplicationPreferences.lo \
 	libCoreFoundation_debug_la-CFArray.lo \
@@ -232,8 +231,7 @@ am__objects_2 =  \
 	libCoreFoundation_debug_la-CFXMLNode.lo \
 	libCoreFoundation_debug_la-CFXMLParser.lo \
 	libCoreFoundation_debug_la-CFXMLPreferencesDomain.lo \
-	libCoreFoundation_debug_la-CFXMLTree.lo \
-	libCoreFoundation_debug_la-Cocotron.lo
+	libCoreFoundation_debug_la-CFXMLTree.lo
 @CF_BUILD_DEBUG_TRUE@am_libCoreFoundation_debug_la_OBJECTS =  \
 @CF_BUILD_DEBUG_TRUE@	$(am__objects_2)
 libCoreFoundation_debug_la_OBJECTS =  \
@@ -264,7 +262,7 @@ am__libCoreFoundation_profile_la_SOURCES_DIST =  \
 	CFUniChar.c CFUnicodeDecomposition.c CFUnicodePrecomposition.c \
 	CFUserNotification.c CFUtilities.c CFVersion.c \
 	CFWindowsMessageQueue.c CFXMLInputStream.c CFXMLNode.c \
-	CFXMLParser.c CFXMLPreferencesDomain.c CFXMLTree.c Cocotron.c
+	CFXMLParser.c CFXMLPreferencesDomain.c CFXMLTree.c
 am__objects_3 =  \
 	libCoreFoundation_profile_la-CFApplicationPreferences.lo \
 	libCoreFoundation_profile_la-CFArray.lo \
@@ -328,8 +326,7 @@ am__objects_3 =  \
 	libCoreFoundation_profile_la-CFXMLNode.lo \
 	libCoreFoundation_profile_la-CFXMLParser.lo \
 	libCoreFoundation_profile_la-CFXMLPreferencesDomain.lo \
-	libCoreFoundation_profile_la-CFXMLTree.lo \
-	libCoreFoundation_profile_la-Cocotron.lo
+	libCoreFoundation_profile_la-CFXMLTree.lo
 @CF_BUILD_PROFILE_TRUE@am_libCoreFoundation_profile_la_OBJECTS =  \
 @CF_BUILD_PROFILE_TRUE@	$(am__objects_3)
 libCoreFoundation_profile_la_OBJECTS =  \
@@ -687,9 +684,10 @@ CF_COMMON_SOURCES = CFApplicationPreferences.c		\
 				  CFXMLNode.c				\
 				  CFXMLParser.c				\
 				  CFXMLPreferencesDomain.c		\
-				  CFXMLTree.c				\
-				  Cocotron.c
+				  CFXMLTree.c
 
+
+#				  Cocotron.c
 lib_LTLIBRARIES = libCoreFoundation.la $(am__append_1) $(am__append_2)
 libCoreFoundation_la_CPPFLAGS = $(CF_COMMON_CPPFLAGS)
 libCoreFoundation_la_CFLAGS = $(CF_COMMON_CFLAGS)
@@ -718,14 +716,15 @@ EXTRA_DIST = APPLE_LICENSE	\
 				  macosx/CFLite.xcodeproj/project.pbxproj \
 				  windows/CFLiteLib.vcproj \
 				  CFLite.sln \
-				  CoreFoundation.xcodeproj/project.pbxproj \
+				  Cocotron/Cocotron.c \
+				  Cocotron/CoreFoundation.xcodeproj/project.pbxproj \
+				  icu/bin/icudt40.dll \
+				  icu/bin/icuin40.dll \
+				  icu/bin/icuuc40.dll \
 				  icu/bin/WHAT_IS_THIS.txt \
-				  icu/bin/icudt36.dll \
-				  icu/bin/icuin36.dll \
-				  icu/bin/icuuc36.dll \
-				  icu/lib/WHAT_IS_THIS.txt \
 				  icu/lib/icuin.lib \
 				  icu/lib/icuuc.lib \
+				  icu/lib/WHAT_IS_THIS.txt \
 				  icu/unicode/basictz.h \
 				  icu/unicode/brkiter.h \
 				  icu/unicode/calendar.h \
@@ -793,16 +792,16 @@ EXTRA_DIST = APPLE_LICENSE	\
 				  icu/unicode/uchar.h \
 				  icu/unicode/uchriter.h \
 				  icu/unicode/uclean.h \
-				  icu/unicode/ucnv.h \
 				  icu/unicode/ucnv_cb.h \
 				  icu/unicode/ucnv_err.h \
-				  icu/unicode/ucol.h \
+				  icu/unicode/ucnv.h \
 				  icu/unicode/ucoleitr.h \
+				  icu/unicode/ucol.h \
 				  icu/unicode/uconfig.h \
 				  icu/unicode/ucsdet.h \
 				  icu/unicode/ucurr.h \
-				  icu/unicode/udat.h \
 				  icu/unicode/udata.h \
+				  icu/unicode/udat.h \
 				  icu/unicode/udatpg.h \
 				  icu/unicode/udeprctd.h \
 				  icu/unicode/udraft.h \
@@ -810,8 +809,8 @@ EXTRA_DIST = APPLE_LICENSE	\
 				  icu/unicode/uidna.h \
 				  icu/unicode/uintrnal.h \
 				  icu/unicode/uiter.h \
-				  icu/unicode/uloc.h \
 				  icu/unicode/ulocdata.h \
+				  icu/unicode/uloc.h \
 				  icu/unicode/umachine.h \
 				  icu/unicode/umisc.h \
 				  icu/unicode/umsg.h \
@@ -841,10 +840,10 @@ EXTRA_DIST = APPLE_LICENSE	\
 				  icu/unicode/ustring.h \
 				  icu/unicode/usystem.h \
 				  icu/unicode/utext.h \
-				  icu/unicode/utf.h \
 				  icu/unicode/utf16.h \
 				  icu/unicode/utf32.h \
 				  icu/unicode/utf8.h \
+				  icu/unicode/utf.h \
 				  icu/unicode/utf_old.h \
 				  icu/unicode/utmscale.h \
 				  icu/unicode/utrace.h \
@@ -1001,7 +1000,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_debug_la-CFXMLParser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_debug_la-CFXMLPreferencesDomain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_debug_la-CFXMLTree.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_debug_la-Cocotron.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFApplicationPreferences.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFArray.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFBag.Plo@am__quote@
@@ -1065,7 +1063,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFXMLParser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFXMLPreferencesDomain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-CFXMLTree.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_la-Cocotron.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFApplicationPreferences.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFArray.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFBag.Plo@am__quote@
@@ -1129,7 +1126,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFXMLParser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFXMLPreferencesDomain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-CFXMLTree.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCoreFoundation_profile_la-Cocotron.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -1593,13 +1589,6 @@ libCoreFoundation_la-CFXMLTree.lo: CFXMLTree.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_la-CFXMLTree.lo `test -f 'CFXMLTree.c' || echo '$(srcdir)/'`CFXMLTree.c
 
-libCoreFoundation_la-Cocotron.lo: Cocotron.c
-@am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_la_CFLAGS) $(CFLAGS) -MT libCoreFoundation_la-Cocotron.lo -MD -MP -MF $(DEPDIR)/libCoreFoundation_la-Cocotron.Tpo -c -o libCoreFoundation_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libCoreFoundation_la-Cocotron.Tpo $(DEPDIR)/libCoreFoundation_la-Cocotron.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='Cocotron.c' object='libCoreFoundation_la-Cocotron.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
-
 libCoreFoundation_debug_la-CFApplicationPreferences.lo: CFApplicationPreferences.c
 @am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_debug_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_debug_la_CFLAGS) $(CFLAGS) -MT libCoreFoundation_debug_la-CFApplicationPreferences.lo -MD -MP -MF $(DEPDIR)/libCoreFoundation_debug_la-CFApplicationPreferences.Tpo -c -o libCoreFoundation_debug_la-CFApplicationPreferences.lo `test -f 'CFApplicationPreferences.c' || echo '$(srcdir)/'`CFApplicationPreferences.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libCoreFoundation_debug_la-CFApplicationPreferences.Tpo $(DEPDIR)/libCoreFoundation_debug_la-CFApplicationPreferences.Plo
@@ -2041,13 +2030,6 @@ libCoreFoundation_debug_la-CFXMLTree.lo: CFXMLTree.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_debug_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_debug_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_debug_la-CFXMLTree.lo `test -f 'CFXMLTree.c' || echo '$(srcdir)/'`CFXMLTree.c
 
-libCoreFoundation_debug_la-Cocotron.lo: Cocotron.c
-@am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_debug_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_debug_la_CFLAGS) $(CFLAGS) -MT libCoreFoundation_debug_la-Cocotron.lo -MD -MP -MF $(DEPDIR)/libCoreFoundation_debug_la-Cocotron.Tpo -c -o libCoreFoundation_debug_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libCoreFoundation_debug_la-Cocotron.Tpo $(DEPDIR)/libCoreFoundation_debug_la-Cocotron.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='Cocotron.c' object='libCoreFoundation_debug_la-Cocotron.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_debug_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_debug_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_debug_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
-
 libCoreFoundation_profile_la-CFApplicationPreferences.lo: CFApplicationPreferences.c
 @am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_profile_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_profile_la_CFLAGS) $(CFLAGS) -MT libCoreFoundation_profile_la-CFApplicationPreferences.lo -MD -MP -MF $(DEPDIR)/libCoreFoundation_profile_la-CFApplicationPreferences.Tpo -c -o libCoreFoundation_profile_la-CFApplicationPreferences.lo `test -f 'CFApplicationPreferences.c' || echo '$(srcdir)/'`CFApplicationPreferences.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libCoreFoundation_profile_la-CFApplicationPreferences.Tpo $(DEPDIR)/libCoreFoundation_profile_la-CFApplicationPreferences.Plo
@@ -2488,13 +2470,6 @@ libCoreFoundation_profile_la-CFXMLTree.lo: CFXMLTree.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='CFXMLTree.c' object='libCoreFoundation_profile_la-CFXMLTree.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_profile_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_profile_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_profile_la-CFXMLTree.lo `test -f 'CFXMLTree.c' || echo '$(srcdir)/'`CFXMLTree.c
-
-libCoreFoundation_profile_la-Cocotron.lo: Cocotron.c
-@am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_profile_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_profile_la_CFLAGS) $(CFLAGS) -MT libCoreFoundation_profile_la-Cocotron.lo -MD -MP -MF $(DEPDIR)/libCoreFoundation_profile_la-Cocotron.Tpo -c -o libCoreFoundation_profile_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libCoreFoundation_profile_la-Cocotron.Tpo $(DEPDIR)/libCoreFoundation_profile_la-Cocotron.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='Cocotron.c' object='libCoreFoundation_profile_la-Cocotron.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCoreFoundation_profile_la_CPPFLAGS) $(CPPFLAGS) $(libCoreFoundation_profile_la_CFLAGS) $(CFLAGS) -c -o libCoreFoundation_profile_la-Cocotron.lo `test -f 'Cocotron.c' || echo '$(srcdir)/'`Cocotron.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

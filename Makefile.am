@@ -178,8 +178,9 @@ CF_COMMON_SOURCES		= CFApplicationPreferences.c		\
 				  CFXMLNode.c				\
 				  CFXMLParser.c				\
 				  CFXMLPreferencesDomain.c		\
-				  CFXMLTree.c				\
-				  Cocotron.c
+				  CFXMLTree.c
+
+#				  Cocotron.c
 
 lib_LTLIBRARIES 			= libCoreFoundation.la
 
@@ -231,14 +232,15 @@ EXTRA_DIST			= APPLE_LICENSE	\
 				  macosx/CFLite.xcodeproj/project.pbxproj \
 				  windows/CFLiteLib.vcproj \
 				  CFLite.sln \
-				  CoreFoundation.xcodeproj/project.pbxproj \
+				  Cocotron/Cocotron.c \
+				  Cocotron/CoreFoundation.xcodeproj/project.pbxproj \
+				  icu/bin/icudt40.dll \
+				  icu/bin/icuin40.dll \
+				  icu/bin/icuuc40.dll \
 				  icu/bin/WHAT_IS_THIS.txt \
-				  icu/bin/icudt36.dll \
-				  icu/bin/icuin36.dll \
-				  icu/bin/icuuc36.dll \
-				  icu/lib/WHAT_IS_THIS.txt \
 				  icu/lib/icuin.lib \
 				  icu/lib/icuuc.lib \
+				  icu/lib/WHAT_IS_THIS.txt \
 				  icu/unicode/basictz.h \
 				  icu/unicode/brkiter.h \
 				  icu/unicode/calendar.h \
@@ -306,16 +308,16 @@ EXTRA_DIST			= APPLE_LICENSE	\
 				  icu/unicode/uchar.h \
 				  icu/unicode/uchriter.h \
 				  icu/unicode/uclean.h \
-				  icu/unicode/ucnv.h \
 				  icu/unicode/ucnv_cb.h \
 				  icu/unicode/ucnv_err.h \
-				  icu/unicode/ucol.h \
+				  icu/unicode/ucnv.h \
 				  icu/unicode/ucoleitr.h \
+				  icu/unicode/ucol.h \
 				  icu/unicode/uconfig.h \
 				  icu/unicode/ucsdet.h \
 				  icu/unicode/ucurr.h \
-				  icu/unicode/udat.h \
 				  icu/unicode/udata.h \
+				  icu/unicode/udat.h \
 				  icu/unicode/udatpg.h \
 				  icu/unicode/udeprctd.h \
 				  icu/unicode/udraft.h \
@@ -323,8 +325,8 @@ EXTRA_DIST			= APPLE_LICENSE	\
 				  icu/unicode/uidna.h \
 				  icu/unicode/uintrnal.h \
 				  icu/unicode/uiter.h \
-				  icu/unicode/uloc.h \
 				  icu/unicode/ulocdata.h \
+				  icu/unicode/uloc.h \
 				  icu/unicode/umachine.h \
 				  icu/unicode/umisc.h \
 				  icu/unicode/umsg.h \
@@ -354,10 +356,10 @@ EXTRA_DIST			= APPLE_LICENSE	\
 				  icu/unicode/ustring.h \
 				  icu/unicode/usystem.h \
 				  icu/unicode/utext.h \
-				  icu/unicode/utf.h \
 				  icu/unicode/utf16.h \
 				  icu/unicode/utf32.h \
 				  icu/unicode/utf8.h \
+				  icu/unicode/utf.h \
 				  icu/unicode/utf_old.h \
 				  icu/unicode/utmscale.h \
 				  icu/unicode/utrace.h \
