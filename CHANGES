@@ -1,6 +1,20 @@
                       Changes and What's New in OpenCFLite
                       ------------------------------------
 
+2009-03-11 v476.17.2
+
+  * Fixed run loop timer support for Linux.
+
+  * Updated pre-compiled ICU to v4.0 for Windows builds.
+
+  * Minor updates to CFRunLoopTimerExample and StringExample examples.
+
+  * Merged in David Cotter's <me@davidcotter.com> CF-Lite project,
+    including his additional CFTest example.
+
+  * Fixed support for writing binary property lists with patch from Stuart
+    Crook <stuart@echus.demon.co.uk>.
+
 2007-02-11 v476.17.1
 
   * Basic, development-level run loop support for Windows and Linux.

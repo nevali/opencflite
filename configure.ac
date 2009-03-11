@@ -13,13 +13,13 @@ AC_PREREQ(2.61)
 # the Apple CoreFoundation release version and z tracks the OpenCFLite
 # release thereof.
 #
-AC_INIT([CoreFoundation],[476.17.1],[bfulgham@users.sourceforge.net],[opencflite])
+AC_INIT([CoreFoundation],[476.17.2],[bfulgham@users.sourceforge.net],[opencflite])
 
 #
 # Interface number, revision and age of the library interface passed to
 # libtool when the library is linked.
 #
-AC_SUBST(CF_VERSION_INFO, [476:17:1])
+AC_SUBST(CF_VERSION_INFO, [476:17:2])
 
 #
 # Check the sanity of thes source directory by checking for the
