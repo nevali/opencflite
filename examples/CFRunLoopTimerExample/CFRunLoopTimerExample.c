@@ -7,16 +7,38 @@
  *      fires N timers every T[n] seconds for up to L seconds.
  */
 
+/*
+ * Copyright (c) 2003, Steven G. Kargl
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice unmodified, this list of conditions, and the following
+ *    disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #if !defined(_WIN32)
 #include <unistd.h>
-#else
-static int lround(double d) {
-   return (int)floor (d + 0.5);
-}
 #endif
 
 #include <AssertMacros.h>
@@ -192,6 +214,53 @@ TimerContainerDestroy(TimerContainerRef inContainer)
 }
 
 /*
+ *  long local_lround()
+ *
+ *  Description:
+ *    This routine, provided by Steven Kargl (see copyright above)
+ *    rounds the specified value to the nearest integer value,
+ *    rounding away from zero, regardless of the current rounding
+ *    direction.
+ *
+ *    NOTE: This function is implemented rather than just using C99's
+ *    lround because this code MUST work with Microsoft Visual Studio
+ *    2005 and 2008, both of which lack round or lround in their math
+ *    libraries.
+ *
+ *  Input(s):
+ *    x - The value to round.
+ *
+ *  Output(s):
+ *    N/A
+ *
+ *  Returns:
+ *    The rounded value.
+ */
+static
+long local_lround(double x)
+{
+	double t;
+
+	if (x >= 0.0) {
+		t = ceilf(x);
+
+		if (t - x > 0.5)
+			t -= 1.0;
+
+		return (long)t;
+
+	} else {
+		t = ceilf(-x);
+
+		if (t + x > 0.5)
+			t -= 1.0;
+
+		return (long)-t;
+
+	}
+}
+
+/*
  *  TimerData * TimerDataCreate()
  *
  *  Description:
@@ -237,7 +306,7 @@ TimerDataCreate(CFIndex inIndex, double inLimit, const char *inInterval)
 
 	/* Compute the expected number of timer iterations. */
 
-	timerIterations = lround(inLimit / timerInterval);
+	timerIterations = local_lround(inLimit / timerInterval);
 
 	/* Allocate storage for the timer data. */
 
