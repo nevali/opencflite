@@ -704,9 +704,11 @@ examples/Allocator/Makefile
 examples/CFLocalServer/Makefile
 examples/CFMessagePort/Makefile
 examples/CFRunLoopTimerExample/Makefile
+examples/CFTest/Makefile
 examples/DisplayURL/Makefile
 examples/DNSServiceMetaQuery/Makefile
 examples/ReadPListExample/Makefile
+examples/SimpleWebServer/Makefile
 examples/StringExample/Makefile
 examples/WritePListExample/Makefile
 ])

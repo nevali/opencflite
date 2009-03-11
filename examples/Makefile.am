@@ -6,4 +6,6 @@ SUBDIRS			= ReadPListExample	\
 			  DisplayURL		\
 			  DNSServiceMetaQuery	\
 			  CFLocalServer		\
-			  CFRunLoopTimerExample
+			  SimpleWebServer	\
+			  CFRunLoopTimerExample	\
+			  CFTest
