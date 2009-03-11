@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #if !defined(_WIN32)
 #include <unistd.h>
+#else
+static int lround(double d) {
+   return (int)floor (d + 0.5);
+}
 #endif
 
 #include <AssertMacros.h>

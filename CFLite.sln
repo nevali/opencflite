@@ -72,6 +72,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFRunLoopTimerExample", "ex
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
