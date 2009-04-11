@@ -638,6 +638,8 @@ CFAllocatorRef CFGetAllocator(CFTypeRef cf) {
     return __CFGetAllocator(cf);
 }
 
+extern void __CFFileDescriptorInitialize(void);
+extern void __CFNotificationCenterInitialize(void);
 extern void __CFBaseInitialize(void);
 extern void __CFNullInitialize(void);
 extern void __CFAllocatorInitialize(void);
@@ -813,7 +815,8 @@ void __CFInitialize(void) {
         __CFRunLoopTimerInitialize();
         __CFSocketInitialize();
 #endif
-
+        __CFFileDescriptorInitialize();
+        __CFNotificationCenterInitialize();
 
 #if DEPLOYMENT_TARGET_MACOSX
         {

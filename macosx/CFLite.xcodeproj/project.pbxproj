@@ -127,6 +127,10 @@
 		844949890ED27EDF00EEB9C0 /* WritePListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 840CBF6C0ED24F4500931057 /* WritePListExample.cpp */; };
 		844949A20ED27F3100EEB9C0 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		844949A40ED27F8500EEB9C0 /* ReadPListExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */; };
+		844D3CA00F91516E0044B7F0 /* CFFileDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 844D3C9E0F91516E0044B7F0 /* CFFileDescriptor.h */; };
+		844D3CA10F91516E0044B7F0 /* CFNotificationCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 844D3C9F0F91516E0044B7F0 /* CFNotificationCenter.h */; };
+		844D3CA40F9151980044B7F0 /* CFFileDescriptor.c in Sources */ = {isa = PBXBuildFile; fileRef = 844D3CA20F9151980044B7F0 /* CFFileDescriptor.c */; };
+		844D3CA50F9151980044B7F0 /* CFNotificationCenter.c in Sources */ = {isa = PBXBuildFile; fileRef = 844D3CA30F9151980044B7F0 /* CFNotificationCenter.c */; };
 		844F5D5A0F3FB23100239823 /* DNSServiceMetaQuery.c in Sources */ = {isa = PBXBuildFile; fileRef = 844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */; };
 		844F5D5E0F3FB24E00239823 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8448EF670ED2796500716715 /* CFLite.framework */; };
 		845EDB370ED3374D0033E001 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 845EDB360ED3374D0033E001 /* Info.plist */; };
@@ -166,6 +170,10 @@
 		844949820ED27E8700EEB9C0 /* WritePListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WritePListExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949920ED27F1100EEB9C0 /* ReadPListExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReadPListExample; sourceTree = BUILT_PRODUCTS_DIR; };
 		844949A30ED27F8500EEB9C0 /* ReadPListExample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ReadPListExample.cpp; path = ../examples/ReadPListExample/ReadPListExample.cpp; sourceTree = SOURCE_ROOT; };
+		844D3C9E0F91516E0044B7F0 /* CFFileDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFFileDescriptor.h; path = ../CFFileDescriptor.h; sourceTree = SOURCE_ROOT; };
+		844D3C9F0F91516E0044B7F0 /* CFNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFNotificationCenter.h; path = ../CFNotificationCenter.h; sourceTree = SOURCE_ROOT; };
+		844D3CA20F9151980044B7F0 /* CFFileDescriptor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFFileDescriptor.c; path = ../CFFileDescriptor.c; sourceTree = SOURCE_ROOT; };
+		844D3CA30F9151980044B7F0 /* CFNotificationCenter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CFNotificationCenter.c; path = ../CFNotificationCenter.c; sourceTree = SOURCE_ROOT; };
 		844F5D540F3FB1F600239823 /* DNSMetaServiceQuery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DNSMetaServiceQuery; sourceTree = BUILT_PRODUCTS_DIR; };
 		844F5D590F3FB23100239823 /* DNSServiceMetaQuery.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DNSServiceMetaQuery.c; path = ../examples/DNSServiceMetaQuery/DNSServiceMetaQuery.c; sourceTree = SOURCE_ROOT; };
 		845EDB360ED3374D0033E001 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = SOURCE_ROOT; };
@@ -440,11 +448,13 @@
 				848B55570ECFAE4D003D696F /* CFDateFormatter.c */,
 				848B55580ECFAE4D003D696F /* CFDictionary.c */,
 				848B55590ECFAE4D003D696F /* CFError.c */,
+				844D3CA20F9151980044B7F0 /* CFFileDescriptor.c */,
 				848B555A0ECFAE4D003D696F /* CFFileUtilities.c */,
 				848B555B0ECFAE4D003D696F /* CFLocale.c */,
 				848B555C0ECFAE4D003D696F /* CFLocaleIdentifier.c */,
 				848B555D0ECFAE4D003D696F /* CFMachPort.c */,
 				848B555E0ECFAE4D003D696F /* CFMessagePort.c */,
+				844D3CA30F9151980044B7F0 /* CFNotificationCenter.c */,
 				848B555F0ECFAE4D003D696F /* CFNumber.c */,
 				848B55600ECFAE4D003D696F /* CFNumberFormatter.c */,
 				848B55610ECFAE4D003D696F /* CFPlatform.c */,
@@ -533,9 +543,11 @@
 				848B55EE0ECFAF5E003D696F /* CFDateFormatter.h */,
 				848B55EF0ECFAF5E003D696F /* CFDictionary.h */,
 				848B55F00ECFAF5E003D696F /* CFError.h */,
+				844D3C9E0F91516E0044B7F0 /* CFFileDescriptor.h */,
 				848B55F30ECFAF5E003D696F /* CFLocale.h */,
 				848B55F50ECFAF5E003D696F /* CFMachPort.h */,
 				848B55F60ECFAF5E003D696F /* CFMessagePort.h */,
+				844D3C9F0F91516E0044B7F0 /* CFNotificationCenter.h */,
 				848B55F70ECFAF5E003D696F /* CFNumber.h */,
 				848B55F80ECFAF5E003D696F /* CFNumberFormatter.h */,
 				848B55F90ECFAF5E003D696F /* CFPlugIn.h */,
@@ -679,6 +691,8 @@
 				84129F9E0F3A4C2600A64427 /* CFXMLNode.h in Headers */,
 				84129F9F0F3A4C2600A64427 /* CFXMLParser.h in Headers */,
 				84129FA00F3A4C2600A64427 /* CoreFoundation.h in Headers */,
+				844D3CA00F91516E0044B7F0 /* CFFileDescriptor.h in Headers */,
+				844D3CA10F91516E0044B7F0 /* CFNotificationCenter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -985,6 +999,8 @@
 				8448EFA70ED2798800716715 /* CFXMLParser.c in Sources */,
 				8448EFA80ED2798800716715 /* CFXMLPreferencesDomain.c in Sources */,
 				8448EFA90ED2798800716715 /* CFXMLTree.c in Sources */,
+				844D3CA40F9151980044B7F0 /* CFFileDescriptor.c in Sources */,
+				844D3CA50F9151980044B7F0 /* CFNotificationCenter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
