@@ -554,6 +554,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\CFFileDescriptor.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\CFFileUtilities.c"
 				>
 				<FileConfiguration
@@ -644,6 +656,18 @@
 						CompileAs="2"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\CFNotificationCenter.c"
+				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -1632,6 +1656,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CFFileDescriptor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\CFInternal.h"
 				>
 			</File>
@@ -1649,6 +1677,10 @@
 			</File>
 			<File
 				RelativePath="..\CFMessagePort.h"
+				>
+			</File>
+			<File
+				RelativePath="..\CFNotificationCenter.h"
 				>
 			</File>
 			<File

@@ -10,9 +10,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreFoundation/CFRunLoop.h>
 
-#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
-
-#if defined(__MACH__)
+#if (MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED) || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 
 CF_EXTERN_C_BEGIN
 
@@ -52,10 +50,7 @@ CF_EXPORT Boolean	CFFileDescriptorIsValid(CFFileDescriptorRef f);
 
 CF_EXPORT CFRunLoopSourceRef CFFileDescriptorCreateRunLoopSource(CFAllocatorRef allocator, CFFileDescriptorRef f, CFIndex order);
 
-
 CF_EXTERN_C_END
-
-#endif
 
 #endif
 

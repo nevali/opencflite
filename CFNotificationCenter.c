@@ -32,7 +32,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 #include <unistd.h>
+#endif
 
 #define CF_LOCAL_CENTER		0
 #define CF_DIST_CENTER		1
@@ -115,9 +117,10 @@ typedef struct dndNotHeader {
 	CFIndex flags;
 } dndNotHeader;
 
-//#if DEPLOYMENT_TARGET_MACOSX
+#if DEPLOYMENT_TARGET_MACOSX
 #include <notify.h>
 #include <CoreFoundation/CFMachPort.h>
+#endif
 /*
  *	Darwin notifications
  *
@@ -139,14 +142,20 @@ typedef struct __CFDarwinNotifications {
 } __CFDarwinNotifications;
 
 typedef struct __CFDarwinCenterInfo {	
+#if defined(__MACH__)
 	CFMachPortRef port;
+#endif
 	CFRunLoopSourceRef rls;
 	CFIndex count;
 	CFIndex capacity;
 	__CFDarwinNotifications *nots;
 } __CFDarwinCenterInfo;
 
+#if defined(__MACH__)
 static __CFDarwinCenterInfo __CFDarwinInfo = { NULL, NULL, 0, 0, NULL };
+#else
+static __CFDarwinCenterInfo __CFDarwinInfo = { NULL, 0, 0, NULL };
+#endif
 
 // the task's singleton centres
 static CFNotificationCenterRef __CFLocalCenter = NULL;
@@ -217,8 +226,9 @@ void __CFDeliverQueue( void );
 Boolean _CFNotificationCenterIsSuspended( CFNotificationCenterRef center );
 void _CFNotificationCenterSetSuspended( CFNotificationCenterRef center, Boolean suspended );
 
+#if DEPLOYMENT_TARGET_MACOSX
 void __CFDarwinCallBack(CFMachPortRef port, void *msg, CFIndex size, void *info);
-
+#endif
 
 /*
  *	Manage the message queue, which is used to store distributed notifications
@@ -251,7 +261,7 @@ void __CFAddQueue( CFStringRef name, const void *object, const void *observer, C
 	if( __CFDistInfo.count == __CFDistInfo.capacity )
 	{
 		__CFDistInfo.capacity += CF_QUEUE_SIZE;
-		__CFDistInfo.queue = realloc( __CFDistInfo.queue, (CF_QUEUE_SIZE * sizeof(__CFQueueRecord)) );
+		__CFDistInfo.queue = (__CFQueueRecord*)realloc( __CFDistInfo.queue, (CF_QUEUE_SIZE * sizeof(__CFQueueRecord)) );
 		if( __CFDistInfo.queue == NULL ) return;
 	}
 
@@ -273,7 +283,7 @@ void __CFDeliverQueue( void )
 	
 	while( count-- ) 
 	{
-		queue->callback( __CFDistributedCenter, queue->observer, queue->name, queue->object, queue->userInfo );
+		queue->callback( (CFNotificationCenterRef)__CFDistributedCenter, (void*)queue->observer, queue->name, queue->object, queue->userInfo );
 		CFRelease(queue->userInfo);
 		
 		queue->name = NULL;
@@ -344,7 +354,7 @@ CFStringRef __CFNCUnhash( CFHashCode hash )
 	if( hash == 0 )
 		string = NULL;
 	else
-		string = CFDictionaryGetValue(__CFHashStore, (const void *)hash);
+		string = (CFStringRef)CFDictionaryGetValue(__CFHashStore, (const void *)hash);
 	__CFSpinUnlock(&__CFHashStoreLock);
 	return string;
 }
@@ -379,10 +389,13 @@ void __CFObserverDiag( __CFObserver o )
  *	message port source to (or remove it from) the main runloop.
  */
 
+#if DEPLOYMENT_TARGET_MACOSX
 CFDataRef __CFDistRecieve( CFMessagePortRef local, SInt32 msgid, CFDataRef data, void *info );
+#endif
 void __CFDistAddNotification( CFStringRef name, CFHashCode hash, CFHashCode object );
 void __CFDistRemoveNotification( CFHashCode hash, CFHashCode object );
 
+#if DEPLOYMENT_TARGET_MACOSX
 /*
  *	recieves messages from the ddistnoted daemon
  *
@@ -445,6 +458,7 @@ CFDataRef __CFDistRecieve( CFMessagePortRef local, SInt32 msgid, CFDataRef data,
 	if( userInfo != NULL ) CFRelease(userInfo);
 	return NULL;
 }
+#endif
 
 /*
  *	Add a notification to the table of registered notifications, optionally registering it with
@@ -475,7 +489,11 @@ void __CFDistAddNotification( CFStringRef name, CFHashCode hash, CFHashCode obje
 	// we need to register for this notification
 	dndNotReg info = { __CFDistInfo.uid, hash, object };
 	CFDataRef data = CFDataCreate( kCFAllocatorDefault, (const UInt8 *)&info, sizeof(dndNotReg) );
+#if DEPLOYMENT_TARGET_MACOSX
 	SInt32 result = CFMessagePortSendRequest( __CFDistInfo.remote, REGISTER_NOTIFICATION, data, 1.0, 0.0, NULL, NULL );
+#else
+   SInt32 result = 0;
+#endif
 	CFRelease(data);
 	if(result != kCFMessagePortSuccess) return;
 
@@ -483,7 +501,7 @@ void __CFDistAddNotification( CFStringRef name, CFHashCode hash, CFHashCode obje
 	{
 		fprintf(stderr, "Increasing capacity of dist notification list\n");
 		__CFDistInfo.capacity += CF_DIST_SIZE;
-		__CFDistInfo.nots = realloc( __CFDistInfo.nots, (__CFDistInfo.capacity * sizeof(__CFDistNotification)) );
+		__CFDistInfo.nots = (__CFDistNotification*)realloc( __CFDistInfo.nots, (__CFDistInfo.capacity * sizeof(__CFDistNotification)) );
 		if( __CFDistInfo.nots == NULL ) return;
 		
 		// because I'm unsure if realloc zeroes the new memory...
@@ -527,7 +545,9 @@ void __CFDistRemoveNotification( CFHashCode hash, CFHashCode object )
 				CFDataRef data = CFDataCreate( kCFAllocatorDefault, (const UInt8 *)&info, sizeof(dndNotReg) );
 				if( data != NULL )
 				{
+#if DEPLOYMENT_TARGET_MACOSX
 					CFMessagePortSendRequest(__CFDistInfo.remote, UNREGISTER_NOTIFICATION, data, 1.0, 1.0, NULL, NULL);
+#endif
 					CFRelease(data);
 				}
 				
@@ -546,7 +566,6 @@ void __CFDistRemoveNotification( CFHashCode hash, CFHashCode object )
 }
 
 
-//#ifdef DEPLOYMENT_TARGET_MACOSX
 /*
  *	Functions used to add and remove notifications to the list we are monitoring and register
  *	with notifyd to recieve them. We track how many times each is added and removed, so we can 
@@ -577,17 +596,19 @@ void __CFDarwinAddNotification( CFStringRef name, CFHashCode hash, CFHashCode ig
 	
 	// haven't registered for this notification yet
 	CFIndex length = CFStringGetLength(name);
-	char buffer[++length];
+   STACK_BUFFER_DECL(char, buffer, ++length);
 	CFStringGetCString(name, buffer, length, kCFStringEncodingASCII);
 	int token;
+#if DEPLOYMENT_TARGET_MACOSX
 	mach_port_t port = CFMachPortGetPort(__CFDarwinInfo.port);
 	
 	if( 0 != notify_register_mach_port(buffer, &port, NOTIFY_REUSE, &token) ) return;
-	
+#endif
+
 	if( __CFDarwinInfo.count == __CFDarwinInfo.capacity )
 	{
 		__CFDarwinInfo.capacity += CF_DARWIN_SIZE;
-		__CFDarwinInfo.nots = realloc( __CFDarwinInfo.nots, ( __CFDarwinInfo.capacity * sizeof(__CFDarwinNotifications)));
+		__CFDarwinInfo.nots = (__CFDarwinNotifications*)realloc( __CFDarwinInfo.nots, ( __CFDarwinInfo.capacity * sizeof(__CFDarwinNotifications)));
 		if( __CFDarwinInfo.nots == NULL ) return;
 		
 		// because I'm unsure if realloc zeroes the new memory...
@@ -625,7 +646,9 @@ void __CFDarwinRemoveNotification( CFHashCode hash, CFHashCode ignored )
 		{
 			if( nots->count-- > 1 ) return; // still want to recieve the notification
 			
+#if defined(__MACH__)
 			notify_cancel(nots->token);
+#endif
 			
 			nots->hash = 0;
 			//nots->name = NULL;
@@ -656,7 +679,7 @@ void __CFAddObserver( CFNotificationCenterRef center, const void *observer, CFNo
 	{
 		//fprintf(stderr, "increasing size of observer records for center type %d\n", center->type);
 		center->capacity += CF_OBS_SIZE;
-		center->obs = realloc(center->obs, (center->capacity * sizeof(__CFObserver)));
+		center->obs = (__CFObserver*)realloc(center->obs, (center->capacity * sizeof(__CFObserver)));
 		if( center->obs == NULL )
 		{
 			fprintf(stderr, "Couldn't realloc observer records for notification center type %d\n", center->type);
@@ -812,7 +835,7 @@ void __CFInvokeCallBacks( CFNotificationCenterRef center, CFHashCode name, CFStr
 			{
 				// CFMachPort source suggested unlocking before invoking callbacks
 				__CFSpinUnlock(&center->lock);
-				obs->callback(center, obs->observer, nameReturn, objectReturn, userInfo);
+				obs->callback((CFNotificationCenterRef)center, (void*)obs->observer, nameReturn, objectReturn, userInfo);
 				__CFSpinLock(&center->lock);
 			}
 			else switch(obs->sb) 
@@ -826,7 +849,7 @@ void __CFInvokeCallBacks( CFNotificationCenterRef center, CFHashCode name, CFStr
 					break;
 				case CFNotificationSuspensionBehaviorDeliverImmediately:
 					if( __CFDistInfo.queueCount != 0 ) __CFDeliverQueue();
-					obs->callback( center, obs->observer, nameReturn, objectReturn, userInfo );
+					obs->callback( (CFNotificationCenterRef)center, (void*)obs->observer, nameReturn, objectReturn, userInfo );
 					break;
 			}
 		}
@@ -838,8 +861,7 @@ void __CFInvokeCallBacks( CFNotificationCenterRef center, CFHashCode name, CFStr
 }
 
 
-
-
+#if defined(__MACH__)
 /*
  *	The CFMachPortCallBack invoked when a message arrives at the runloop from notifyd. The
  *	Darwin notification centre is passed in as the info... just because.
@@ -873,8 +895,7 @@ void __CFDarwinCallBack(CFMachPortRef port, void *msg, CFIndex size, void *info)
 	// then we send the notification to all the matching observers
 	__CFInvokeCallBacks(__CFDarwinCenter, nots->hash, __CFNCUnhash(nots->hash), NULL, NULL, NULL, TRUE);
 }
-//#endif
-
+#endif
 
 // shared creation method
 CFNotificationCenterRef __CFCreateCenter( CFIndex type )
@@ -886,13 +907,13 @@ CFNotificationCenterRef __CFCreateCenter( CFIndex type )
 	
 	memory->suspended = FALSE;
 	memory->type = type;
-	memory->lock = CFSpinLockInit;
+   CF_SPINLOCK_INIT_FOR_STRUCTS(memory->lock);
 
 	// allocate storage and set counters
 	memory->observers = 0;
 	memory->capacity = CF_OBS_SIZE;
 	// IMPORTANT: after calloc, we assume memory is zeroed
-	memory->obs = calloc(CF_OBS_SIZE, sizeof(__CFObserver));
+	memory->obs = (__CFObserver*)calloc(CF_OBS_SIZE, sizeof(__CFObserver));
 	
 	if( memory->obs == NULL )
 	{
@@ -935,6 +956,7 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
 
 		// create the local port now, because the daemon will look for it
 		CFMessagePortContext context = { 0, NULL, NULL, NULL, NULL };
+#if defined(__MACH__)
 		CFMessagePortRef local = CFMessagePortCreateLocal( kCFAllocatorDefault, name, __CFDistRecieve, &context, NULL );
 		
 		if( local == NULL )
@@ -943,10 +965,14 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
 			__CFSpinUnlock(&__CFDistributedCenterLock);
 			return NULL;
 		}
+#else
+      CFMessagePortRef local = 0;
+#endif
 		
 		//CFRunLoopSourceRef rls = 
 		//CFRunLoopAddSource( CFRunLoopGetMain(), rls, kCFRunLoopCommonModes );
 		
+#if defined(DEPLOYMENT_TARGET_MACOSX)
 		// create the remote port
 		CFMessagePortRef remote = CFMessagePortCreateRemote( kCFAllocatorDefault, CFSTR("org.puredarwin.ddistnoted") );
 		
@@ -956,17 +982,24 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
 			__CFSpinUnlock(&__CFDistributedCenterLock);
 			return NULL;
 		}
-		
+#else
+      CFMessagePortRef remote = 0;
+#endif
+
 		// squeeze our unique name, as ASCII, into a data object...
 		CFIndex length = CFStringGetLength(name);
-		UInt8 data[(++length + sizeof(long))];
+      STACK_BUFFER_DECL(UInt8, data, (++length + sizeof(long)));
 
 		/*	Security sessions come via one of the security components, although
 			I'm not sure which. Once we get everything working we may be able to
 			actually get this working properly. */
 		
 		// if this isn't set -- and on other platforms -- we could maybe use userIds
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 		long session = getuid();
+#else
+      long session = 0;
+#endif
 		
 		if( session == 0 ) session = 1;
 		
@@ -984,7 +1017,9 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
 
 		// ...send the register message...
 		CFDataRef dataIn = NULL;
+#if DEPLOYMENT_TARGET_MACOSX
 		CFMessagePortSendRequest( remote, REGISTER_PORT, dataOut, 1.0, 1.0, kCFRunLoopDefaultMode, &dataIn);
+#endif
 		
 		CFRelease(name);
 		CFRelease(dataOut);
@@ -1004,19 +1039,20 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
 		
 		if( __CFDistributedCenter == NULL ) return NULL;
 		
-		__CFDistInfo.nots = calloc(CF_DIST_SIZE, sizeof(__CFDistNotification));
+		__CFDistInfo.nots = (__CFDistNotification*)calloc(CF_DIST_SIZE, sizeof(__CFDistNotification));
 		if( __CFDistInfo.nots == NULL ) return NULL;
 
-		__CFDistInfo.queue = calloc(CF_QUEUE_SIZE, sizeof(__CFQueueRecord));
+		__CFDistInfo.queue = (__CFQueueRecord*)calloc(CF_QUEUE_SIZE, sizeof(__CFQueueRecord));
 		if( __CFDistInfo.queue == NULL ) return NULL;
 
 		__CFDistInfo.local = local;
 		__CFDistInfo.remote = remote;
 		__CFDistInfo.session = session;
-		__CFDistInfo.uid = hash;	
+		__CFDistInfo.uid = hash;
+#if defined(DEPLOYMENT_TARGET_MACOSX)
 		__CFDistInfo.rls = CFMessagePortCreateRunLoopSource( kCFAllocatorDefault, local, 0 );
 // do we need an "added to runloop" flag?
-
+#endif
 		//__PFDistInfo.count = 0;
 		__CFDistInfo.capacity = CF_DIST_SIZE;
 		//__PFDistInfo.count = 0;
@@ -1040,25 +1076,23 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void)
  */
 CFNotificationCenterRef CFNotificationCenterGetDarwinNotifyCenter(void) 
 {
-//#if DEPLOYMENT_TARGET_MACOSX
 	__CFSpinLock(&__CFDarwinCenterLock);
 	if( __CFDarwinCenter == NULL )
 	{
 		__CFDarwinCenter = __CFCreateCenter(CF_DARWIN_CENTER);
 
+#if DEPLOYMENT_TARGET_MACOSX
 		CFMachPortContext context = { 0, (void *)__CFDarwinCenter, NULL, NULL, NULL };
 		__CFDarwinInfo.port = CFMachPortCreate( kCFAllocatorDefault, __CFDarwinCallBack, &context, NULL );
 		__CFDarwinInfo.rls = CFMachPortCreateRunLoopSource( kCFAllocatorDefault, __CFDarwinInfo.port, 0 );
+#endif
 		
-		__CFDarwinInfo.nots = calloc(CF_DARWIN_SIZE, sizeof(__CFDarwinNotifications));
+		__CFDarwinInfo.nots = (__CFDarwinNotifications*)calloc(CF_DARWIN_SIZE, sizeof(__CFDarwinNotifications));
 		__CFDarwinInfo.count = 0;
 		__CFDarwinInfo.capacity = CF_DARWIN_SIZE;
 	}
 	__CFSpinUnlock(&__CFDarwinCenterLock);
 	return __CFDarwinCenter;
-//#else
-//	return NULL;
-//#endif
 }
 
 
@@ -1073,7 +1107,6 @@ void CFNotificationCenterAddObserver(CFNotificationCenterRef center, const void 
 	if( (center == NULL) || (CFGetTypeID(center) != __kCFNotificationCenterTypeID) || (callBack == NULL) || ((name == NULL) && (object == NULL)) ) 
 		return;
 
-	
 	switch (center->type) 
 	{
 		case CF_LOCAL_CENTER:
@@ -1086,7 +1119,7 @@ void CFNotificationCenterAddObserver(CFNotificationCenterRef center, const void 
 			if( object != NULL )
 			{
 				if( CFGetTypeID((CFTypeRef)object) != CFStringGetTypeID() ) return;
-				object = (const void *)__CFNCHash(object);
+				object = (const void *)__CFNCHash((CFStringRef)object);
 			}
 			__CFAddObserver(center, observer, callBack, name, object, suspensionBehavior, __CFDistAddNotification);
 			break;
@@ -1197,7 +1230,7 @@ void __CFPostDistributedNotification( CFNotificationCenterRef center, CFStringRe
 		plist[1] = object;
 	}
 
-	plist[2] = (userInfo == NULL) ? kCFBooleanFalse : userInfo;
+	plist[2] = (userInfo == NULL) ? (CFDictionaryRef)kCFBooleanFalse : userInfo;
 	CFArrayRef array = CFArrayCreate( kCFAllocatorDefault, (const void **)&plist, 3, NULL );
 	
 	// we don't need to store the strings these hashes represent
@@ -1212,13 +1245,15 @@ void __CFPostDistributedNotification( CFNotificationCenterRef center, CFStringRe
 	CFPropertyListWriteToStream( array, ws, kCFPropertyListBinaryFormat_v1_0, NULL );
 	
 	CFWriteStreamClose(ws);
-	CFDataRef data = CFWriteStreamCopyProperty( ws, kCFStreamPropertyDataWritten );
+	CFDataRef data = (CFDataRef)CFWriteStreamCopyProperty( ws, kCFStreamPropertyDataWritten );
 	CFRelease(ws);
 	CFRelease(array);
 	
 	if( data == NULL ) return;
 	
+#if DEPLOYMENT_TARGET_MACOSX
 	CFMessagePortSendRequest( __CFDistInfo.remote, NOTIFICATION, data, 1.0, 1.0, NULL, NULL );
+#endif
 }
 
 
@@ -1229,9 +1264,11 @@ void __CFPostDarwinNotification( CFNotificationCenterRef center, CFStringRef nam
 {
 	CFIndex length = CFStringGetLength(name);
 	if( length == 0 ) return;
-	char buffer[++length];
+   STACK_BUFFER_DECL(char, buffer, ++length);
 	CFStringGetCString(name, buffer, length, kCFStringEncodingASCII);
+#if defined(__MACH__)
 	notify_post(buffer);
+#endif
 }
 
 

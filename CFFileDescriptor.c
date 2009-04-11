@@ -24,6 +24,7 @@
 #include "CFInternal.h"
 #include "CFFileDescriptor.h"
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 // for kqueue
 #include <sys/types.h>
 #include <sys/event.h>
@@ -32,13 +33,21 @@
 // for threads
 #include <pthread.h>
 
+#if defined(__MACH__)
 // for mach ports
 #include <mach/mach.h>
 #include <mach/mach_error.h>
 #include <mach/notify.h>
+#endif
 
 // for close
 #include <unistd.h>
+#elif DEPLOYMENT_TARGET_WINDOWS
+#include <io.h>
+#include <stdio.h>F
+#define close _close
+#endif
+
 
 typedef struct __CFFileDescriptor {
 	CFRuntimeBase _base;
@@ -47,12 +56,17 @@ typedef struct __CFFileDescriptor {
 	CFFileDescriptorCallBack callback;
 	CFFileDescriptorContext context; // includes info for callback
 	CFRunLoopSourceRef rls;	
+#if defined(__MACH__)
 	mach_port_t port;
+#endif
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 	pthread_t thread;
+#endif
 	CFSpinLock_t lock;
 } __CFFileDescriptor;
 
 
+#if DEPLOYMENT_TARGET_MACOSX
 /*
  *	callbacks, etc.
  */
@@ -60,6 +74,7 @@ typedef struct __CFFileDescriptor {
 void *_CFFDWait(void *info)
 {
 	CFFileDescriptorRef f = (CFFileDescriptorRef)info;
+
 	struct kevent events[2];
 	//struct kevent change[2];
 	struct timespec ts = { 0, 0 };
@@ -125,12 +140,15 @@ mach_port_t __CFFDGetPort(void *info)
 	__CFSpinUnlock(&f->lock);
 	return f->port;
 }
+#endif
 
 // main runloop callback: invoke the user's callback
 void *__CFFDRunLoopCallBack(void *msg, CFIndex size, CFAllocatorRef allocator, void *info)
 {
 	//fprintf(stderr, "runloop callback\n");
+#if defined(__MACH__)
 	((__CFFileDescriptor *)info)->callback(info, ((mach_msg_header_t *)msg)->msgh_id, ((__CFFileDescriptor *)info)->context.info);
+#endif
 	return NULL;
 }
 
@@ -174,9 +192,13 @@ CFFileDescriptorRef	CFFileDescriptorCreate(CFAllocatorRef allocator, CFFileDescr
 {
 	if(callout == NULL) return NULL;
 
+#if DEPLOYMENT_TARGET_MACOSX
 	// create the kqueue and add the events we'll be monitoring, disabled
 	int qd = kqueue();
 		//fprintf(stderr, "kqueue() returned %d\n", qd);
+#else
+   int qd = 0;
+#endif
 	if( qd == -1 ) return NULL;
 
 	CFIndex size = sizeof(struct __CFFileDescriptor) - sizeof(CFRuntimeBase);
@@ -206,8 +228,12 @@ CFFileDescriptorRef	CFFileDescriptorCreate(CFAllocatorRef allocator, CFFileDescr
 	}
 	
 	memory->rls = NULL;
+#if DEPLOYMENT_TARGET_MACOSX
 	memory->port = MACH_PORT_NULL;
+#endif
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_LINUX
 	memory->thread = NULL;
+#endif
 	
 	__CFBitfieldSetValue(((CFRuntimeBase *)memory)->_cfinfo[CF_INFO_BITS], 0, 0, 1); // valid
 	__CFBitfieldSetValue(((CFRuntimeBase *)memory)->_cfinfo[CF_INFO_BITS], 1, 1, closeOnInvalidate); 
@@ -245,7 +271,9 @@ void CFFileDescriptorEnableCallBacks(CFFileDescriptorRef f, CFOptionFlags callBa
 	if( (f == NULL) || (CFGetTypeID(f) != CFFileDescriptorGetTypeID()) || !__CFFDIsValid(f) ) return;
 
 	__CFSpinLock(&f->lock);
-	struct kevent ev;
+
+#if DEPLOYMENT_TARGET_MACOSX
+   struct kevent ev;
 	struct timespec ts = { 0, 0 };
 
 	if( callBackTypes | kCFFileDescriptorReadCallBack )
@@ -259,7 +287,8 @@ void CFFileDescriptorEnableCallBacks(CFFileDescriptorRef f, CFOptionFlags callBa
 		EV_SET(&ev, f->fd, EVFILT_WRITE, EV_ADD|EV_ONESHOT, 0, 0, 0);
 		kevent(f->qd, &ev, 1, NULL, 0, &ts);
 	}
-	
+#endif
+
 	__CFSpinUnlock(&f->lock);
 }
 
@@ -269,7 +298,9 @@ void CFFileDescriptorDisableCallBacks(CFFileDescriptorRef f, CFOptionFlags callB
 	if( (f == NULL) || (CFGetTypeID(f) != CFFileDescriptorGetTypeID()) || !__CFFDIsValid(f) ) return;
 	
 	__CFSpinLock(&f->lock);
-	struct kevent ev;
+
+#if DEPLOYMENT_TARGET_MACOSX
+   struct kevent ev;
 	struct timespec ts = { 0, 0 };
 	
 	if( callBackTypes | kCFFileDescriptorReadCallBack )
@@ -283,7 +314,8 @@ void CFFileDescriptorDisableCallBacks(CFFileDescriptorRef f, CFOptionFlags callB
 		EV_SET(&ev, f->fd, EVFILT_WRITE, EV_DELETE, 0, 0, 0);
 		kevent(f->qd, &ev, 1, NULL, 0, &ts);
 	}
-	
+#endif
+
 	__CFSpinUnlock(&f->lock);
 }
 
@@ -296,6 +328,7 @@ void CFFileDescriptorInvalidate(CFFileDescriptorRef f)
 
 	__CFBitfieldSetValue(((CFRuntimeBase *)f)->_cfinfo[CF_INFO_BITS], 0, 0, 0); // invalidate flag
 
+#if DEPLOYMENT_TARGET_MACOSX
 	if( f->thread != NULL ) // assume there is a thread and a mach port
 	{
 		pthread_cancel(f->thread);
@@ -304,15 +337,18 @@ void CFFileDescriptorInvalidate(CFFileDescriptorRef f)
 		f->thread = NULL;
 		f->port = MACH_PORT_NULL;
 	}
-	
+#endif
+
 	if( f->rls != NULL )
 	{
 		CFRelease(f->rls);
 		f->rls = NULL;
 	}
 	
+#if DEPLOYMENT_TARGET_MACOSX
 	close(f->qd);
 	f->qd = -1;
+#endif
 	
 	if( __CFBitfieldGetValue(((const CFRuntimeBase *)f)->_cfinfo[CF_INFO_BITS], 1, 1) ) // close fd on invalidate
 		close(f->fd);
@@ -336,14 +372,14 @@ CFRunLoopSourceRef CFFileDescriptorCreateRunLoopSource(CFAllocatorRef allocator,
 	__CFSpinLock(&f->lock);
 	if( f->rls == NULL )
 	{
+#if DEPLOYMENT_TARGET_MACOSX
 		CFRunLoopSourceContext1 context = { 1, CFRetain(f), (CFAllocatorRetainCallBack)f->context.retain, (CFAllocatorReleaseCallBack)f->context.release, (CFAllocatorCopyDescriptionCallBack)f->context.copyDescription, NULL, NULL, __CFFDGetPort, __CFFDRunLoopCallBack };
 		CFRunLoopSourceRef rls = CFRunLoopSourceCreate( allocator, order, (CFRunLoopSourceContext *)&context );
 		if( rls != NULL ) f->rls = rls;
-	}
+#endif
+   }
 	__CFSpinUnlock(&f->lock);
 	//fprintf(stderr,"Leaving CFFileDescriptorCreateRunLoopSource()\n");
 
 	return f->rls;
 }
-
-
